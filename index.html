@@ -28,7 +28,7 @@
       --modal-overlay: rgba(0,0,0,0.7); --warn-color: #fbbf24;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background: var(--bg-color); color: var(--text-color); padding: 12px; padding-bottom: calc(90px + env(safe-area-inset-bottom)); padding-top: env(safe-area-inset-top); max-width: 600px; margin: 0 auto; }
+    body { background: var(--bg-color); color: var(--text-color); padding: 12px; padding-bottom: 90px; max-width: 600px; margin: 0 auto; }
     .header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
     h1 { font-size: 1.25rem; }
     .theme-toggle { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-color); padding: 6px 12px; border-radius: 20px; font-size: 0.85rem; cursor: pointer; width: auto; }
@@ -57,11 +57,11 @@
     .controls-card { background: var(--card-bg); padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); margin-bottom: 12px; }
     .input-group { margin-bottom: 8px; }
     input, select, button { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); font-size: 0.9rem; outline: none; background: var(--input-bg); color: var(--text-color); }
-    .filter-row { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 8px; }
+    .filter-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-top: 8px; }
     .filter-row label { font-size: 0.65rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 2px; }
 
-    .sync-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-bottom: 12px; }
-    .btn-sync { background: #475569; color: white; border: none; font-weight: 700; font-size: 0.75rem; padding: 9px 2px; cursor: pointer; border-radius: 8px; text-align: center; }
+    .sync-row { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 6px; margin-bottom: 12px; }
+    .btn-sync { background: #475569; color: white; border: none; font-weight: 700; font-size: 0.8rem; padding: 9px 4px; cursor: pointer; border-radius: 8px; }
     .btn-sync.green { background: var(--success-color); }
     .btn-sync.purple { background: #8b5cf6; }
     .btn-sync.orange { background: #d97706; }
@@ -87,7 +87,7 @@
     .chart-container { background: var(--card-bg); padding: 14px; border-radius: 10px; border: 1px solid var(--border-color); margin-bottom: 12px; position: relative; height: 280px; width: 100%; }
     .chart-container h3 { font-size: 0.9rem; margin-bottom: 10px; text-align: center; }
 
-    .fab-btn { position: fixed; bottom: calc(20px + env(safe-area-inset-bottom)); right: 20px; width: 56px; height: 56px; border-radius: 28px; background: var(--accent-color); color: white; border: none; font-size: 1.8rem; font-weight: 700; display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 14px rgba(0,0,0,0.4); cursor: pointer; z-index: 99; }
+    .fab-btn { position: fixed; bottom: 20px; right: 20px; width: 56px; height: 56px; border-radius: 28px; background: var(--accent-color); color: white; border: none; font-size: 1.8rem; font-weight: 700; display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 14px rgba(0,0,0,0.4); cursor: pointer; z-index: 99; }
 
     .modal-overlay { position: fixed; inset: 0; background: var(--modal-overlay); display: none; justify-content: center; align-items: center; z-index: 100; padding: 16px; }
     .modal-content { background: var(--card-bg); width: 100%; max-width: 500px; border-radius: 14px; padding: 16px; max-height: 90vh; overflow-y: auto; border: 1px solid var(--border-color); }
@@ -119,15 +119,13 @@
     .adjust-list { max-height: 160px; overflow-y: auto; margin-top: 12px; font-size: 0.8rem; }
     .adjust-item { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border-color); }
     .adjust-pos { color: var(--success-color); } .adjust-neg { color: var(--danger-color); }
-    
-    .toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: #1e293b; color: #fff; padding: 10px 20px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 300; transition: opacity 0.3s; opacity: 0; pointer-events: none; border: 1px solid var(--border-color); }
-    .toast.show { opacity: 1; }
   </style>
 </head>
 <body>
   <div class="header-row">
     <h1>📦 Cantareal</h1>
     <div style="display:flex;gap:6px;align-items:center;">
+      <button id="installBtn" onclick="installPWA()" style="display:none;background:#d97706;color:#fff;border:none;padding:6px 10px;border-radius:20px;font-size:0.8rem;font-weight:700;cursor:pointer;width:auto;">⬇ Installa</button>
       <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()">☀️ Chiaro</button>
     </div>
   </div>
@@ -157,7 +155,7 @@
 
   <div class="goal-card">
     <div class="goal-header">
-      <span>🎯 Obiettivo: €<input type="number" id="targetGoalInput" class="goal-input" value="200" inputmode="decimal" oninput="updateGoal()"></span>
+      <span>🎯 Obiettivo: €<input type="number" id="targetGoalInput" class="goal-input" value="200" oninput="updateGoal()"></span>
       <span id="goalPercentText">0%</span>
     </div>
     <div class="progress-bar-bg"><div class="progress-bar-fill" id="goalProgressBar"></div></div>
@@ -188,25 +186,26 @@
           </select>
         </div>
         <div>
-          <label>PERIODO (MESE)</label>
+          <label>PERIODO</label>
           <select id="filterMonth" onchange="renderApp()">
-            <option value="ALL">Tutti i mesi</option>
+            <option value="ALL">Sempre</option>
+            <option value="CURR_MONTH">Questo Mese</option>
           </select>
         </div>
-      </div>
-      <div style="margin-top: 8px;">
-        <label style="font-size:0.65rem;font-weight:700;color:var(--text-muted);display:block;margin-bottom:2px;">ORDINA</label>
-        <select id="sortBy" onchange="renderApp()">
-          <option value="date-desc">Recenti (Data)</option>
-          <option value="date-asc">Vecchi (Data)</option>
-          <option value="days-desc">Giorni in stock ↓</option>
-          <option value="soldDate-desc">Data Vendita ↓</option>
-          <option value="roi-desc">ROI ↓</option>
-          <option value="margin-desc">Margine ↓</option>
-          <option value="price-desc">Prezzo ↓</option>
-          <option value="price-asc">Prezzo ↑</option>
-          <option value="alpha-asc">A → Z</option>
-        </select>
+        <div>
+          <label>ORDINA</label>
+          <select id="sortBy" onchange="renderApp()">
+            <option value="date-desc">Recenti (Data)</option>
+            <option value="date-asc">Vecchi (Data)</option>
+            <option value="days-desc">Giorni in stock ↓</option>
+            <option value="soldDate-desc">Data Vendita ↓</option>
+            <option value="roi-desc">ROI ↓</option>
+            <option value="margin-desc">Margine ↓</option>
+            <option value="price-desc">Prezzo ↓</option>
+            <option value="price-asc">Prezzo ↑</option>
+            <option value="alpha-asc">A → Z</option>
+          </select>
+        </div>
       </div>
     </div>
 
@@ -215,7 +214,9 @@
       <button class="btn-sync" onclick="importData()">📥 Importa</button>
       <button class="btn-sync green" onclick="manualSave()">💾 Salva</button>
       <button class="btn-sync purple" onclick="downloadBackup()">📂 Backup</button>
-      <button class="btn-sync orange" onclick="downloadCSV()">📊 CSV</button>
+    </div>
+    <div style="margin-bottom:12px;">
+      <button class="btn-sync orange" onclick="downloadCSV()">📊 Esporta CSV</button>
     </div>
     <div id="itemList"></div>
   </div>
@@ -271,7 +272,7 @@
         </div>
         <div>
           <label style="font-size:0.75rem;font-weight:700;">PREZZO ACQ (€)</label>
-          <input type="number" id="addBuyPrice" step="0.01" inputmode="decimal" placeholder="0.00">
+          <input type="number" id="addBuyPrice" step="0.01" placeholder="0.00">
         </div>
         <div>
           <label style="font-size:0.75rem;font-weight:700;">DATA ACQUISTO</label>
@@ -319,18 +320,18 @@
         </div>
         <div>
           <label style="font-size:0.75rem;font-weight:700;">PREZZO ACQ (€)</label>
-          <input type="number" id="editBuyPrice" step="0.01" inputmode="decimal">
+          <input type="number" id="editBuyPrice" step="0.01">
         </div>
         <div>
-          <label style="font-size:0.75rem;font-weight:700;">DATA ACQ (ISO)</label>
-          <input type="date" id="editDate">
+          <label style="font-size:0.75rem;font-weight:700;">DATA ACQ</label>
+          <input type="text" id="editDate" placeholder="GG/MM/AAAA">
         </div>
         <div class="full-width" style="border-top:1px solid var(--border-color);margin-top:6px;padding-top:8px;">
           <label style="font-size:0.75rem;font-weight:700;color:var(--success-color);">DETTAGLI VENDITA</label>
         </div>
         <div>
           <label style="font-size:0.75rem;font-weight:700;">PREZZO VENDITA (€)</label>
-          <input type="number" id="editSellPrice" step="0.01" inputmode="decimal" placeholder="0.00">
+          <input type="number" id="editSellPrice" step="0.01" placeholder="0.00">
         </div>
         <div>
           <label style="font-size:0.75rem;font-weight:700;">PIATTAFORMA</label>
@@ -345,7 +346,7 @@
         </div>
         <div class="full-width">
           <label style="font-size:0.75rem;font-weight:700;">DATA VENDITA</label>
-          <input type="date" id="editSoldDate">
+          <input type="text" id="editSoldDate" placeholder="GG/MM/AAAA">
         </div>
         <div class="full-width">
           <button class="btn-sell-modal" id="btnQuickSell">🛒 Segna come Venduto</button>
@@ -368,12 +369,12 @@
       </p>
       <div class="form-grid">
         <div class="full-width">
-          <label style="font-size:0.75rem;font-weight:700;">IMPORTO (€) — es. 50 oppure -30</label>
+          <label style="font-size:0.75rem;font-weight:700;">IMPORTO (€) — metti il meno per togliere (es. -50)</label>
           <input type="text" inputmode="decimal" id="cashAmount" placeholder="es. 50 oppure -30">
         </div>
         <div class="full-width">
           <label style="font-size:0.75rem;font-weight:700;">MOTIVO (opzionale)</label>
-          <input type="text" id="cashReason" placeholder="es. Versamento personale, Prelievo...">
+          <input type="text" id="cashReason" placeholder="es. Versamento personale, Prelievo, Correzione...">
         </div>
         <div class="full-width">
           <button class="btn-main" onclick="confirmCashAdjust()">Applica Aggiustamento</button>
@@ -391,7 +392,7 @@
       <div class="sheet-subtitle" id="sheetItemTitle">Nome Oggetto</div>
       <div class="sheet-price-group">
         <label>PREZZO FINALE INCASSATO (€)</label>
-        <input type="number" id="sheetSellPrice" step="0.50" inputmode="decimal" class="sheet-price-input" placeholder="0.00">
+        <input type="number" id="sheetSellPrice" step="0.50" class="sheet-price-input" placeholder="0.00">
       </div>
       <label style="font-size:0.75rem;font-weight:700;color:var(--text-muted);display:block;margin-bottom:8px;">PIATTAFORMA:</label>
       <div class="sheet-platform-grid">
@@ -405,8 +406,6 @@
     </div>
   </div>
 
-  <div id="toast" class="toast">Notifica</div>
-
   <script>
     const BASELINE_CASH = 200.64;
     const DB_KEY = "reselling_pro_max_db_v6";
@@ -414,87 +413,85 @@
     const GOAL_KEY = "reselling_pro_max_goal";
     const THEME_KEY = "reselling_pro_max_theme";
 
-    // Fallback dataset iniziale di sicurezza nel caso il localStorage sia vuoto
-    const fallbackDataset = [
-      {"id":"1793884343763","t":"Felpa Napapijri","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.15,"sp":0,"s":"stock","d":"2026-11-05","soldPlatform":"","soldDate":""},
-      {"id":"1793884334722","t":"Felpa Guinness","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.15,"sp":0,"s":"stock","d":"2026-11-05","soldPlatform":"","soldDate":""},
-      {"id":"1793884319850","t":"Felpa DHL taglia M","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.15,"sp":0,"s":"stock","d":"2026-11-05","soldPlatform":"","soldDate":""},
-      {"id":"1793884304211","t":"Felpa DHL taglia L","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.15,"sp":0,"s":"stock","d":"2026-11-05","soldPlatform":"","soldDate":""},
-      {"id":"1793709293839","t":"Felpa Ascoli Nike","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3,"sp":0,"s":"stock","d":"2026-11-03","soldPlatform":"","soldDate":""},
-      {"id":"1793261983990","t":"Miti del nord","c":"Libri","src":"Mercatino / Di Persona","bp":0,"sp":0,"s":"stock","d":"2026-10-29","soldPlatform":"","soldDate":""},
-      {"id":"1793261971110","t":"Enciclopedia del fantastico","c":"Libri","src":"Mercatino / Di Persona","bp":0,"sp":0,"s":"stock","d":"2026-10-29","soldPlatform":"","soldDate":""},
-      {"id":"1793261957954","t":"Edda","c":"Libri","src":"Mercatino / Di Persona","bp":0,"sp":10,"s":"sold","d":"2026-10-29","soldPlatform":"Vinted","soldDate":"2026-11-01"},
-      {"id":"1793109700688","t":"Bushido","c":"Libri","src":"Mercatino / Di Persona","bp":0,"sp":0,"s":"stock","d":"2026-10-27","soldPlatform":"","soldDate":""},
-      {"id":"1793109690566","t":"Cuore oscuro","c":"Libri","src":"Mercatino / Di Persona","bp":0,"sp":0,"s":"stock","d":"2026-10-27","soldPlatform":"","soldDate":""},
-      {"id":"1793109674532","t":"Maglia DHL","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":2,"sp":17,"s":"sold","d":"2026-10-27","soldPlatform":"Vinted","soldDate":"2026-10-28"},
-      {"id":"1793109660940","t":"Maglia Lipsia","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":5,"sp":0,"s":"stock","d":"2026-10-27","soldPlatform":"","soldDate":""},
-      {"id":"1792655015266","t":"Don Chisciotte DVD","c":"Altro","src":"Mercatino / Di Persona","bp":0,"sp":0,"s":"stock","d":"2026-10-22","soldPlatform":"","soldDate":""},
-      {"id":"1792655005063","t":"Il miracolo di berna DVD","c":"Altro","src":"Mercatino / Di Persona","bp":0,"sp":0,"s":"stock","d":"2026-10-22","soldPlatform":"","soldDate":""},
-      {"id":"1792654995011","t":"Nella terra dei cannibali dvd","c":"Altro","src":"Mercatino / Di Persona","bp":0,"sp":0,"s":"stock","d":"2026-10-22","soldPlatform":"","soldDate":""},
-      {"id":"1792654978314","t":"The getaway Ps2","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":0,"sp":0,"s":"stock","d":"2026-10-22","soldPlatform":"","soldDate":""},
-      {"id":"1792499154342","t":"Felpa Borussia Dortmund","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.3,"sp":30,"s":"sold","d":"2026-10-20","soldPlatform":"Wallapop","soldDate":"2026-10-29"},
-      {"id":"1792499138053","t":"Maglia Chicago bulls","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.3,"sp":0,"s":"stock","d":"2026-10-20","soldPlatform":"","soldDate":""},
-      {"id":"1792499116883","t":"Maglia Jordan PSG","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.3,"sp":0,"s":"stock","d":"2026-10-20","soldPlatform":"","soldDate":""},
-      {"id":"1791914659856","t":"PS4 slim","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":25,"sp":0,"s":"stock","d":"2026-10-13","soldPlatform":"","soldDate":""},
-      {"id":"1791651300704","t":"Inazuma Eleven striker wii","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":5,"sp":0,"s":"stock","d":"2026-10-10","soldPlatform":"","soldDate":""},
-      {"id":"1791651288584","t":"Mario kart wii","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":5,"sp":0,"s":"stock","d":"2026-10-10","soldPlatform":"","soldDate":""},
-      {"id":"1791596827414","t":"Camicia uomo Tommy Hilfiger","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.75,"sp":0,"s":"stock","d":"2026-10-06","soldPlatform":"","soldDate":""},
-      {"id":"1791596810008","t":"Felpa Adidas donna con zip","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.75,"sp":0,"s":"stock","d":"2026-10-06","soldPlatform":"","soldDate":""},
-      {"id":"1791596787282","t":"Felpa Adidas oliva","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.75,"sp":0,"s":"stock","d":"2026-10-06","soldPlatform":"","soldDate":""},
-      {"id":"1791596760197","t":"Maglietta Rosario central","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":5.14,"sp":35,"s":"sold","d":"2026-10-06","soldPlatform":"Wallapop","soldDate":"2026-10-29"},
-      {"id":"1791157418467","t":"God of war ps3","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":6,"sp":0,"s":"stock","d":"2026-10-05","soldPlatform":"","soldDate":""},
-      {"id":"1791157403004","t":"Maglietta Marcelo burlon","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":16.65,"sp":0,"s":"stock","d":"2026-10-05","soldPlatform":"","soldDate":""},
-      {"id":"1791157390221","t":"Crash twinsanity","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":6.84,"sp":0,"s":"stock","d":"2026-10-05","soldPlatform":"","soldDate":""},
-      {"id":"1791157369967","t":"Spyro the eternal night","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":6.84,"sp":0,"s":"stock","d":"2026-10-05","soldPlatform":"","soldDate":""},
-      {"id":"1791157184294","t":"Crash 4","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":5,"sp":0,"s":"stock","d":"2026-10-05","soldPlatform":"","soldDate":""},
-      {"id":"1791157170580","t":"Rayman Legend","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":5,"sp":0,"s":"stock","d":"2026-10-05","soldPlatform":"","soldDate":""},
-      {"id":"1791157157611","t":"Crash Trilogy ps4","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":5,"sp":15,"s":"sold","d":"2026-10-05","soldPlatform":"Vinted","soldDate":"2026-10-05"},
-      {"id":"1791157144737","t":"Spyro Trilogy ps4","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":5,"sp":15,"s":"sold","d":"2026-10-05","soldPlatform":"Vinted","soldDate":"2026-10-05"},
-      {"id":"1791157109063","t":"PS4 fat","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":40,"sp":0,"s":"stock","d":"2026-10-05","soldPlatform":"","soldDate":""},
-      {"id":"1","t":"Onimusha: Dawn of Dreams (PS2)","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":20,"sp":0,"d":"2026-09-05","soldPlatform":"","soldDate":""},
-      {"id":"2","t":"Zerocalcare (Libro)","c":"Libri","src":"Vinted","s":"sold","bp":0,"sp":9,"d":"2026-09-05","soldPlatform":"Vinted","soldDate":"2026-09-05"},
-      {"id":"3","t":"Crash l'ira di Cortex","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":0,"sp":0,"d":"2026-09-05","soldPlatform":"","soldDate":""},
-      {"id":"4","t":"Gta V","c":"Gaming / Videogiochi","src":"Wallapop","s":"sold","bp":0,"sp":8,"d":"2026-09-05","soldPlatform":"Wallapop","soldDate":"2026-09-05"},
-      {"id":"5","t":"Jak e dexter","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":0,"sp":0,"d":"2026-09-05","soldPlatform":"","soldDate":""},
-      {"id":"6","t":"SmackDown shut your mouth","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":0,"sp":0,"d":"2026-09-05","soldPlatform":"","soldDate":""},
-      {"id":"7","t":"Smackdown here comes the pain","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":0,"sp":0,"d":"2026-09-05","soldPlatform":"","soldDate":""},
-      {"id":"8","t":"TMNT Wii","c":"Gaming / Videogiochi","src":"eBay","s":"sold","bp":0,"sp":6.94,"d":"2026-09-05","soldPlatform":"eBay","soldDate":"2026-09-05"},
-      {"id":"9","t":"Cardigan Abercrombie","c":"Abbigliamento","src":"Vinted","s":"sold","bp":0,"sp":7,"d":"2026-09-05","soldPlatform":"Vinted","soldDate":"2026-09-05"},
-      {"id":"10","t":"The last of us part 2","c":"Gaming / Videogiochi","src":"Vinted","s":"sold","bp":5,"sp":14,"d":"2026-09-05","soldPlatform":"Vinted","soldDate":"2026-09-05"},
-      {"id":"11","t":"Dying light","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"sold","bp":5,"sp":11.5,"d":"2026-09-05","soldPlatform":"Vinted","soldDate":"2026-11-05"},
-      {"id":"12","t":"Ring fit Adventure","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":20,"sp":0,"d":"2026-09-06","soldPlatform":"","soldDate":""},
-      {"id":"13","t":"Distruggi documenti","c":"Elettronica","src":"Mercatino / Di Persona","s":"stock","bp":0,"sp":0,"d":"2026-09-09","soldPlatform":"","soldDate":""},
-      {"id":"14","t":"Resistance 2","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":3,"sp":0,"d":"2026-09-16","soldPlatform":"","soldDate":""},
-      {"id":"15","t":"Resistance fall of man","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":3,"sp":0,"d":"2026-09-16","soldPlatform":"","soldDate":""},
-      {"id":"16","t":"Gran Turismo 6","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"sold","bp":3,"sp":6,"d":"2026-09-16","soldPlatform":"Vinted","soldDate":"2026-11-01"},
-      {"id":"17","t":"Street fighter IV","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":3,"sp":0,"d":"2026-09-16","soldPlatform":"","soldDate":""},
-      {"id":"18","t":"Metal Gear Solid guns of the patriots","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":3,"sp":0,"d":"2026-09-16","soldPlatform":"","soldDate":""},
-      {"id":"19","t":"Binary domain","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":3,"sp":0,"d":"2026-09-16","soldPlatform":"","soldDate":""},
-      {"id":"20","t":"Time crisis razing storm","c":"Gaming / Videogiochi","src":"Vinted","s":"sold","bp":3,"sp":13,"d":"2026-09-16","soldPlatform":"Vinted","soldDate":"2026-09-16"},
-      {"id":"21","t":"The Legend of Spyro","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"sold","bp":3,"sp":24,"d":"2026-09-16","soldPlatform":"Vinted","soldDate":"2026-10-05"},
-      {"id":"22","t":"The last of us","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":3,"sp":0,"d":"2026-09-16","soldPlatform":"","soldDate":""},
-      {"id":"23","t":"COD Advanced warfare","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":3,"sp":0,"d":"2026-09-16","soldPlatform":"","soldDate":""},
-      {"id":"24","t":"Costume adidas","c":"Abbigliamento","src":"Mercatino / Di Persona","s":"stock","bp":0,"sp":0,"d":"2026-09-18","soldPlatform":"","soldDate":""},
-      {"id":"25","t":"Castlevania","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"sold","bp":6,"sp":19,"d":"2026-09-19","soldPlatform":"Vinted","soldDate":"2026-10-10"},
-      {"id":"26","t":"Dead space 2","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":6,"sp":0,"d":"2026-09-19","soldPlatform":"","soldDate":""},
-      {"id":"27","t":"Polo Lacoste","c":"Abbigliamento","src":"Vinted","s":"sold","bp":5,"sp":19,"d":"2026-09-19","soldPlatform":"Vinted","soldDate":"2026-09-19"},
-      {"id":"28","t":"Life Is strange","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":11.39,"sp":0,"d":"2026-09-24","soldPlatform":"","soldDate":""},
-      {"id":"29","t":"GTA Trilogy ps4","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"sold","bp":9.63,"sp":15,"d":"2026-09-27","soldPlatform":"Vinted","soldDate":"2026-10-05"}
+    const userRealDataset = [
+      {"id":"1793884343763","t":"Felpa Napapijri","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.15,"sp":0,"s":"stock","d":"05/11/2026","soldPlatform":"","soldDate":""},
+      {"id":"1793884334722","t":"Felpa Guinness","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.15,"sp":0,"s":"stock","d":"05/11/2026","soldPlatform":"","soldDate":""},
+      {"id":"1793884319850","t":"Felpa DHL taglia M","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.15,"sp":0,"s":"stock","d":"05/11/2026","soldPlatform":"","soldDate":""},
+      {"id":"1793884304211","t":"Felpa DHL taglia L","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.15,"sp":0,"s":"stock","d":"05/11/2026","soldPlatform":"","soldDate":""},
+      {"id":"1793709293839","t":"Felpa Ascoli Nike","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3,"sp":0,"s":"stock","d":"03/11/2026","soldPlatform":"","soldDate":""},
+      {"id":"1793261983990","t":"Miti del nord","c":"Libri","src":"Mercatino / Di Persona","bp":0,"sp":0,"s":"stock","d":"29/10/2026","soldPlatform":"","soldDate":""},
+      {"id":"1793261971110","t":"Enciclopedia del fantastico","c":"Libri","src":"Mercatino / Di Persona","bp":0,"sp":0,"s":"stock","d":"29/10/2026","soldPlatform":"","soldDate":""},
+      {"id":"1793261957954","t":"Edda","c":"Libri","src":"Mercatino / Di Persona","bp":0,"sp":10,"s":"sold","d":"29/10/2026","soldPlatform":"Vinted","soldDate":"01/11/2026"},
+      {"id":"1793109700688","t":"Bushido","c":"Libri","src":"Mercatino / Di Persona","bp":0,"sp":0,"s":"stock","d":"27/10/2026","soldPlatform":"","soldDate":""},
+      {"id":"1793109690566","t":"Cuore oscuro","c":"Libri","src":"Mercatino / Di Persona","bp":0,"sp":0,"s":"stock","d":"27/10/2026","soldPlatform":"","soldDate":""},
+      {"id":"1793109674532","t":"Maglia DHL","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":2,"sp":17,"s":"sold","d":"27/10/2026","soldPlatform":"Vinted","soldDate":"28/10/2026"},
+      {"id":"1793109660940","t":"Maglia Lipsia","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":5,"sp":0,"s":"stock","d":"27/10/2026","soldPlatform":"","soldDate":""},
+      {"id":"1792655015266","t":"Don Chisciotte DVD","c":"Altro","src":"Mercatino / Di Persona","bp":0,"sp":0,"s":"stock","d":"22/10/2026","soldPlatform":"","soldDate":""},
+      {"id":"1792655005063","t":"Il miracolo di berna DVD","c":"Altro","src":"Mercatino / Di Persona","bp":0,"sp":0,"s":"stock","d":"22/10/2026","soldPlatform":"","soldDate":""},
+      {"id":"1792654995011","t":"Nella terra dei cannibali dvd","c":"Altro","src":"Mercatino / Di Persona","bp":0,"sp":0,"s":"stock","d":"22/10/2026","soldPlatform":"","soldDate":""},
+      {"id":"1792654978314","t":"The getaway Ps2","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":0,"sp":0,"s":"stock","d":"22/10/2026","soldPlatform":"","soldDate":""},
+      {"id":"1792499154342","t":"Felpa Borussia Dortmund","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.3,"sp":30,"s":"sold","d":"20/10/2026","soldPlatform":"Wallapop","soldDate":"29/10/2026"},
+      {"id":"1792499138053","t":"Maglia Chicago bulls","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.3,"sp":0,"s":"stock","d":"20/10/2026","soldPlatform":"","soldDate":""},
+      {"id":"1792499116883","t":"Maglia Jordan PSG","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.3,"sp":0,"s":"stock","d":"20/10/2026","soldPlatform":"","soldDate":""},
+      {"id":"1791914659856","t":"PS4 slim","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":25,"sp":0,"s":"stock","d":"13/10/2026","soldPlatform":"","soldDate":""},
+      {"id":"1791651300704","t":"Inazuma Eleven striker wii","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":5,"sp":0,"s":"stock","d":"10/10/2026","soldPlatform":"","soldDate":""},
+      {"id":"1791651288584","t":"Mario kart wii","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":5,"sp":0,"s":"stock","d":"10/10/2026","soldPlatform":"","soldDate":""},
+      {"id":"1791596827414","t":"Camicia uomo Tommy Hilfiger","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.75,"sp":0,"s":"stock","d":"06/10/2026","soldPlatform":"","soldDate":""},
+      {"id":"1791596810008","t":"Felpa Adidas donna con zip","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.75,"sp":0,"s":"stock","d":"06/10/2026","soldPlatform":"","soldDate":""},
+      {"id":"1791596787282","t":"Felpa Adidas oliva","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.75,"sp":0,"s":"stock","d":"06/10/2026","soldPlatform":"","soldDate":""},
+      {"id":"1791596760197","t":"Maglietta Rosario central","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":5.14,"sp":35,"s":"sold","d":"06/10/2026","soldPlatform":"Wallapop","soldDate":"29/10/2026"},
+      {"id":"1791157418467","t":"God of war ps3","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":6,"sp":0,"s":"stock","d":"05/10/2026","soldPlatform":"","soldDate":""},
+      {"id":"1791157403004","t":"Maglietta Marcelo burlon","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":16.65,"sp":0,"s":"stock","d":"05/10/2026","soldPlatform":"","soldDate":""},
+      {"id":"1791157390221","t":"Crash twinsanity","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":6.84,"sp":0,"s":"stock","d":"05/10/2026","soldPlatform":"","soldDate":""},
+      {"id":"1791157369967","t":"Spyro the eternal night","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":6.84,"sp":0,"s":"stock","d":"05/10/2026","soldPlatform":"","soldDate":""},
+      {"id":"1791157184294","t":"Crash 4","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":5,"sp":0,"s":"stock","d":"05/10/2026","soldPlatform":"","soldDate":""},
+      {"id":"1791157170580","t":"Rayman Legend","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":5,"sp":0,"s":"stock","d":"05/10/2026","soldPlatform":"","soldDate":""},
+      {"id":"1791157157611","t":"Crash Trilogy ps4","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":5,"sp":15,"s":"sold","d":"05/10/2026","soldPlatform":"Vinted","soldDate":"05/10/2026"},
+      {"id":"1791157144737","t":"Spyro Trilogy ps4","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":5,"sp":15,"s":"sold","d":"05/10/2026","soldPlatform":"Vinted","soldDate":"05/10/2026"},
+      {"id":"1791157109063","t":"PS4 fat","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":40,"sp":0,"s":"stock","d":"05/10/2026","soldPlatform":"","soldDate":""},
+      {"id":"1","t":"Onimusha: Dawn of Dreams (PS2)","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":20,"sp":0,"d":"05/09/2026","soldPlatform":"","soldDate":""},
+      {"id":"2","t":"Zerocalcare (Libro)","c":"Libri","src":"Vinted","s":"sold","bp":0,"sp":9,"d":"05/09/2026","soldPlatform":"Vinted","soldDate":"05/09/2026"},
+      {"id":"3","t":"Crash l'ira di Cortex","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":0,"sp":0,"d":"05/09/2026","soldPlatform":"","soldDate":""},
+      {"id":"4","t":"Gta V","c":"Gaming / Videogiochi","src":"Wallapop","s":"sold","bp":0,"sp":8,"d":"05/09/2026","soldPlatform":"Wallapop","soldDate":"05/09/2026"},
+      {"id":"5","t":"Jak e dexter","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":0,"sp":0,"d":"05/09/2026","soldPlatform":"","soldDate":""},
+      {"id":"6","t":"SmackDown shut your mouth","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":0,"sp":0,"d":"05/09/2026","soldPlatform":"","soldDate":""},
+      {"id":"7","t":"Smackdown here comes the pain","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":0,"sp":0,"d":"05/09/2026","soldPlatform":"","soldDate":""},
+      {"id":"8","t":"TMNT Wii","c":"Gaming / Videogiochi","src":"eBay","s":"sold","bp":0,"sp":6.94,"d":"05/09/2026","soldPlatform":"eBay","soldDate":"05/09/2026"},
+      {"id":"9","t":"Cardigan Abercrombie","c":"Abbigliamento","src":"Vinted","s":"sold","bp":0,"sp":7,"d":"05/09/2026","soldPlatform":"Vinted","soldDate":"05/09/2026"},
+      {"id":"10","t":"The last of us part 2","c":"Gaming / Videogiochi","src":"Vinted","s":"sold","bp":5,"sp":14,"d":"05/09/2026","soldPlatform":"Vinted","soldDate":"05/09/2026"},
+      {"id":"11","t":"Dying light","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"sold","bp":5,"sp":11.5,"d":"05/09/2026","soldPlatform":"Vinted","soldDate":"05/11/2026"},
+      {"id":"12","t":"Ring fit Adventure","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":20,"sp":0,"d":"06/09/2026","soldPlatform":"","soldDate":""},
+      {"id":"13","t":"Distruggi documenti","c":"Elettronica","src":"Mercatino / Di Persona","s":"stock","bp":0,"sp":0,"d":"09/09/2026","soldPlatform":"","soldDate":""},
+      {"id":"14","t":"Resistance 2","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":3,"sp":0,"d":"16/09/2026","soldPlatform":"","soldDate":""},
+      {"id":"15","t":"Resistance fall of man","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":3,"sp":0,"d":"16/09/2026","soldPlatform":"","soldDate":""},
+      {"id":"16","t":"Gran Turismo 6","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"sold","bp":3,"sp":6,"d":"16/09/2026","soldPlatform":"Vinted","soldDate":"01/11/2026"},
+      {"id":"17","t":"Street fighter IV","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":3,"sp":0,"d":"16/09/2026","soldPlatform":"","soldDate":""},
+      {"id":"18","t":"Metal Gear Solid guns of the patriots","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":3,"sp":0,"d":"16/09/2026","soldPlatform":"","soldDate":""},
+      {"id":"19","t":"Binary domain","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":3,"sp":0,"d":"16/09/2026","soldPlatform":"","soldDate":""},
+      {"id":"20","t":"Time crisis razing storm","c":"Gaming / Videogiochi","src":"Vinted","s":"sold","bp":3,"sp":13,"d":"16/09/2026","soldPlatform":"Vinted","soldDate":"16/09/2026"},
+      {"id":"21","t":"The Legend of Spyro","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"sold","bp":3,"sp":24,"d":"16/09/2026","soldPlatform":"Vinted","soldDate":"05/10/2026"},
+      {"id":"22","t":"The last of us","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":3,"sp":0,"d":"16/09/2026","soldPlatform":"","soldDate":""},
+      {"id":"23","t":"COD Advanced warfare","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":3,"sp":0,"d":"16/09/2026","soldPlatform":"","soldDate":""},
+      {"id":"24","t":"Costume adidas","c":"Abbigliamento","src":"Mercatino / Di Persona","s":"stock","bp":0,"sp":0,"d":"18/09/2026","soldPlatform":"","soldDate":""},
+      {"id":"25","t":"Castlevania","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"sold","bp":6,"sp":19,"d":"19/09/2026","soldPlatform":"Vinted","soldDate":"10/10/2026"},
+      {"id":"26","t":"Dead space 2","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":6,"sp":0,"d":"19/09/2026","soldPlatform":"","soldDate":""},
+      {"id":"27","t":"Polo Lacoste","c":"Abbigliamento","src":"Vinted","s":"sold","bp":5,"sp":19,"d":"19/09/2026","soldPlatform":"Vinted","soldDate":"19/09/2026"},
+      {"id":"28","t":"Life Is strange","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":11.39,"sp":0,"d":"24/09/2026","soldPlatform":"","soldDate":""},
+      {"id":"29","t":"GTA Trilogy ps4","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"sold","bp":9.63,"sp":15,"d":"27/09/2026","soldPlatform":"Vinted","soldDate":"05/10/2026"}
     ];
 
     let db = [];
     let adjustments = [];
     let currentStatusFilter = "ALL";
     let activeSheetItemId = null;
-    let lastDeletedItem = null;
     let platformChartInst = null, monthChartInst = null, categoryChartInst = null;
 
     // Load data
     try {
       const saved = localStorage.getItem(DB_KEY);
-      db = saved ? JSON.parse(saved) : fallbackDataset;
+      db = saved ? JSON.parse(saved) : userRealDataset;
       if (!saved) localStorage.setItem(DB_KEY, JSON.stringify(db));
-    } catch(e) { db = fallbackDataset; }
+    } catch(e) { db = userRealDataset; }
 
     try {
       adjustments = JSON.parse(localStorage.getItem(ADJ_KEY) || "[]");
@@ -510,51 +507,27 @@
     const savedGoal = localStorage.getItem(GOAL_KEY);
     if (savedGoal) document.getElementById("targetGoalInput").value = savedGoal;
 
-    function showToast(msg) {
-      const t = document.getElementById("toast");
-      t.innerText = msg;
-      t.classList.add("show");
-      setTimeout(() => t.classList.remove("show"), 2500);
-    }
-
     function saveData() {
       localStorage.setItem(DB_KEY, JSON.stringify(db));
       localStorage.setItem(ADJ_KEY, JSON.stringify(adjustments));
-      populateMonthFilterOptions();
       if (currentStatusFilter === "STATS") renderCharts();
       else renderApp();
     }
 
     function manualSave() {
       saveData();
-      showToast("Dati salvati con successo!");
+      alert("Dati salvati con successo!");
     }
 
-    function escapeHtml(str) {
-      return (str || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
-    }
-
-    function todayISO() {
+    function todayFormatted() {
       const t = new Date();
-      return t.toISOString().slice(0,10);
-    }
-
-    function formatDateDisplay(isoStr) {
-      if (!isoStr) return "-";
-      const p = isoStr.split("-");
-      if (p.length === 3) return p[2] + "/" + p[1] + "/" + p[0];
-      return isoStr;
+      return String(t.getDate()).padStart(2,"0") + "/" + String(t.getMonth()+1).padStart(2,"0") + "/" + t.getFullYear();
     }
 
     function parseDate(dStr) {
       if (!dStr) return null;
-      if (dStr.includes("-")) {
-        const p = dStr.split("-");
-        if (p.length === 3) return new Date(+p[0], +p[1]-1, +p[2]);
-      } else if (dStr.includes("/")) {
-        const p = dStr.split("/");
-        if (p.length === 3) return new Date(+p[2], +p[1]-1, +p[0]);
-      }
+      const p = dStr.split("/");
+      if (p.length === 3) return new Date(+p[2], +p[1]-1, +p[0]);
       return null;
     }
 
@@ -565,13 +538,18 @@
       return Math.max(0, Math.floor((Date.now() - d.getTime()) / 86400000));
     }
 
+    // Baseline calibrata sullo stato iniziale del dataset.
+    // investito = somma di TUTTI i prezzi di acquisto (stock + venduti)
+    // incassi   = somma dei prezzi di vendita dei soli venduti
+    // Cassa = Baseline - (investito attuale - investito iniziale) + (incassi attuali - incassi iniziali) + aggiustamenti
+    // Così una vendita aggiunge SOLO il prezzo di vendita, non anche il costo di acquisto.
     function getInitialStateHash() {
-      let stockCost = 0, salesRevenue = 0;
-      fallbackDataset.forEach(i => {
-        if (i.s === "stock") stockCost += parseFloat(i.bp) || 0;
+      let invested = 0, salesRevenue = 0;
+      userRealDataset.forEach(i => {
+        invested += parseFloat(i.bp) || 0;
         if (i.s === "sold") salesRevenue += parseFloat(i.sp) || 0;
       });
-      return { stockCost, salesRevenue };
+      return { invested, salesRevenue };
     }
     const initialBaseHash = getInitialStateHash();
 
@@ -622,7 +600,7 @@
         adjustments.slice().reverse().map(a => {
           const cls = a.amount >= 0 ? "adjust-pos" : "adjust-neg";
           const sign = a.amount >= 0 ? "+" : "";
-          return `<div class="adjust-item"><span>${formatDateDisplay(a.date)} — ${escapeHtml(a.reason || "Senza motivo")}</span><span class="${cls}">${sign}€${a.amount.toFixed(2)}</span></div>`;
+          return `<div class="adjust-item"><span>${a.date} — ${a.reason || "Senza motivo"}</span><span class="${cls}">${sign}€${a.amount.toFixed(2)}</span></div>`;
         }).join("");
     }
 
@@ -634,10 +612,13 @@
         return alert("Inserisci un importo valido (es. 50 oppure -30).");
       }
       const reason = document.getElementById("cashReason").value.trim() || "Aggiustamento";
-      adjustments.push({ amount: amount, reason: reason, date: todayISO(), id: Date.now() });
-      saveData();
+      adjustments.push({ amount: amount, reason: reason, date: todayFormatted(), id: Date.now() });
+      localStorage.setItem(ADJ_KEY, JSON.stringify(adjustments));
+      localStorage.setItem(DB_KEY, JSON.stringify(db));
       closeModal("cashModal");
-      showToast("Cassa aggiornata!");
+      if (currentStatusFilter === "STATS") renderCharts();
+      else renderApp();
+      alert("Cassa aggiornata di " + (amount >= 0 ? "+" : "") + "€" + amount.toFixed(2));
     }
 
     function getCategoryEmoji(cat) {
@@ -647,34 +628,6 @@
         case "Elettronica": return "💻";
         case "Libri": return "📚";
         default: return "📦";
-      }
-    }
-
-    function populateMonthFilterOptions() {
-      const select = document.getElementById("filterMonth");
-      const currentVal = select.value;
-      
-      const monthsSet = new Set();
-      db.forEach(i => {
-        const dStr = i.s === "sold" ? (i.soldDate || i.d) : i.d;
-        const d = parseDate(dStr);
-        if (d) {
-          monthsSet.add(String(d.getMonth()+1).padStart(2,"0") + "/" + d.getFullYear());
-        }
-      });
-
-      const sortedMonths = Array.from(monthsSet).sort((a,b) => {
-        const pa = a.split("/"), pb = b.split("/");
-        return (+pb[1]*12 + +pb[0]) - (+pa[1]*12 + +pa[0]);
-      });
-
-      let html = '<option value="ALL">Tutti i mesi</option>';
-      sortedMonths.forEach(m => {
-        html += `<option value="${m}">${m}</option>`;
-      });
-      select.innerHTML = html;
-      if (Array.from(select.options).some(o => o.value === currentVal)) {
-        select.value = currentVal;
       }
     }
 
@@ -693,10 +646,9 @@
         const matchCat = category === "ALL" || item.c === category;
         const matchStatus = currentStatusFilter === "ALL" || item.s === currentStatusFilter;
         let matchMonth = true;
-        if (monthFilter !== "ALL") {
-          const dStr = item.s === "sold" ? (item.soldDate || item.d) : item.d;
-          const d = parseDate(dStr);
-          matchMonth = d && (String(d.getMonth()+1).padStart(2,"0") + "/" + d.getFullYear()) === monthFilter;
+        if (monthFilter === "CURR_MONTH") {
+          const d = item.s === "sold" ? (item.soldDate || item.d) : item.d;
+          matchMonth = d && d.endsWith(currentMMYYYY);
         }
         return matchSearch && matchCat && matchStatus && matchMonth;
       });
@@ -704,8 +656,9 @@
       const getROI = i => i.bp > 0 ? ((i.sp||0) - i.bp) / i.bp : ((i.sp||0) > 0 ? 9999 : 0);
       const getMargin = i => (i.sp||0) - (i.bp||0);
       const parseD = dStr => {
-        const d = parseDate(dStr);
-        return d ? d.getTime() : 0;
+        if (!dStr) return 0;
+        const p = dStr.split("/");
+        return p.length === 3 ? new Date(+p[2], +p[1]-1, +p[0]).getTime() : 0;
       };
 
       filtered.sort((a,b) => {
@@ -720,34 +673,33 @@
           const diff = parseD(a.d) - parseD(b.d);
           return diff !== 0 ? diff : Number(a.id) - Number(b.id);
         }
+        // default: date-desc
         const diff = parseD(b.d) - parseD(a.d);
         return diff !== 0 ? diff : Number(b.id) - Number(a.id);
       });
 
-      // Stats & Cassa corretta
-      let stockVal = 0, totalProfit = 0, monthProfit = 0, currentStockCost = 0, currentSalesRevenue = 0;
+      // Stats
+      let stockVal = 0, totalProfit = 0, monthProfit = 0, currentInvested = 0, currentSalesRevenue = 0;
       db.forEach(item => {
         const bp = parseFloat(item.bp)||0, sp = parseFloat(item.sp)||0;
+        currentInvested += bp; // tutto il capitale impiegato (stock + venduti)
         if (item.s === "stock") {
           stockVal += bp;
-          currentStockCost += bp;
         } else if (item.s === "sold") {
           const profit = sp - bp;
           totalProfit += profit;
           currentSalesRevenue += sp;
           const sd = item.soldDate || item.d;
-          const d = parseDate(sd);
-          if (d && (String(d.getMonth()+1).padStart(2,"0") + "/" + d.getFullYear()) === currentMMYYYY) {
-            monthProfit += profit;
-          }
+          if (sd && sd.endsWith(currentMMYYYY)) monthProfit += profit;
         }
       });
 
-      // Formula Corretta Cassa: Baseline + Incassi totali attuali - Costo totale iniziale dello stock + Aggiustamenti
-      const totalCurrentStockAndSoldCost = db.reduce((acc, i) => acc + (parseFloat(i.bp)||0), 0);
-      const deltaCost = totalCurrentStockAndSoldCost - initialBaseHash.stockCost;
+      // Formula corretta:
+      // - nuovo acquisto → investito sale → cassa scende di bp
+      // - vendita        → solo incassi salgono → cassa sale di sp (NON anche di bp)
       const deltaRev = currentSalesRevenue - initialBaseHash.salesRevenue;
-      const cashVal = BASELINE_CASH + deltaRev - deltaCost + getTotalAdjustments();
+      const deltaInvested = currentInvested - initialBaseHash.invested;
+      const cashVal = BASELINE_CASH - deltaInvested + deltaRev + getTotalAdjustments();
 
       document.getElementById("statStockVal").innerText = `€${stockVal.toFixed(2)}`;
       document.getElementById("statCash").innerText = `€${cashVal.toFixed(2)}`;
@@ -771,8 +723,7 @@
         if (isSold) {
           const roi = bp > 0 ? ((profit/bp)*100).toFixed(0) : "∞";
           const cls = profit >= 0 ? "roi-pos" : "roi-neg";
-          const sign = profit >= 0 ? "+€" : "-€";
-          roiHtml = `<span class="${cls}">(${sign}${Math.abs(profit).toFixed(2)} • ROI ${roi}%)</span>`;
+          roiHtml = `<span class="${cls}">(+€${profit.toFixed(2)} • ROI ${roi}%)</span>`;
         }
 
         const wrapper = document.createElement("div");
@@ -785,12 +736,12 @@
         card.className = "item-card" + (!isSold && days >= 30 ? " old-stock" : "");
         card.innerHTML = `
           <div class="item-info">
-            <div class="item-title">${getCategoryEmoji(item.c)} ${escapeHtml(item.t)}</div>
+            <div class="item-title">${getCategoryEmoji(item.c)} ${item.t}</div>
             <div class="item-meta">
               <span class="badge ${isSold ? "badge-sold" : "badge-stock"}">${isSold ? "✅ Venduto" : "STOCK"}</span>
-              ${escapeHtml(item.c)} • Acq: €${bp.toFixed(2)} (${formatDateDisplay(item.d)})
+              ${item.c} • Acq: €${bp.toFixed(2)} (${item.d})
               ${!isSold && days > 0 ? `<br><span class="days-tag">In stock da ${days} giorni</span>` : ""}
-              ${isSold ? `<br>Vend: €${sp.toFixed(2)} su ${escapeHtml(item.soldPlatform||"-")} (${formatDateDisplay(item.soldDate||item.d)}) ${roiHtml}` : ""}
+              ${isSold ? `<br>Vend: €${sp.toFixed(2)} (${item.soldDate||"-"}) ${roiHtml}` : ""}
             </div>
           </div>
           <div style="color:var(--text-muted);font-size:1.2rem;">➔</div>
@@ -837,8 +788,7 @@
     }
 
     function updateGoal() {
-      const val = document.getElementById("targetGoalInput").value;
-      localStorage.setItem(GOAL_KEY, val);
+      localStorage.setItem(GOAL_KEY, document.getElementById("targetGoalInput").value);
       const mp = parseFloat(document.getElementById("statMonthProfit").innerText.replace("€","")) || 0;
       updateGoalProgress(mp);
     }
@@ -854,6 +804,7 @@
       const textColor = getComputedStyle(document.documentElement).getPropertyValue("--text-color").trim();
       const cardBg = getComputedStyle(document.documentElement).getPropertyValue("--card-bg").trim();
 
+      // Platform
       const plat = {};
       db.forEach(i => {
         if (i.s === "sold" && i.soldPlatform) {
@@ -868,12 +819,12 @@
         options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: "bottom", labels: { color: textColor, font: { size: 11 } } } } }
       });
 
+      // Monthly
       const months = {};
       db.forEach(i => {
         if (i.s === "sold") {
-          const dStr = i.soldDate || i.d || "";
-          const d = parseDate(dStr);
-          const key = d ? String(d.getMonth()+1).padStart(2,"0") + "/" + d.getFullYear() : "Sconosciuto";
+          const d = i.soldDate || i.d || "";
+          const key = d.length >= 7 ? d.slice(3) : "Sconosciuto"; // MM/YYYY
           const p = (parseFloat(i.sp)||0) - (parseFloat(i.bp)||0);
           months[key] = (months[key]||0) + p;
         }
@@ -889,6 +840,7 @@
         options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: textColor } }, y: { ticks: { color: textColor } } } }
       });
 
+      // Category
       const cats = {};
       db.forEach(i => {
         if (i.s === "sold") {
@@ -905,7 +857,7 @@
     }
 
     function openAddModal() {
-      document.getElementById("addItemDate").value = todayISO();
+      document.getElementById("addItemDate").valueAsDate = new Date();
       document.getElementById("addModal").style.display = "flex";
     }
     function closeModal(id) { document.getElementById(id).style.display = "none"; }
@@ -913,20 +865,24 @@
     function addItem() {
       const title = document.getElementById("addTitle").value.trim();
       if (!title) return alert("Inserisci un nome.");
-      const dateInput = document.getElementById("addItemDate").value || todayISO();
+      const dateInput = document.getElementById("addItemDate").value;
+      let d = todayFormatted();
+      if (dateInput) {
+        const p = dateInput.split("-");
+        d = p[2] + "/" + p[1] + "/" + p[0];
+      }
       const buyPrice = parseFloat(document.getElementById("addBuyPrice").value.replace(",", ".")) || 0;
       db.unshift({
         id: String(Date.now()), t: title,
         c: document.getElementById("addCategory").value,
         src: document.getElementById("addSource").value,
         bp: buyPrice,
-        sp: 0, s: "stock", d: dateInput, soldPlatform: "", soldDate: ""
+        sp: 0, s: "stock", d, soldPlatform: "", soldDate: ""
       });
       saveData();
       closeModal("addModal");
       document.getElementById("addTitle").value = "";
       document.getElementById("addBuyPrice").value = "";
-      showToast("Articolo aggiunto!");
     }
 
     function openEditModal(id) {
@@ -937,7 +893,7 @@
       document.getElementById("editCategory").value = item.c;
       document.getElementById("editSource").value = item.src || "Mercatino / Di Persona";
       document.getElementById("editBuyPrice").value = item.bp;
-      document.getElementById("editDate").value = item.d || todayISO();
+      document.getElementById("editDate").value = item.d;
       document.getElementById("editSellPrice").value = item.sp || "";
       document.getElementById("editSoldPlatform").value = item.soldPlatform || "";
       document.getElementById("editSoldDate").value = item.soldDate || "";
@@ -957,46 +913,28 @@
       item.c = document.getElementById("editCategory").value;
       item.src = document.getElementById("editSource").value;
       item.bp = parseFloat(String(document.getElementById("editBuyPrice").value).replace(",", ".")) || 0;
-      item.d = document.getElementById("editDate").value || todayISO();
+      item.d = document.getElementById("editDate").value;
       const rawSell = String(document.getElementById("editSellPrice").value).replace(",", ".");
       const sp = parseFloat(rawSell);
       const platform = document.getElementById("editSoldPlatform").value;
       const soldDate = document.getElementById("editSoldDate").value;
-
-      if (!isNaN(sp) && sp > 0) {
-        item.sp = sp;
-        item.soldPlatform = platform;
-        item.soldDate = soldDate || todayISO();
-        if (platform) {
-          item.s = "sold";
-        } else {
-          // Prezzo inserito ma senza piattaforma -> resta in stock
-          item.s = "stock";
-        }
-      } else {
-        // Prezzo azzerato o vuoto -> torna in stock pulito
-        item.sp = 0;
-        item.soldPlatform = "";
-        item.soldDate = "";
-        item.s = "stock";
-      }
-
+      if (!isNaN(sp)) item.sp = sp; else item.sp = 0;
+      item.soldPlatform = platform;
+      item.soldDate = soldDate;
+      if (item.sp > 0 && platform) {
+        item.s = "sold";
+        if (!item.soldDate) item.soldDate = todayFormatted();
+      } else item.s = "stock";
       saveData();
       closeModal("editModal");
-      showToast("Modifiche salvate!");
     }
 
     function deleteCurrentItem() {
       const id = document.getElementById("editId").value;
-      const itemIndex = db.findIndex(x => x.id === id);
-      if (itemIndex > -1) {
-        if (confirm("Eliminare questo oggetto dall'inventario?")) {
-          lastDeletedItem = db[itemIndex];
-          db.splice(itemIndex, 1);
-          saveData();
-          closeModal("editModal");
-          showToast("Oggetto eliminato. [Annulla]");
-        }
+      if (confirm("Eliminare questo oggetto dall'inventario?")) {
+        db = db.filter(x => x.id !== id);
+        saveData();
+        closeModal("editModal");
       }
     }
 
@@ -1020,27 +958,19 @@
       if (isNaN(price) || price <= 0) return alert("Inserisci un prezzo valido.");
       const item = db.find(x => x.id === activeSheetItemId);
       if (item) {
-        item.s = "sold"; 
-        item.sp = price; 
-        item.soldPlatform = platform; 
-        item.soldDate = todayISO();
+        item.s = "sold"; item.sp = price; item.soldPlatform = platform; item.soldDate = todayFormatted();
         saveData();
-        showToast("Vendita registrata!");
       }
       closeSellSheet();
     }
 
     function copyData() {
-      const payload = JSON.stringify({ db, adjustments }, null, 2);
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(payload).then(() => {
-          showToast("Backup copiato negli appunti!");
-        }).catch(() => {
-          prompt("Copia questo testo per l'importazione:", payload);
-        });
-      } else {
+      const payload = JSON.stringify({ db, adjustments });
+      navigator.clipboard.writeText(payload).then(() => {
+        alert("Dati copiati negli appunti con successo!");
+      }).catch(() => {
         prompt("Copia questo testo per l'importazione:", payload);
-      }
+      });
     }
 
     function importData() {
@@ -1052,28 +982,25 @@
 
       try {
         const parsed = JSON.parse(text);
-        let newDb = null;
-        let newAdj = [];
 
         if (Array.isArray(parsed)) {
-          newDb = parsed;
+          db = parsed;
         } else if (parsed && Array.isArray(parsed.db)) {
-          newDb = parsed.db;
-          if (Array.isArray(parsed.adjustments)) newAdj = parsed.adjustments;
+          db = parsed.db;
+          if (Array.isArray(parsed.adjustments)) {
+            adjustments = parsed.adjustments;
+          }
+        } else {
+          return alert("Formato non valido. Deve essere un array di oggetti o una struttura di backup valida.");
         }
 
-        if (!newDb || !newDb.every(i => i.id && i.t !== undefined && i.c)) {
-          return alert("Il file JSON non è valido o è incompleto.");
-        }
-
-        if (confirm(`Attenzione: stai per sostituire l'inventario attuale con ${newDb.length} elementi. Vuoi procedere?`)) {
-          db = newDb;
-          if (newAdj.length) adjustments = newAdj;
-          saveData();
-          showToast("Dati importati con successo!");
-        }
+        localStorage.setItem(DB_KEY, JSON.stringify(db));
+        localStorage.setItem(ADJ_KEY, JSON.stringify(adjustments));
+        renderApp();
+        alert("Dati importati con successo! Oggetti caricati: " + db.length);
       } catch (e) {
-        alert("Errore durante la lettura del JSON. Formato non valido.");
+        alert("Errore durante la lettura del JSON. Verificare di aver copiato il testo completo.");
+        console.error(e);
       }
     }
 
@@ -1083,48 +1010,29 @@
         const bp = parseFloat(i.bp)||0, sp = parseFloat(i.sp)||0;
         const profit = i.s === "sold" ? (sp - bp).toFixed(2) : "";
         const roi = i.s === "sold" && bp > 0 ? (((sp-bp)/bp)*100).toFixed(1) : "";
-        return [i.id, `"${(i.t||"").replace(/"/g,'""')}"`, i.c, i.src, i.s, bp, sp||"", profit, roi, i.d, i.soldDate||"", i.soldPlatform||""].join(",");
+        return [i.id, `"${i.t.replace(/"/g,'""')}"`, i.c, i.src, i.s, bp, sp||"", profit, roi, i.d, i.soldDate||"", i.soldPlatform||""].join(",");
       });
       const csv = [headers.join(","), ...rows].join("\n");
-      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-      const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
-      a.href = url;
-      a.download = `reselling_export_${todayISO()}.csv`;
+      a.href = "data:text/csv;charset=utf-8," + encodeURIComponent(csv);
+      a.download = `reselling_export_${new Date().toISOString().slice(0,10)}.csv`;
       a.click();
-      URL.revokeObjectURL(url);
     }
 
     function downloadBackup() {
-      const payload = JSON.stringify({ db, adjustments }, null, 2);
-      const blob = new Blob([payload], { type: "application/json;charset=utf-8;" });
-      
-      if (navigator.share && navigator.canShare && navigator.canShare({ files: [new File([blob], `backup.json`, {type: "application/json"})] })) {
-        const file = new File([blob], `reselling_backup_${todayISO()}.json`, { type: "application/json" });
-        navigator.share({
-          title: "Backup Reselling Pro",
-          text: "Ecco il file di backup dell'inventario.",
-          files: [file]
-        }).catch(() => {});
-      } else {
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = `reselling_backup_${todayISO()}.json`;
-        a.click();
-        URL.revokeObjectURL(url);
-      }
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ db, adjustments }, null, 2));
+      const a = document.createElement("a");
+      a.href = dataStr;
+      a.download = `reselling_backup_${new Date().toISOString().slice(0,10)}.json`;
+      a.click();
     }
 
     function filterThisMonth() {
-      const now = new Date();
-      const mStr = String(now.getMonth()+1).padStart(2,"0") + "/" + now.getFullYear();
-      document.getElementById("filterMonth").value = mStr;
+      document.getElementById("filterMonth").value = "CURR_MONTH";
       setStatusFilter("ALL");
       renderApp();
     }
 
-    populateMonthFilterOptions();
     renderApp();
   </script>
 </body>
