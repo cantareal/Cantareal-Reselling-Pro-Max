@@ -616,6 +616,16 @@
       alert("Cassa aggiornata di " + (amount >= 0 ? "+" : "") + "€" + amount.toFixed(2));
     }
 
+    function getCategoryEmoji(cat) {
+      switch(cat) {
+        case "Gaming / Videogiochi": return "🎮";
+        case "Abbigliamento": return "🧥";
+        case "Elettronica": return "💻";
+        case "Libri": return "📚";
+        default: return "📦";
+      }
+    }
+
     function renderApp() {
       if (currentStatusFilter === "STATS") return;
 
@@ -716,7 +726,7 @@
         card.className = "item-card" + (!isSold && days >= 30 ? " old-stock" : "");
         card.innerHTML = `
           <div class="item-info">
-            <div class="item-title">${item.t}</div>
+            <div class="item-title">${getCategoryEmoji(item.c)} ${item.t}</div>
             <div class="item-meta">
               <span class="badge ${isSold ? "badge-sold" : "badge-stock"}">${isSold ? "✅ Venduto" : "STOCK"}</span>
               ${item.c} • Acq: €${bp.toFixed(2)} (${item.d})
