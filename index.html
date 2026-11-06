@@ -1,315 +1,329 @@
 <!DOCTYPE html>
-<html lang="it" data-theme="dark">
+<html lang="it">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <meta name="theme-color" content="#0f172a">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Cantareal">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="application-name" content="Cantareal">
-  <title>Cantareal — Reselling Pro MAX</title>
-  <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Gestione Reselling Pro MAX v8</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     :root {
-      --bg-color: #f4f6f9; --card-bg: #ffffff; --text-color: #333333; --text-muted: #64748b;
-      --accent-color: #2563eb; --success-color: #16a34a; --danger-color: #ef4444;
-      --border-color: #e5e7eb; --input-bg: #ffffff; --badge-stock-bg: #dbeafe; --badge-stock-text: #1e40af;
-      --badge-sold-bg: #dcfce7; --badge-sold-text: #166534; --tab-active: #2563eb; --tab-active-text: #fff;
-      --modal-overlay: rgba(0,0,0,0.5); --warn-color: #f59e0b;
-      --frame-gradient: linear-gradient(135deg, #f59e0b, #ec4899);
-    }
-    [data-theme="dark"] {
-      --bg-color: #0f172a; --card-bg: #1e293b; --text-color: #f8fafc; --text-muted: #94a3b8;
-      --accent-color: #3b82f6; --success-color: #22c55e; --danger-color: #ef4444;
-      --border-color: #334155; --input-bg: #0f172a; --badge-stock-bg: #1e3a8a; --badge-stock-text: #93c5fd;
-      --badge-sold-bg: #14532d; --badge-sold-text: #86efac; --tab-active: #3b82f6; --tab-active-text: #fff;
-      --modal-overlay: rgba(0,0,0,0.7); --warn-color: #fbbf24;
-    }
-    /* TEMI EXTRA SBLOCCABILI */
-    [data-theme="emerald"] {
-      --bg-color: #064e3b; --card-bg: #047857; --text-color: #ecfdf5; --text-muted: #a7f3d0;
-      --accent-color: #10b981; --success-color: #34d399; --danger-color: #f87171;
-      --border-color: #059669; --input-bg: #065f46; --badge-stock-bg: #064e3b; --badge-stock-text: #a7f3d0;
-      --badge-sold-bg: #022c22; --badge-sold-text: #6ee7b7; --tab-active: #10b981; --tab-active-text: #fff;
-      --modal-overlay: rgba(0,0,0,0.8); --warn-color: #fbbf24;
-    }
-    [data-theme="vaporwave"] {
-      --bg-color: #2d1b4e; --card-bg: #1a0b2e; --text-color: #f0abfc; --text-muted: #c084fc;
-      --accent-color: #d946ef; --success-color: #22c55e; --danger-color: #f43f5e;
-      --border-color: #581c87; --input-bg: #3b0764; --badge-stock-bg: #4c1d95; --badge-stock-text: #e9d5ff;
-      --badge-sold-bg: #701a75; --badge-sold-text: #f5d0fe; --tab-active: #d946ef; --tab-active-text: #fff;
-      --modal-overlay: rgba(0,0,0,0.8); --warn-color: #f59e0b;
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --card-border: #334155;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --primary: #10b981;
+      --primary-hover: #059669;
+      --accent: #3b82f6;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --radius: 12px;
+      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background: var(--bg-color); color: var(--text-color); padding: 12px; padding-bottom: 90px; max-width: 600px; margin: 0 auto; }
+    /* Themes */
+    body.theme-emerald { --bg: #064e3b; --card-bg: #047857; --card-border: #059669; --text: #ecfdf5; --primary: #34d399; }
+    body.theme-vaporwave { --bg: #2e1065; --card-bg: #5b21b6; --card-border: #7c3aed; --text: #f3e8ff; --primary: #ec4899; }
+    body.theme-oled { --bg: #000000; --card-bg: #111111; --card-border: #222222; --text: #ffffff; --primary: #10b981; }
+    body.theme-cyberpunk { --bg: #18002e; --card-bg: #2a004f; --card-border: #facc15; --text: #ffeb3b; --primary: #facc15; }
+    body.theme-arcade { --bg: #0f051d; --card-bg: #291147; --card-border: #ff007f; --text: #00f0ff; --primary: #ff007f; }
+    body.theme-sunset { --bg: #451a03; --card-bg: #78350f; --card-border: #b45309; --text: #fef3c7; --primary: #f59e0b; }
+    body.theme-midnight { --bg: #020617; --card-bg: #0f172a; --card-border: #1e293b; --text: #e2e8f0; --primary: #38bdf8; }
+    body.theme-mint { --bg: #042f2e; --card-bg: #115e59; --card-border: #0d9488; --text: #ccfbf1; --primary: #2dd4bf; }
+    body.theme-crimson { --bg: #450a0a; --card-bg: #7f1d1d; --card-border: #991b1b; --text: #fee2e2; --primary: #f87171; }
+    body.theme-royal { --bg: #3b0764; --card-bg: #581c87; --card-border: #7e22ce; --text: #fae8ff; --primary: #c084fc; }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font); -webkit-tap-highlight-color: transparent; }
+    body { background-color: var(--bg); color: var(--text); padding-bottom: 80px; min-height: 100vh; transition: background 0.3s, color 0.3s; }
     
-    /* HEADER CON AVATAR E CORNICE */
-    .header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
-    .profile-card-header { display: flex; align-items: center; gap: 10px; cursor: pointer; }
-    .avatar-frame { position: relative; width: 44px; height: 44px; flex-shrink: 0; }
-    .avatar-border { position: absolute; inset: -3px; background: var(--frame-gradient); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(245,158,11,0.4); }
-    .avatar-img { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 50%; background: var(--card-bg); object-fit: cover; border: 2px solid var(--card-bg); }
-    .user-info-text .user-name { font-weight: 800; font-size: 1rem; line-height: 1.1; }
-    .user-info-text .user-title { font-size: 0.7rem; color: #a855f7; font-weight: 700; margin-top: 2px; }
+    /* Header & Navigation */
+    header { background: var(--card-bg); border-bottom: 1px solid var(--card-border); padding: 12px 16px; sticky: top; top: 0; z-index: 100; }
+    .top-bar { display: flex; justify-content: space-between; align-items: center; }
+    .user-profile { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+    .avatar-wrapper { position: relative; width: 44px; height: 44px; border-radius: 50%; padding: 2px; }
+    .avatar-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; background: #334155; }
+    .user-info { display: flex; flex-direction: column; }
+    .user-name { font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; gap: 6px; }
+    .user-title { font-size: 0.72rem; color: var(--text-muted); font-weight: 600; }
+    .xp-badge { background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; font-size: 0.75rem; font-weight: 800; padding: 2px 8px; border-radius: 12px; }
 
-    .header-actions { display: flex; gap: 6px; align-items: center; }
-    .btn-header-icon { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-color); padding: 6px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; cursor: pointer; width: auto; display: flex; align-items: center; gap: 4px; }
+    .xp-bar-container { margin-top: 8px; background: rgba(255,255,255,0.1); border-radius: 6px; height: 6px; overflow: hidden; position: relative; }
+    .xp-bar-fill { height: 100%; background: linear-gradient(90deg, #10b981, #3b82f6); width: 0%; transition: width 0.4s ease; }
 
-    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
-    .stat-card { padding: 12px 10px; border-radius: 14px; text-align: left; position: relative; border: none; color: #fff; min-height: 72px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 12px rgba(0,0,0,0.25); }
-    .stat-card .label { font-size: 0.7rem; opacity: 0.9; font-weight: 600; }
-    .stat-card .val { font-size: 1.2rem; font-weight: 800; margin-top: 4px; color: #fff !important; }
-    .stat-card .stat-icon { position: absolute; top: 10px; right: 10px; font-size: 1.3rem; opacity: 0.85; }
-    .stat-card.stock { background: linear-gradient(135deg, #2563eb, #1d4ed8); }
-    .stat-card.cash { background: linear-gradient(135deg, #0d9488, #0f766e); }
-    .stat-card.profit { background: linear-gradient(135deg, #7c3aed, #6d28d9); }
-    .stat-card.month { background: linear-gradient(135deg, #d97706, #b45309); }
-    .cash-adjust-btn { position: absolute; top: 8px; right: 8px; background: rgba(255,255,255,0.2); border: none; color: #fff; font-size: 0.85rem; cursor: pointer; width: auto; padding: 3px 7px; border-radius: 6px; }
+    /* Bottom Nav */
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card-bg); border-top: 1px solid var(--card-border); display: flex; justify-content: space-around; padding: 8px 0; z-index: 99; }
+    .nav-item { display: flex; flex-direction: column; align-items: center; gap: 3px; color: var(--text-muted); font-size: 0.7rem; cursor: pointer; text-decoration: none; border: none; background: none; flex: 1; }
+    .nav-item.active { color: var(--primary); font-weight: 700; }
+    .nav-icon { font-size: 1.25rem; }
 
-    .goal-card { background: var(--card-bg); padding: 10px; border-radius: 10px; border: 1px solid var(--border-color); margin-bottom: 12px; }
-    .goal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 0.8rem; font-weight: 700; }
-    .goal-input { width: 70px; padding: 2px 4px; font-size: 0.8rem; text-align: right; background: var(--input-bg); color: var(--text-color); border: 1px solid var(--border-color); border-radius: 4px; }
-    .progress-bar-bg { background: var(--border-color); border-radius: 6px; height: 10px; overflow: hidden; }
-    .progress-bar-fill { background: var(--success-color); height: 100%; width: 0%; transition: width 0.3s; }
-
-    .status-tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-bottom: 10px; }
-    .tab-btn { padding: 9px 4px; font-size: 0.75rem; font-weight: 700; border-radius: 8px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-color); cursor: pointer; }
-    .tab-btn.active { background: var(--tab-active); color: var(--tab-active-text); border-color: var(--tab-active); }
-
-    .controls-card { background: var(--card-bg); padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); margin-bottom: 12px; }
-    .input-group { margin-bottom: 8px; }
-    input, select, button { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); font-size: 0.9rem; outline: none; background: var(--input-bg); color: var(--text-color); }
-    .filter-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-top: 8px; }
-    .filter-row label { font-size: 0.65rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 2px; }
-
-    .quick-chips-container { display: flex; gap: 6px; margin-top: 6px; overflow-x: auto; padding-bottom: 4px; }
-    .chip-btn { padding: 5px 10px; font-size: 0.72rem; font-weight: 700; border-radius: 6px; width: auto; border: 1px solid var(--border-color); background: var(--card-bg); cursor: pointer; white-space: nowrap; }
-
-    .swipe-container { position: relative; margin-bottom: 8px; border-radius: 10px; overflow: hidden; }
-    .swipe-background { position: absolute; inset: 0; display: flex; justify-content: space-between; align-items: center; font-weight: 700; color: white; font-size: 0.85rem; z-index: 0; }
-    .swipe-bg-left { background: var(--success-color); padding-left: 16px; display: flex; align-items: center; width: 50%; height: 100%; }
-    .swipe-bg-right { background: var(--danger-color); padding-right: 16px; display: flex; justify-content: flex-end; align-items: center; width: 50%; height: 100%; }
-
-    .item-card { background: var(--card-bg); padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; cursor: pointer; position: relative; z-index: 1; touch-action: pan-y; }
-    .item-card.old-stock { border-left: 3px solid var(--warn-color); }
-    .item-info { flex-grow: 1; padding-right: 8px; pointer-events: none; }
-    .item-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 2px; }
-    .item-meta { font-size: 0.72rem; color: var(--text-muted); line-height: 1.45; }
-    .badge { display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 0.68rem; font-weight: 700; margin-right: 4px; }
-    .badge-stock { background: var(--badge-stock-bg); color: var(--badge-stock-text); }
-    .badge-sold { background: var(--badge-sold-bg); color: var(--badge-sold-text); }
-    .roi-pos { color: var(--success-color); font-weight: 700; }
-    .roi-neg { color: var(--danger-color); font-weight: 700; }
-    .days-tag { color: var(--warn-color); font-weight: 600; }
-
-    #chartsView { display: none; }
-    .chart-container { background: var(--card-bg); padding: 14px; border-radius: 10px; border: 1px solid var(--border-color); margin-bottom: 12px; position: relative; height: 280px; width: 100%; }
-    .chart-container h3 { font-size: 0.9rem; margin-bottom: 10px; text-align: center; }
-
-    .fab-btn { position: fixed; bottom: 20px; right: 20px; width: 56px; height: 56px; border-radius: 28px; background: var(--accent-color); color: white; border: none; font-size: 1.8rem; font-weight: 700; display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 14px rgba(0,0,0,0.4); cursor: pointer; z-index: 99; }
-
-    .modal-overlay { position: fixed; inset: 0; background: var(--modal-overlay); display: none; justify-content: center; align-items: center; z-index: 100; padding: 16px; }
-    .modal-content { background: var(--card-bg); width: 100%; max-width: 500px; border-radius: 14px; padding: 16px; max-height: 90vh; overflow-y: auto; border: 1px solid var(--border-color); }
-    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
-    .modal-title { font-size: 1.1rem; font-weight: 700; }
-    .close-modal { background: none; border: none; font-size: 1.4rem; color: var(--text-muted); cursor: pointer; width: auto; padding: 0; }
-    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .full-width { grid-column: span 2; }
-    .btn-main { background: var(--accent-color); color: white; border: none; font-weight: 700; cursor: pointer; margin-top: 8px; }
-    .btn-sell-modal { background: var(--success-color); color: white; border: none; font-weight: 700; cursor: pointer; margin-top: 8px; }
-    .btn-danger { background: var(--danger-color); color: white; border: none; font-weight: 700; cursor: pointer; margin-top: 8px; }
-
-    .bottom-sheet-overlay { position: fixed; inset: 0; background: var(--modal-overlay); z-index: 200; display: flex; align-items: flex-end; justify-content: center; }
-    .bottom-sheet-overlay.hidden { display: none; }
-    .bottom-sheet-content { background: var(--card-bg); width: 100%; max-width: 600px; border-radius: 20px 20px 0 0; padding: 16px 20px 28px; border: 1px solid var(--border-color); }
-    .sheet-handle { width: 36px; height: 4px; background: var(--border-color); border-radius: 2px; margin: 0 auto 12px; }
-    .sheet-title { font-size: 1.1rem; font-weight: 700; text-align: center; }
-    .sheet-subtitle { font-size: 0.8rem; color: var(--text-muted); text-align: center; margin-bottom: 16px; }
-    .sheet-price-group { margin-bottom: 16px; }
-    .sheet-price-group label { display: block; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); margin-bottom: 4px; }
-    .sheet-price-input { font-size: 1.3rem; font-weight: 800; padding: 10px 12px; color: var(--success-color); background: var(--input-bg); border: 2px solid var(--border-color); border-radius: 8px; }
-    .sheet-platform-grid { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
-    .btn-sheet-platform { display: flex; align-items: center; padding: 12px 14px; border: none; border-radius: 8px; font-size: 0.95rem; font-weight: 700; color: #fff; cursor: pointer; width: 100%; text-align: left; }
-    .btn-sheet-platform .p-icon { width: 24px; margin-right: 10px; text-align: center; }
-    .btn-p-vinted { background: #007782; } .btn-p-wallapop { background: #13c1a3; } .btn-p-subito { background: #ff4d4d; }
-    .btn-p-ebay { background: #0064d2; } .btn-p-persona { background: #475569; }
-    .btn-sheet-cancel { background: transparent; border: none; color: var(--text-muted); font-weight: 700; cursor: pointer; padding: 10px; margin-top: 4px; }
-
-    .adjust-list { max-height: 160px; overflow-y: auto; margin-top: 12px; font-size: 0.8rem; }
-    .adjust-item { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border-color); }
-    .adjust-pos { color: var(--success-color); } .adjust-neg { color: var(--danger-color); }
-
-    /* STILI SHOP & SELEZIONE AVATAR */
-    .avatar-picker-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 10px 0; }
-    .avatar-opt { width: 50px; height: 50px; border-radius: 50%; border: 2px solid var(--border-color); cursor: pointer; object-fit: cover; background: var(--input-bg); }
-    .avatar-opt.active { border-color: #a855f7; box-shadow: 0 0 8px rgba(168,85,247,0.5); }
-
-    .shop-item-card { background: var(--input-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
-    .shop-item-info .title { font-weight: 700; font-size: 0.9rem; }
-    .shop-item-info .desc { font-size: 0.72rem; color: var(--text-muted); }
-    .btn-buy-shop { padding: 6px 12px; border-radius: 8px; border: none; background: linear-gradient(135deg, #a855f7, #3b82f6); color: #fff; font-size: 0.75rem; font-weight: 800; cursor: pointer; width: auto; }
-    .btn-buy-shop.owned { background: var(--border-color); color: var(--text-muted); cursor: default; }
-
-    .progress-panel .xp-bar-bg { background:var(--border-color); border-radius:8px; height:12px; overflow:hidden; margin:8px 0 4px; }
-    .progress-panel .xp-bar-fill { background:linear-gradient(90deg,#a855f7,#3b82f6); height:100%; width:0%; transition:width .3s; }
-    .progress-panel .streak-box { display:flex; align-items:center; gap:10px; background:rgba(249,115,22,.15); border:1px solid rgba(249,115,22,.4); border-radius:10px; padding:10px 12px; margin:12px 0; }
-    .progress-panel .mission-item, .progress-panel .badge-item { background:var(--input-bg); border:1px solid var(--border-color); border-radius:10px; padding:10px 12px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; gap:8px; }
-    .progress-panel .mission-item.done { opacity:.75; border-color:var(--success-color); }
-    .progress-panel .badge-item.locked { opacity:.4; }
-    .progress-panel .badge-item.unlocked { border-color:#a855f7; }
-    .progress-panel .tag-xp { font-size:.7rem; font-weight:700; color:#a855f7; white-space:nowrap; }
-    .progress-panel .tag-ok { font-size:.7rem; font-weight:700; color:var(--success-color); }
-    .celeb-overlay { position:fixed; inset:0; z-index:300; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.4); }
-    .celeb-overlay.show { display:flex; }
-    .celeb-box { background:var(--card-bg); border:1px solid var(--border-color); border-radius:16px; padding:24px 28px; text-align:center; max-width:280px; }
-    .celeb-box .big { font-size:2rem; font-weight:800; color:var(--success-color); margin:8px 0; }
+    /* Views & Layout */
+    .container { padding: 16px; max-width: 800px; margin: 0 auto; }
+    .view { display: none; }
+    .view.active { display: block; }
     
-    .settings-item-btn { display: flex; align-items: center; justify-content: space-between; padding: 12px; background: var(--input-bg); border: 1px solid var(--border-color); border-radius: 10px; color: var(--text-color); font-weight: 700; cursor: pointer; margin-bottom: 8px; text-align: left; }
+    .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius); padding: 16px; margin-bottom: 16px; }
+    .card-title { font-size: 1rem; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; }
+    
+    /* Stats Grid */
+    .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 16px; }
+    .stat-box { background: rgba(255,255,255,0.03); border: 1px solid var(--card-border); border-radius: var(--radius); padding: 12px; }
+    .stat-label { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; }
+    .stat-val { font-size: 1.2rem; font-weight: 800; }
+    .stat-val.positive { color: #10b981; }
+    .stat-val.negative { color: #ef4444; }
+
+    /* Buttons & Inputs */
+    .btn { background: var(--primary); color: #fff; border: none; padding: 10px 16px; border-radius: 8px; font-weight: 700; font-size: 0.85rem; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 6px; width: 100%; transition: opacity 0.2s; }
+    .btn:active { opacity: 0.8; }
+    .btn-secondary { background: #334155; color: #fff; }
+    .btn-danger { background: var(--danger); color: #fff; }
+    .btn-outline { background: transparent; border: 1px solid var(--card-border); color: var(--text); }
+    .btn-sm { padding: 6px 10px; font-size: 0.75rem; width: auto; }
+    
+    .form-group { margin-bottom: 12px; }
+    .form-group label { display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px; font-weight: 600; }
+    .form-control { width: 100%; background: rgba(0,0,0,0.2); border: 1px solid var(--card-border); color: var(--text); padding: 10px; border-radius: 8px; font-size: 0.9rem; }
+    .form-control:focus { outline: none; border-color: var(--primary); }
+    
+    /* Filter & Tabs */
+    .tab-bar { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 12px; scrollbar-width: none; }
+    .tab-bar::-webkit-scrollbar { display: none; }
+    .tab-btn { background: rgba(255,255,255,0.05); border: 1px solid var(--card-border); color: var(--text-muted); padding: 6px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; cursor: pointer; white-space: nowrap; }
+    .tab-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+    /* Inventory Items List */
+    .item-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius); padding: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+    .item-left { display: flex; gap: 12px; align-items: center; }
+    .item-icon { width: 40px; height: 40px; border-radius: 8px; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+    .item-title { font-weight: 700; font-size: 0.9rem; margin-bottom: 2px; }
+    .item-sub { font-size: 0.75rem; color: var(--text-muted); }
+    .item-right { text-align: right; }
+    .item-price { font-weight: 800; font-size: 0.95rem; }
+    .status-badge { font-size: 0.65rem; font-weight: 800; padding: 2px 6px; border-radius: 4px; display: inline-block; margin-top: 4px; text-transform: uppercase; }
+    .status-stock { background: #0284c7; color: #fff; }
+    .status-sold { background: #10b981; color: #fff; }
+
+    /* Badges Grid */
+    .badge-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; }
+    .badge-item { background: rgba(255,255,255,0.03); border: 1px solid var(--card-border); border-radius: var(--radius); padding: 10px; text-align: center; position: relative; opacity: 0.5; filter: grayscale(1); transition: 0.2s; }
+    .badge-item.unlocked { opacity: 1; filter: grayscale(0); border-color: var(--warning); background: rgba(245, 158, 11, 0.05); }
+    .badge-icon { font-size: 1.8rem; margin-bottom: 4px; }
+    .badge-name { font-weight: 700; font-size: 0.75rem; margin-bottom: 2px; }
+    .badge-desc { font-size: 0.65rem; color: var(--text-muted); }
+    .badge-progress { font-size: 0.65rem; color: var(--primary); font-weight: 700; margin-top: 4px; }
+
+    /* Shop Grid */
+    .shop-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+    .shop-card { background: rgba(255,255,255,0.03); border: 1px solid var(--card-border); border-radius: var(--radius); padding: 12px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; }
+    .shop-preview { width: 44px; height: 44px; margin: 0 auto 8px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; background: #334155; }
+    .shop-name { font-weight: 700; font-size: 0.8rem; margin-bottom: 2px; }
+    .shop-desc { font-size: 0.65rem; color: var(--text-muted); margin-bottom: 8px; min-height: 24px; }
+    .shop-cost { font-size: 0.75rem; font-weight: 800; color: var(--warning); margin-bottom: 6px; }
+
+    /* Modal */
+    .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 16px; }
+    .modal-overlay.active { display: flex; }
+    .modal-content { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius); width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; padding: 20px; }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .modal-title { font-weight: 800; font-size: 1.1rem; }
+    .close-btn { background: none; border: none; color: var(--text-muted); font-size: 1.5rem; cursor: pointer; }
   </style>
 </head>
 <body>
 
-  <!-- HEADER CON AVATAR E TITOLO DINAMICO -->
-  <div class="header-row">
-    <div class="profile-card-header" onclick="openSettingsModal()" title="Apri Profilo e Impostazioni">
-      <div class="avatar-frame">
-        <div class="avatar-border" id="headerAvatarBorder"></div>
-        <img id="headerAvatarImg" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Cantareal" alt="Avatar" class="avatar-img">
-      </div>
-      <div class="user-info-text">
-        <div class="user-name">Cantareal</div>
-        <div class="user-title" id="headerUserLevelText">Liv. 1 • Novizio</div>
-      </div>
-    </div>
-    
-    <div class="header-actions">
-      <button class="btn-header-icon" onclick="openShopModal()" title="Shop Premi XP" style="background: linear-gradient(135deg, rgba(168,85,247,0.2), rgba(59,130,246,0.2)); border-color: #a855f7;">🛒 Shop</button>
-      <button class="btn-header-icon" onclick="openProgressPanel()" title="Progressi">🏆 <span id="headerXpTag">0 XP</span></button>
-      <button class="btn-header-icon" onclick="openSettingsModal()" title="Impostazioni">⚙️</button>
-    </div>
-  </div>
-
-  <div class="stats-grid">
-    <div class="stat-card stock" onclick="setStatusFilter('stock')" style="cursor:pointer;" title="Vai a Giacenza">
-      <span class="stat-icon">📦</span>
-      <div class="label">Valore Giacenza</div>
-      <div class="val" id="statStockVal">€0.00</div>
-    </div>
-    <div class="stat-card cash" onclick="openCashAdjust()" style="cursor:pointer;" title="Aggiusta Cassa">
-      <button class="cash-adjust-btn" onclick="event.stopPropagation(); openCashAdjust()">✏️</button>
-      <div class="label">Cassa Disponibile</div>
-      <div class="val" id="statCash">€0.00</div>
-    </div>
-    <div class="stat-card profit" onclick="setStatusFilter('sold')" style="cursor:pointer;" title="Vai a Venduti">
-      <span class="stat-icon">📈</span>
-      <div class="label">Profitto Totale</div>
-      <div class="val" id="statProfit">€0.00</div>
-    </div>
-    <div class="stat-card month" onclick="filterThisMonth()" style="cursor:pointer;" title="Filtra questo mese">
-      <span class="stat-icon">📅</span>
-      <div class="label">Profitto Mese</div>
-      <div class="val" id="statMonthProfit">€0.00</div>
-    </div>
-  </div>
-
-  <div class="goal-card">
-    <div class="goal-header">
-      <span>🎯 Obiettivo: €<input type="number" id="targetGoalInput" class="goal-input" value="200" oninput="updateGoal()"></span>
-      <span id="goalPercentText">0%</span>
-    </div>
-    <div class="progress-bar-bg"><div class="progress-bar-fill" id="goalProgressBar"></div></div>
-  </div>
-
-  <div class="status-tabs">
-    <button class="tab-btn active" id="tabALL" onclick="setStatusFilter('ALL')">Tutti</button>
-    <button class="tab-btn" id="tabstock" onclick="setStatusFilter('stock')">📦 Stock</button>
-    <button class="tab-btn" id="tabsold" onclick="setStatusFilter('sold')">✅ Venduti</button>
-    <button class="tab-btn" id="tabSTATS" onclick="setStatusFilter('STATS')">📊 Grafici</button>
-  </div>
-
-  <div id="mainView">
-    <div class="controls-card">
-      <div class="input-group">
-        <input type="text" id="searchInput" placeholder="🔍 Cerca oggetto..." oninput="renderApp()">
-      </div>
-      <div class="filter-row">
-        <div>
-          <label>CATEGORIA</label>
-          <select id="filterCategory" onchange="renderApp()">
-            <option value="ALL">Tutte</option>
-            <option value="Gaming / Videogiochi">Gaming</option>
-            <option value="Abbigliamento">Abbigliamento</option>
-            <option value="Elettronica">Elettronica</option>
-            <option value="Libri">Libri</option>
-            <option value="Altro">Altro</option>
-          </select>
+  <!-- Header -->
+  <header>
+    <div class="top-bar">
+      <div class="user-profile" onclick="switchView('profile')">
+        <div class="avatar-wrapper" id="headerAvatarWrapper">
+          <img id="headerAvatar" class="avatar-img" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Cantareal" alt="Avatar">
         </div>
-        <div>
-          <label>PERIODO</label>
-          <select id="filterMonth" onchange="renderApp()">
-            <option value="ALL">Sempre</option>
-            <option value="CURR_MONTH">Questo Mese</option>
-          </select>
-        </div>
-        <div>
-          <label>ORDINA</label>
-          <select id="sortBy" onchange="renderApp()">
-            <option value="date-desc">Recenti (Data)</option>
-            <option value="date-asc">Vecchi (Data)</option>
-            <option value="days-desc">Giorni in stock ↓</option>
-            <option value="soldDate-desc">Data Vendita ↓</option>
-            <option value="roi-desc">ROI ↓</option>
-            <option value="margin-desc">Margine ↓</option>
-            <option value="price-desc">Prezzo ↓</option>
-            <option value="price-asc">Prezzo ↑</option>
-            <option value="alpha-asc">A → Z</option>
-          </select>
+        <div class="user-info">
+          <div class="user-name">
+            <span id="headerName">Cantareal</span>
+            <span class="xp-badge" id="headerLevel">Lvl 1</span>
+          </div>
+          <div class="user-title" id="headerTitle">⚡ Reseller Debuttante</div>
         </div>
       </div>
+      <div style="text-align: right;">
+        <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 600;">XP CASSA</div>
+        <div style="font-weight: 800; color: var(--warning); font-size: 1rem;" id="headerXp">0 XP</div>
+      </div>
+    </div>
+    <div class="xp-bar-container">
+      <div class="xp-bar-fill" id="xpBarFill"></div>
+    </div>
+  </header>
+
+  <!-- Navigation -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" onclick="switchView('dashboard')">
+      <span class="nav-icon">📊</span>
+      <span>Dashboard</span>
+    </button>
+    <button class="nav-item" onclick="switchView('inventory')">
+      <span class="nav-icon">📦</span>
+      <span>Stock</span>
+    </button>
+    <button class="nav-item" onclick="switchView('badges')">
+      <span class="nav-icon">🏆</span>
+      <span>Obiettivi</span>
+    </button>
+    <button class="nav-item" onclick="switchView('shop')">
+      <span class="nav-icon">🛍️</span>
+      <span>Shop XP</span>
+    </button>
+    <button class="nav-item" onclick="switchView('profile')">
+      <span class="nav-icon">👤</span>
+      <span>Profilo</span>
+    </button>
+  </nav>
+
+  <!-- Container -->
+  <div class="container">
+
+    <!-- View: Dashboard -->
+    <div id="view-dashboard" class="view active">
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div class="stat-label">Profitto Netto Totale</div>
+          <div class="stat-val positive" id="dashProfit">€0.00</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Capitale in Giacenza</div>
+          <div class="stat-val" id="dashStockValue">€0.00</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Oggetti in Stock</div>
+          <div class="stat-val" id="dashStockCount">0</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Vendite Concluse</div>
+          <div class="stat-val" id="dashSalesCount">0</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span>Azione Rapida</span>
+        </div>
+        <button class="btn" onclick="openAddModal()">➕ Aggiungi Nuovo Oggetto (+10 XP)</button>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span>Andamento Vendite</span>
+        </div>
+        <canvas id="salesChart" height="180"></canvas>
+      </div>
     </div>
 
-    <div id="itemList"></div>
+    <!-- View: Inventory -->
+    <div id="view-inventory" class="view">
+      <div class="card" style="margin-bottom: 12px; padding: 12px;">
+        <input type="text" id="searchInput" class="form-control" placeholder="🔍 Cerca per titolo, categoria o piattaforma..." oninput="renderInventory()">
+      </div>
+      
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="filterCategory('ALL', this)">Tutti</button>
+        <button class="tab-btn" onclick="filterCategory('STOCK', this)">In Stock</button>
+        <button class="tab-btn" onclick="filterCategory('SOLD', this)">Venduti</button>
+        <button class="tab-btn" onclick="filterCategory('Gaming', this)">Gaming</button>
+        <button class="tab-btn" onclick="filterCategory('Abbigliamento', this)">Abbigliamento</button>
+        <button class="tab-btn" onclick="filterCategory('Elettronica', this)">Elettronica</button>
+      </div>
+
+      <div id="inventoryList"></div>
+    </div>
+
+    <!-- View: Badges (100 Obiettivi) -->
+    <div id="view-badges" class="view">
+      <div class="card" style="margin-bottom: 12px; padding: 12px; text-align: center;">
+        <div style="font-weight: 800; font-size: 1.1rem;">🏆 100 Obiettivi Reseller</div>
+        <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">Sblocca le sfide per guadagnare XP e scalare i livelli!</div>
+      </div>
+
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="filterBadges('ALL', this)">Tutti (100)</button>
+        <button class="tab-btn" onclick="filterBadges('sales', this)">Vendite</button>
+        <button class="tab-btn" onclick="filterBadges('profit', this)">Profitto</button>
+        <button class="tab-btn" onclick="filterBadges('streak', this)">Streak</button>
+        <button class="tab-btn" onclick="filterBadges('stock', this)">Stock</button>
+        <button class="tab-btn" onclick="filterBadges('cat', this)">Categorie</button>
+      </div>
+
+      <div class="badge-grid" id="badgeGrid"></div>
+    </div>
+
+    <!-- View: Shop (100 Premi) -->
+    <div id="view-shop" class="view">
+      <div class="card" style="margin-bottom: 12px; padding: 12px; text-align: center;">
+        <div style="font-weight: 800; font-size: 1.1rem;">🛍️ Shop Esclusivo XP (100 Premi)</div>
+        <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">Usa i tuoi XP accumulati per personalizzare il tuo stile!</div>
+      </div>
+
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="filterShop('ALL', this)">Tutti (100)</button>
+        <button class="tab-btn" onclick="filterShop('Cornici', this)">Cornici Profilo</button>
+        <button class="tab-btn" onclick="filterShop('Temi', this)">Temi App</button>
+        <button class="tab-btn" onclick="filterShop('Titoli', this)">Titoli Esclusivi</button>
+        <button class="tab-btn" onclick="filterShop('Avatar', this)">Avatar</button>
+      </div>
+
+      <div class="shop-grid" id="shopGrid"></div>
+    </div>
+
+    <!-- View: Profile -->
+    <div id="view-profile" class="view">
+      <div class="card" style="text-align: center;">
+        <div class="avatar-wrapper" id="profileAvatarWrapper" style="width: 80px; height: 80px; margin: 0 auto 12px;">
+          <img id="profileAvatar" class="avatar-img" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Cantareal" alt="Avatar">
+        </div>
+        <h2 id="profileName" style="font-size: 1.2rem;">Cantareal</h2>
+        <div id="profileTitle" style="color: var(--primary); font-weight: 700; font-size: 0.85rem; margin-top: 2px;">⚡ Reseller Debuttante</div>
+        
+        <div style="display: flex; justify-content: center; gap: 16px; margin-top: 16px; text-align: center;">
+          <div>
+            <div style="font-size: 0.75rem; color: var(--text-muted);">Livello</div>
+            <div style="font-weight: 800; font-size: 1.1rem;" id="profileLvl">1</div>
+          </div>
+          <div>
+            <div style="font-size: 0.75rem; color: var(--text-muted);">XP Totali</div>
+            <div style="font-weight: 800; font-size: 1.1rem; color: var(--warning);" id="profileXp">0</div>
+          </div>
+          <div>
+            <div style="font-size: 0.75rem; color: var(--text-muted);">Obiettivi</div>
+            <div style="font-weight: 800; font-size: 1.1rem; color: var(--primary);" id="profileBadgesUnlocked">0 / 100</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Impostazioni & Dati</div>
+        <button class="btn btn-secondary" style="margin-bottom: 8px;" onclick="exportBackup()">📥 Esporta Backup JSON</button>
+        <button class="btn btn-outline" onclick="triggerImport()">📤 Importa Backup JSON</button>
+        <input type="file" id="importFile" style="display:none" onchange="importBackup(event)">
+      </div>
+    </div>
+
   </div>
 
-  <div id="chartsView">
-    <div class="chart-container">
-      <h3>Profitto per Piattaforma</h3>
-      <canvas id="platformChart"></canvas>
-    </div>
-    <div class="chart-container">
-      <h3>Profitto Mensile</h3>
-      <canvas id="monthChart"></canvas>
-    </div>
-    <div class="chart-container">
-      <h3>Profitto per Categoria</h3>
-      <canvas id="categoryChart"></canvas>
-    </div>
-  </div>
-
-  <button class="fab-btn" onclick="openAddModal()">+</button>
-
-  <!-- MODALE AGGIUNGI (SENZA ANTEPRIMA RARITÀ) -->
+  <!-- Modal: Add Item -->
   <div class="modal-overlay" id="addModal">
     <div class="modal-content">
       <div class="modal-header">
-        <div style="display:flex;align-items:center;gap:8px;">
-          <span class="modal-title">➕ Nuovo Oggetto</span>
-          <span style="font-size:0.72rem;font-weight:800;background:rgba(168,85,247,0.2);color:#a855f7;padding:2px 8px;border-radius:12px;border:1px solid rgba(168,85,247,0.4);">+10 XP</span>
-        </div>
-        <button class="close-modal" onclick="closeModal('addModal')">✕</button>
+        <div class="modal-title">➕ Nuovo Oggetto</div>
+        <button class="close-btn" onclick="closeModal('addModal')">&times;</button>
       </div>
-      <div class="form-grid">
-        <div class="full-width">
-          <label style="font-size:0.75rem;font-weight:700;">NOME OGGETTO</label>
-          <input type="text" id="addTitle" placeholder="es. PS4 Fat con Joypad">
+      <form onsubmit="saveNewItem(event)">
+        <div class="form-group">
+          <label>Titolo Oggetto</label>
+          <input type="text" id="addTitle" class="form-control" required placeholder="Es. PS4 Slim 500GB">
         </div>
-        <div>
-          <label style="font-size:0.75rem;font-weight:700;">CATEGORIA</label>
-          <select id="addCategory">
+        <div class="form-group">
+          <label>Categoria</label>
+          <select id="addCategory" class="form-control">
             <option value="Gaming / Videogiochi">Gaming / Videogiochi</option>
             <option value="Abbigliamento">Abbigliamento</option>
             <option value="Elettronica">Elettronica</option>
@@ -317,1251 +331,607 @@
             <option value="Altro">Altro</option>
           </select>
         </div>
-        <div>
-          <label style="font-size:0.75rem;font-weight:700;">FONTE ACQUISTO</label>
-          <select id="addSource">
-            <option value="Mercatino / Di Persona">Mercatino / Di Persona</option>
+        <div class="form-group">
+          <label>Prezzo d'Acquisto (€)</label>
+          <input type="number" step="0.01" id="addBuyPrice" class="form-control" required placeholder="0.00">
+        </div>
+        <div class="form-group">
+          <label>Piattaforma di Vendita Presunta</label>
+          <select id="addPlatform" class="form-control">
             <option value="Vinted">Vinted</option>
             <option value="Wallapop">Wallapop</option>
             <option value="Subito">Subito</option>
             <option value="eBay">eBay</option>
+            <option value="Di Persona">Di Persona</option>
           </select>
         </div>
-
-        <div class="full-width">
-          <label style="font-size:0.75rem;font-weight:700;">PREZZO ACQUISTO (€)</label>
-          <input type="number" id="addBuyPrice" step="0.01" placeholder="0.00" oninput="updateAddPreview()">
-          <div class="quick-chips-container">
-            <button type="button" class="chip-btn" onclick="setQuickBuyPrice(0)">€0 (Gratis)</button>
-            <button type="button" class="chip-btn" onclick="setQuickBuyPrice(2)">€2</button>
-            <button type="button" class="chip-btn" onclick="setQuickBuyPrice(5)">€5</button>
-            <button type="button" class="chip-btn" onclick="setQuickBuyPrice(10)">€10</button>
-            <button type="button" class="chip-btn" onclick="setQuickBuyPrice(20)">€20</button>
-          </div>
-        </div>
-
-        <div>
-          <label style="font-size:0.75rem;font-weight:700;">TARGET VENDITA STIMATO (€)</label>
-          <input type="number" id="addTargetPrice" step="0.01" placeholder="es. 40.00" oninput="updateAddPreview()">
-        </div>
-
-        <div>
-          <label style="font-size:0.75rem;font-weight:700;">DATA ACQUISTO</label>
-          <input type="date" id="addItemDate">
-        </div>
-
-        <!-- BOX MARGINE ATTESO -->
-        <div class="full-width" style="background:var(--input-bg); border:1px solid var(--border-color); border-radius:10px; padding:10px; display:flex; justify-content:space-between; align-items:center;">
-          <div style="font-size:0.75rem; font-weight:700; color:var(--text-muted);">PROFITTO ATTESO STIMATO</div>
-          <div id="previewProfitVal" style="font-size:0.95rem; font-weight:800; color:var(--success-color);">€0.00</div>
-        </div>
-
-        <div class="full-width">
-          <button class="btn-main" onclick="addItem()">💾 Salva nell'Inventario</button>
-        </div>
-      </div>
+        <button type="submit" class="btn">Salva Oggetto (+10 XP)</button>
+      </form>
     </div>
   </div>
 
-  <!-- MODALE SHOP PREMI XP -->
-  <div class="modal-overlay" id="shopModal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <span class="modal-title">🛒 Shop Premi XP</span>
-        <button class="close-modal" onclick="closeModal('shopModal')">✕</button>
-      </div>
-
-      <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(168,85,247,0.15); border:1px solid rgba(168,85,247,0.3); border-radius:10px; padding:10px 12px; margin-bottom:14px;">
-        <span style="font-weight:700; font-size:0.85rem;">Saldo XP Disponibile:</span>
-        <span style="font-weight:800; font-size:1.1rem; color:#a855f7;" id="shopXpBalance">0 XP</span>
-      </div>
-
-      <div style="font-size:0.75rem; font-weight:800; color:var(--text-muted); margin-bottom:8px;">🎨 CORNICI PROFILO</div>
-      
-      <div class="shop-item-card">
-        <div class="shop-item-info">
-          <div class="title">Cornice Argento Cromata</div>
-          <div class="desc">Un elegante bordo argento brillante</div>
-        </div>
-        <button class="btn-buy-shop" id="buy_frame_silver" onclick="buyShopItem('frame_silver', 150)">150 XP</button>
-      </div>
-
-      <div class="shop-item-card">
-        <div class="shop-item-info">
-          <div class="title">Cornice Oro Lusso</div>
-          <div class="desc">La leggendaria cornice dorata dei top reseller</div>
-        </div>
-        <button class="btn-buy-shop" id="buy_frame_gold" onclick="buyShopItem('frame_gold', 300)">300 XP</button>
-      </div>
-
-      <div class="shop-item-card">
-        <div class="shop-item-info">
-          <div class="title">Cornice Neon Cyberpunk</div>
-          <div class="desc">Sfumatura viola e blu acceso</div>
-        </div>
-        <button class="btn-buy-shop" id="buy_frame_neon" onclick="buyShopItem('frame_neon', 500)">500 XP</button>
-      </div>
-
-      <div style="font-size:0.75rem; font-weight:800; color:var(--text-muted); margin:14px 0 8px;">🌈 TEMI GRAFICI ESCLUSIVI</div>
-
-      <div class="shop-item-card">
-        <div class="shop-item-info">
-          <div class="title">Tema Emerald Cash</div>
-          <div class="desc">Sfondo verde smeraldo per veri affaristi</div>
-        </div>
-        <button class="btn-buy-shop" id="buy_theme_emerald" onclick="buyShopItem('theme_emerald', 250)">250 XP</button>
-      </div>
-
-      <div class="shop-item-card">
-        <div class="shop-item-info">
-          <div class="title">Tema Sunset Vaporwave</div>
-          <div class="desc">Tonalità viola e magenta retrò</div>
-        </div>
-        <button class="btn-buy-shop" id="buy_theme_vaporwave" onclick="buyShopItem('theme_vaporwave', 350)">350 XP</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- MODALE MODIFICA -->
+  <!-- Modal: Edit / Sell / Delete Item -->
   <div class="modal-overlay" id="editModal">
     <div class="modal-content">
       <div class="modal-header">
-        <span class="modal-title">✏️ Dettaglio & Modifica</span>
-        <button class="close-modal" onclick="closeModal('editModal')">✕</button>
+        <div class="modal-title">✏️ Dettaglio & Gestione Oggetto</div>
+        <button class="close-btn" onclick="closeModal('editModal')">&times;</button>
       </div>
-      <input type="hidden" id="editId">
-      <div class="form-grid">
-        <div class="full-width">
-          <label style="font-size:0.75rem;font-weight:700;">NOME</label>
-          <input type="text" id="editTitle">
+      <form onsubmit="updateItem(event)">
+        <input type="hidden" id="editId">
+        <div class="form-group">
+          <label>Titolo Oggetto</label>
+          <input type="text" id="editTitle" class="form-control" required>
         </div>
-        <div>
-          <label style="font-size:0.75rem;font-weight:700;">CATEGORIA</label>
-          <select id="editCategory">
-            <option value="Gaming / Videogiochi">Gaming / Videogiochi</option>
-            <option value="Abbigliamento">Abbigliamento</option>
-            <option value="Elettronica">Elettronica</option>
-            <option value="Libri">Libri</option>
-            <option value="Altro">Altro</option>
+        <div class="form-group">
+          <label>Prezzo d'Acquisto (€)</label>
+          <input type="number" step="0.01" id="editBuyPrice" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label>Stato Vendita</label>
+          <select id="editStatus" class="form-control" onchange="toggleSellFields()">
+            <option value="stock">📦 In Stock (In Vendita)</option>
+            <option value="sold">✅ VENDUTO</option>
           </select>
         </div>
-        <div>
-          <label style="font-size:0.75rem;font-weight:700;">FONTE</label>
-          <select id="editSource">
-            <option value="Mercatino / Di Persona">Mercatino / Di Persona</option>
-            <option value="Vinted">Vinted</option>
-            <option value="Wallapop">Wallapop</option>
-            <option value="Subito">Subito</option>
-            <option value="eBay">eBay</option>
-          </select>
-        </div>
-        <div>
-          <label style="font-size:0.75rem;font-weight:700;">PREZZO ACQ (€)</label>
-          <input type="number" id="editBuyPrice" step="0.01">
-        </div>
-        <div>
-          <label style="font-size:0.75rem;font-weight:700;">DATA ACQ</label>
-          <input type="text" id="editDate" placeholder="GG/MM/AAAA">
-        </div>
-        <div class="full-width" style="border-top:1px solid var(--border-color);margin-top:6px;padding-top:8px;">
-          <label style="font-size:0.75rem;font-weight:700;color:var(--success-color);">DETTAGLI VENDITA</label>
-        </div>
-        <div>
-          <label style="font-size:0.75rem;font-weight:700;">PREZZO VENDITA (€)</label>
-          <input type="number" id="editSellPrice" step="0.01" placeholder="0.00">
-        </div>
-        <div>
-          <label style="font-size:0.75rem;font-weight:700;">PIATTAFORMA</label>
-          <select id="editSoldPlatform">
-            <option value="">Seleziona...</option>
-            <option value="Vinted">Vinted</option>
-            <option value="Wallapop">Wallapop</option>
-            <option value="Subito">Subito</option>
-            <option value="eBay">eBay</option>
-            <option value="Mercatino / Di Persona">Mercatino / Di Persona</option>
-          </select>
-        </div>
-        <div class="full-width">
-          <label style="font-size:0.75rem;font-weight:700;">DATA VENDITA</label>
-          <input type="text" id="editSoldDate" placeholder="GG/MM/AAAA">
-        </div>
-        <div class="full-width">
-          <button class="btn-sell-modal" id="btnQuickSell">🛒 Segna come Venduto</button>
-          <button class="btn-main" onclick="saveEditChanges()">💾 Salva Modifiche</button>
-          <button class="btn-danger" onclick="deleteCurrentItem()">🗑 Elimina</button>
-        </div>
-      </div>
-    </div>
-  </div>
 
-  <!-- MODALE AGGIUSTA CASSA -->
-  <div class="modal-overlay" id="cashModal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <span class="modal-title">💰 Aggiusta Cassa</span>
-        <button class="close-modal" onclick="closeModal('cashModal')">✕</button>
-      </div>
-      <p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:12px;">
-        Usa questo per versamenti, prelievi o correzioni. La cassa si aggiorna subito.
-      </p>
-      <div class="form-grid">
-        <div class="full-width">
-          <label style="font-size:0.75rem;font-weight:700;">IMPORTO (€) — metti il meno per togliere (es. -50)</label>
-          <input type="text" inputmode="decimal" id="cashAmount" placeholder="es. 50 oppure -30">
+        <div id="sellFields" style="display:none; border-top: 1px dashed var(--card-border); padding-top: 12px; margin-top: 12px;">
+          <div class="form-group">
+            <label>Prezzo di Vendita Effettivo (€)</label>
+            <input type="number" step="0.01" id="editSellPrice" class="form-control" placeholder="0.00">
+          </div>
+          <div class="form-group">
+            <label>Spese / Commissioni (€)</label>
+            <input type="number" step="0.01" id="editFees" class="form-control" value="0.00">
+          </div>
         </div>
-        <div class="full-width">
-          <label style="font-size:0.75rem;font-weight:700;">MOTIVO (opzionale)</label>
-          <input type="text" id="cashReason" placeholder="es. Versamento personale, Prelievo, Correzione...">
+
+        <div style="display: flex; gap: 8px; margin-top: 16px;">
+          <button type="submit" class="btn" style="flex: 2;"> Aggiorna Oggetto</button>
+          <button type="button" class="btn btn-danger" style="flex: 1;" onclick="deleteCurrentItem()">🗑️ Elimina</button>
         </div>
-        <div class="full-width">
-          <button class="btn-main" onclick="confirmCashAdjust()">Applica Aggiustamento</button>
-        </div>
-      </div>
-      <div class="adjust-list" id="adjustList"></div>
-    </div>
-  </div>
-
-  <!-- MODALE IMPOSTAZIONI E SELEZIONE AVATAR -->
-  <div class="modal-overlay" id="settingsModal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <span class="modal-title">⚙️ Profilo & Impostazioni</span>
-        <button class="close-modal" onclick="closeModal('settingsModal')">✕</button>
-      </div>
-      
-      <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px; padding:10px; background:var(--input-bg); border-radius:10px; border:1px solid var(--border-color);">
-        <div class="avatar-frame">
-          <div class="avatar-border" id="settingsAvatarBorder"></div>
-          <img id="settingsAvatarImg" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Cantareal" alt="Avatar" class="avatar-img">
-        </div>
-        <div>
-          <div style="font-weight:800; font-size:1rem;">Cantareal</div>
-          <div style="font-size:0.75rem; color:#a855f7; font-weight:700;" id="settingsLevelText">Livello 1 • Novizio</div>
-        </div>
-      </div>
-
-      <!-- SCELTA IMMAGINE PROFILO -->
-      <div style="font-size:0.75rem; font-weight:800; color:var(--text-muted); margin-bottom:6px;">SCEGLI IMMAGINE PROFILO</div>
-      <div class="avatar-picker-grid">
-        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Cantareal" class="avatar-opt" onclick="setAvatar(this.src)">
-        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" class="avatar-opt" onclick="setAvatar(this.src)">
-        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Aneka" class="avatar-opt" onclick="setAvatar(this.src)">
-        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Jack" class="avatar-opt" onclick="setAvatar(this.src)">
-      </div>
-      <div style="margin-bottom:14px;">
-        <input type="text" id="customAvatarUrlInput" placeholder="O incolla URL immagine personalizzata..." style="font-size:0.75rem; padding:6px 10px;" onchange="setAvatar(this.value)">
-      </div>
-
-      <div style="font-size:0.75rem; font-weight:800; color:var(--text-muted); margin-bottom:8px;">GESTIONE DATI & BACKUP</div>
-      
-      <div class="settings-item-btn" onclick="copyData()">
-        <span>📋 Copia Dati negli Appunti</span>
-        <span>➔</span>
-      </div>
-      <div class="settings-item-btn" onclick="importData()">
-        <span>📥 Importa Backup JSON</span>
-        <span>➔</span>
-      </div>
-      <div class="settings-item-btn" onclick="downloadBackup()">
-        <span>📂 Scarica Backup (JSON)</span>
-        <span>➔</span>
-      </div>
-      <div class="settings-item-btn" onclick="downloadCSV()">
-        <span>📊 Esporta in Excel (CSV)</span>
-        <span>➔</span>
-      </div>
-      <div class="settings-item-btn" onclick="manualSave()">
-        <span>💾 Salva Stato Attuale</span>
-        <span>➔</span>
-      </div>
-
-      <div style="font-size:0.75rem; font-weight:800; color:var(--text-muted); margin:14px 0 8px;">PERSONALIZZAZIONE</div>
-      
-      <div class="settings-item-btn" onclick="toggleTheme()">
-        <span>Tema Grafico Base</span>
-        <span id="settingsThemeBtn">☀️ Chiaro</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- PANNELLO PROGRESSI (XP / STREAK / MISSIONI) -->
-  <div class="modal-overlay" id="progressModal">
-    <div class="modal-content progress-panel">
-      <div class="modal-header">
-        <span class="modal-title">🏆 Progressi & Livello</span>
-        <button class="close-modal" onclick="closeModal('progressModal')">✕</button>
-      </div>
-      <div style="text-align:center;margin-bottom:4px;">
-        <div style="font-size:0.75rem;color:var(--text-muted);">LIVELLO ATTUALE</div>
-        <div style="font-size:1.8rem;font-weight:800;" id="progLevel">1</div>
-        <div class="xp-bar-bg"><div class="xp-bar-fill" id="progXpBar"></div></div>
-        <div style="font-size:0.75rem;color:var(--text-muted);" id="progXpText">0 / 100 XP</div>
-      </div>
-      <div class="streak-box">
-        <span style="font-size:1.6rem;">🔥</span>
-        <div>
-          <div style="font-weight:800;" id="progStreak">Streak: 0 giorni</div>
-          <div style="font-size:0.75rem;color:var(--text-muted);">Apri l'app ogni giorno per non perderlo</div>
-        </div>
-      </div>
-      <div style="font-weight:700;margin:12px 0 8px;">🎯 Missioni della Settimana</div>
-      <div id="progMissions"></div>
-      <div style="font-weight:700;margin:14px 0 8px;">🏅 Badge Sbloccati</div>
-      <div id="progBadges"></div>
-    </div>
-  </div>
-
-  <!-- CELEBRAZIONE VENDITA -->
-  <div class="celeb-overlay" id="celebOverlay" onclick="this.classList.remove('show')">
-    <div class="celeb-box">
-      <div style="font-size:1.5rem;">🎉</div>
-      <div class="big" id="celebProfit">+€0</div>
-      <div style="font-weight:700;">Vendita registrata!</div>
-      <div style="font-size:0.8rem;color:var(--text-muted);margin-top:4px;" id="celebXp">+0 XP</div>
-    </div>
-  </div>
-
-  <!-- BOTTOM SHEET VENDITA -->
-  <div id="sellSheet" class="bottom-sheet-overlay hidden" onclick="closeSellSheet(event)">
-    <div class="bottom-sheet-content" onclick="event.stopPropagation()">
-      <div class="sheet-handle"></div>
-      <div class="sheet-title">🛒 Registra Vendita</div>
-      <div class="sheet-subtitle" id="sheetItemTitle">Nome Oggetto</div>
-      <div class="sheet-price-group">
-        <label>PREZZO FINALE INCASSATO (€)</label>
-        <input type="number" id="sheetSellPrice" step="0.50" class="sheet-price-input" placeholder="0.00">
-      </div>
-      <label style="font-size:0.75rem;font-weight:700;color:var(--text-muted);display:block;margin-bottom:8px;">PIATTAFORMA:</label>
-      <div class="sheet-platform-grid">
-        <button type="button" class="btn-sheet-platform btn-p-vinted" onclick="confirmSheetSell('Vinted')"><span class="p-icon">V</span> Vinted</button>
-        <button type="button" class="btn-sheet-platform btn-p-wallapop" onclick="confirmSheetSell('Wallapop')"><span class="p-icon">W</span> Wallapop</button>
-        <button type="button" class="btn-sheet-platform btn-p-subito" onclick="confirmSheetSell('Subito')"><span class="p-icon">S</span> Subito</button>
-        <button type="button" class="btn-sheet-platform btn-p-ebay" onclick="confirmSheetSell('eBay')"><span class="p-icon">e</span> eBay</button>
-        <button type="button" class="btn-sheet-platform btn-p-persona" onclick="confirmSheetSell('Mercatino / Di Persona')"><span class="p-icon">🤝</span> Di Persona</button>
-      </div>
-      <button type="button" class="btn-sheet-cancel" onclick="closeSellSheet()">Annulla</button>
+      </form>
     </div>
   </div>
 
   <script>
-    const BASELINE_CASH = 200.64;
-    const DB_KEY = "reselling_pro_max_db_v6";
-    const ADJ_KEY = "reselling_pro_max_adjustments";
-    const GOAL_KEY = "reselling_pro_max_goal";
-    const THEME_KEY = "reselling_pro_max_theme";
-    const AVATAR_KEY = "reselling_pro_max_avatar";
-    const SHOP_KEY = "reselling_pro_max_shop";
+    // --- 100 OBIETTIVI (BADGES) ---
+    const BADGES = [{"id": "sale_1", "name": "1 Vendita", "desc": "Completa 1 vendita in totale", "icon": "🛒", "reqType": "sales", "reqVal": 1}, {"id": "sale_2", "name": "2 Vendite", "desc": "Completa 2 vendite in totale", "icon": "🛒", "reqType": "sales", "reqVal": 2}, {"id": "sale_3", "name": "3 Vendite", "desc": "Completa 3 vendite in totale", "icon": "🛒", "reqType": "sales", "reqVal": 3}, {"id": "sale_5", "name": "5 Vendite", "desc": "Completa 5 vendite in totale", "icon": "🛒", "reqType": "sales", "reqVal": 5}, {"id": "sale_7", "name": "7 Vendite", "desc": "Completa 7 vendite in totale", "icon": "🛒", "reqType": "sales", "reqVal": 7}, {"id": "sale_10", "name": "10 Vendite", "desc": "Completa 10 vendite in totale", "icon": "🥇", "reqType": "sales", "reqVal": 10}, {"id": "sale_15", "name": "15 Vendite", "desc": "Completa 15 vendite in totale", "icon": "🥇", "reqType": "sales", "reqVal": 15}, {"id": "sale_20", "name": "20 Vendite", "desc": "Completa 20 vendite in totale", "icon": "🥇", "reqType": "sales", "reqVal": 20}, {"id": "sale_25", "name": "25 Vendite", "desc": "Completa 25 vendite in totale", "icon": "🥇", "reqType": "sales", "reqVal": 25}, {"id": "sale_30", "name": "30 Vendite", "desc": "Completa 30 vendite in totale", "icon": "🥇", "reqType": "sales", "reqVal": 30}, {"id": "sale_40", "name": "40 Vendite", "desc": "Completa 40 vendite in totale", "icon": "🥇", "reqType": "sales", "reqVal": 40}, {"id": "sale_50", "name": "50 Vendite", "desc": "Completa 50 vendite in totale", "icon": "🏆", "reqType": "sales", "reqVal": 50}, {"id": "sale_60", "name": "60 Vendite", "desc": "Completa 60 vendite in totale", "icon": "🏆", "reqType": "sales", "reqVal": 60}, {"id": "sale_70", "name": "70 Vendite", "desc": "Completa 70 vendite in totale", "icon": "🏆", "reqType": "sales", "reqVal": 70}, {"id": "sale_80", "name": "80 Vendite", "desc": "Completa 80 vendite in totale", "icon": "🏆", "reqType": "sales", "reqVal": 80}, {"id": "sale_90", "name": "90 Vendite", "desc": "Completa 90 vendite in totale", "icon": "🏆", "reqType": "sales", "reqVal": 90}, {"id": "sale_100", "name": "100 Vendite", "desc": "Completa 100 vendite in totale", "icon": "🏆", "reqType": "sales", "reqVal": 100}, {"id": "sale_150", "name": "150 Vendite", "desc": "Completa 150 vendite in totale", "icon": "🏆", "reqType": "sales", "reqVal": 150}, {"id": "sale_200", "name": "200 Vendite", "desc": "Completa 200 vendite in totale", "icon": "🏆", "reqType": "sales", "reqVal": 200}, {"id": "sale_250", "name": "250 Vendite", "desc": "Completa 250 vendite in totale", "icon": "🏆", "reqType": "sales", "reqVal": 250}, {"id": "profit_5", "name": "€5 Profitto", "desc": "Raggiungi €5 di profitto accumulato", "icon": "💶", "reqType": "profit", "reqVal": 5}, {"id": "profit_10", "name": "€10 Profitto", "desc": "Raggiungi €10 di profitto accumulato", "icon": "💶", "reqType": "profit", "reqVal": 10}, {"id": "profit_20", "name": "€20 Profitto", "desc": "Raggiungi €20 di profitto accumulato", "icon": "💶", "reqType": "profit", "reqVal": 20}, {"id": "profit_30", "name": "€30 Profitto", "desc": "Raggiungi €30 di profitto accumulato", "icon": "💶", "reqType": "profit", "reqVal": 30}, {"id": "profit_50", "name": "€50 Profitto", "desc": "Raggiungi €50 di profitto accumulato", "icon": "💶", "reqType": "profit", "reqVal": 50}, {"id": "profit_75", "name": "€75 Profitto", "desc": "Raggiungi €75 di profitto accumulato", "icon": "💶", "reqType": "profit", "reqVal": 75}, {"id": "profit_100", "name": "€100 Profitto", "desc": "Raggiungi €100 di profitto accumulato", "icon": "💰", "reqType": "profit", "reqVal": 100}, {"id": "profit_150", "name": "€150 Profitto", "desc": "Raggiungi €150 di profitto accumulato", "icon": "💰", "reqType": "profit", "reqVal": 150}, {"id": "profit_200", "name": "€200 Profitto", "desc": "Raggiungi €200 di profitto accumulato", "icon": "💰", "reqType": "profit", "reqVal": 200}, {"id": "profit_250", "name": "€250 Profitto", "desc": "Raggiungi €250 di profitto accumulato", "icon": "💰", "reqType": "profit", "reqVal": 250}, {"id": "profit_300", "name": "€300 Profitto", "desc": "Raggiungi €300 di profitto accumulato", "icon": "💰", "reqType": "profit", "reqVal": 300}, {"id": "profit_400", "name": "€400 Profitto", "desc": "Raggiungi €400 di profitto accumulato", "icon": "💰", "reqType": "profit", "reqVal": 400}, {"id": "profit_500", "name": "€500 Profitto", "desc": "Raggiungi €500 di profitto accumulato", "icon": "💰", "reqType": "profit", "reqVal": 500}, {"id": "profit_750", "name": "€750 Profitto", "desc": "Raggiungi €750 di profitto accumulato", "icon": "💰", "reqType": "profit", "reqVal": 750}, {"id": "profit_1000", "name": "€1000 Profitto", "desc": "Raggiungi €1000 di profitto accumulato", "icon": "💎", "reqType": "profit", "reqVal": 1000}, {"id": "profit_1500", "name": "€1500 Profitto", "desc": "Raggiungi €1500 di profitto accumulato", "icon": "💎", "reqType": "profit", "reqVal": 1500}, {"id": "profit_2000", "name": "€2000 Profitto", "desc": "Raggiungi €2000 di profitto accumulato", "icon": "💎", "reqType": "profit", "reqVal": 2000}, {"id": "profit_2500", "name": "€2500 Profitto", "desc": "Raggiungi €2500 di profitto accumulato", "icon": "💎", "reqType": "profit", "reqVal": 2500}, {"id": "profit_5000", "name": "€5000 Profitto", "desc": "Raggiungi €5000 di profitto accumulato", "icon": "💎", "reqType": "profit", "reqVal": 5000}, {"id": "profit_10000", "name": "€10000 Profitto", "desc": "Raggiungi €10000 di profitto accumulato", "icon": "💎", "reqType": "profit", "reqVal": 10000}, {"id": "streak_1", "name": "Streak 1 Giono", "desc": "Accedi all'app per 1 giorno consecutivo", "icon": "🔥", "reqType": "streak", "reqVal": 1}, {"id": "streak_2", "name": "Streak 2 Gioni", "desc": "Accedi all'app per 2 giorni consecutivi", "icon": "🔥", "reqType": "streak", "reqVal": 2}, {"id": "streak_3", "name": "Streak 3 Gioni", "desc": "Accedi all'app per 3 giorni consecutivi", "icon": "🔥", "reqType": "streak", "reqVal": 3}, {"id": "streak_4", "name": "Streak 4 Gioni", "desc": "Accedi all'app per 4 giorni consecutivi", "icon": "🔥", "reqType": "streak", "reqVal": 4}, {"id": "streak_5", "name": "Streak 5 Gioni", "desc": "Accedi all'app per 5 giorni consecutivi", "icon": "🔥", "reqType": "streak", "reqVal": 5}, {"id": "streak_6", "name": "Streak 6 Gioni", "desc": "Accedi all'app per 6 giorni consecutivi", "icon": "🔥", "reqType": "streak", "reqVal": 6}, {"id": "streak_7", "name": "Streak 7 Gioni", "desc": "Accedi all'app per 7 giorni consecutivi", "icon": "🔥", "reqType": "streak", "reqVal": 7}, {"id": "streak_10", "name": "Streak 10 Gioni", "desc": "Accedi all'app per 10 giorni consecutivi", "icon": "🔥", "reqType": "streak", "reqVal": 10}, {"id": "streak_14", "name": "Streak 14 Gioni", "desc": "Accedi all'app per 14 giorni consecutivi", "icon": "🔥", "reqType": "streak", "reqVal": 14}, {"id": "streak_21", "name": "Streak 21 Gioni", "desc": "Accedi all'app per 21 giorni consecutivi", "icon": "🔥", "reqType": "streak", "reqVal": 21}, {"id": "streak_30", "name": "Streak 30 Gioni", "desc": "Accedi all'app per 30 giorni consecutivi", "icon": "🔥", "reqType": "streak", "reqVal": 30}, {"id": "streak_45", "name": "Streak 45 Gioni", "desc": "Accedi all'app per 45 giorni consecutivi", "icon": "🔥", "reqType": "streak", "reqVal": 45}, {"id": "streak_60", "name": "Streak 60 Gioni", "desc": "Accedi all'app per 60 giorni consecutivi", "icon": "🔥", "reqType": "streak", "reqVal": 60}, {"id": "streak_90", "name": "Streak 90 Gioni", "desc": "Accedi all'app per 90 giorni consecutivi", "icon": "🔥", "reqType": "streak", "reqVal": 90}, {"id": "streak_100", "name": "Streak 100 Gioni", "desc": "Accedi all'app per 100 giorni consecutivi", "icon": "🔥", "reqType": "streak", "reqVal": 100}, {"id": "stock_1", "name": "Stock 1 Pezzi", "desc": "Mantieni almeno 1 oggetto in giacenza", "icon": "📦", "reqType": "stock", "reqVal": 1}, {"id": "stock_5", "name": "Stock 5 Pezzi", "desc": "Mantieni almeno 5 oggetti in giacenza", "icon": "📦", "reqType": "stock", "reqVal": 5}, {"id": "stock_10", "name": "Stock 10 Pezzi", "desc": "Mantieni almeno 10 oggetti in giacenza", "icon": "📦", "reqType": "stock", "reqVal": 10}, {"id": "stock_15", "name": "Stock 15 Pezzi", "desc": "Mantieni almeno 15 oggetti in giacenza", "icon": "📦", "reqType": "stock", "reqVal": 15}, {"id": "stock_20", "name": "Stock 20 Pezzi", "desc": "Mantieni almeno 20 oggetti in giacenza", "icon": "📦", "reqType": "stock", "reqVal": 20}, {"id": "stock_25", "name": "Stock 25 Pezzi", "desc": "Mantieni almeno 25 oggetti in giacenza", "icon": "📦", "reqType": "stock", "reqVal": 25}, {"id": "stock_30", "name": "Stock 30 Pezzi", "desc": "Mantieni almeno 30 oggetti in giacenza", "icon": "📦", "reqType": "stock", "reqVal": 30}, {"id": "stock_40", "name": "Stock 40 Pezzi", "desc": "Mantieni almeno 40 oggetti in giacenza", "icon": "📦", "reqType": "stock", "reqVal": 40}, {"id": "stock_50", "name": "Stock 50 Pezzi", "desc": "Mantieni almeno 50 oggetti in giacenza", "icon": "📦", "reqType": "stock", "reqVal": 50}, {"id": "stock_60", "name": "Stock 60 Pezzi", "desc": "Mantieni almeno 60 oggetti in giacenza", "icon": "📦", "reqType": "stock", "reqVal": 60}, {"id": "stock_70", "name": "Stock 70 Pezzi", "desc": "Mantieni almeno 70 oggetti in giacenza", "icon": "📦", "reqType": "stock", "reqVal": 70}, {"id": "stock_80", "name": "Stock 80 Pezzi", "desc": "Mantieni almeno 80 oggetti in giacenza", "icon": "📦", "reqType": "stock", "reqVal": 80}, {"id": "stock_90", "name": "Stock 90 Pezzi", "desc": "Mantieni almeno 90 oggetti in giacenza", "icon": "📦", "reqType": "stock", "reqVal": 90}, {"id": "stock_100", "name": "Stock 100 Pezzi", "desc": "Mantieni almeno 100 oggetti in giacenza", "icon": "📦", "reqType": "stock", "reqVal": 100}, {"id": "stock_150", "name": "Stock 150 Pezzi", "desc": "Mantieni almeno 150 oggetti in giacenza", "icon": "📦", "reqType": "stock", "reqVal": 150}, {"id": "cat_gaming_1", "name": "Esperto Gaming 1", "desc": "Vendi 1 oggetto nella categoria Gaming / Videogiochi", "icon": "🎮", "reqType": "cat", "catName": "Gaming / Videogiochi", "reqVal": 1}, {"id": "cat_gaming_5", "name": "Esperto Gaming 5", "desc": "Vendi 5 oggetti nella categoria Gaming / Videogiochi", "icon": "🎮", "reqType": "cat", "catName": "Gaming / Videogiochi", "reqVal": 5}, {"id": "cat_gaming_10", "name": "Esperto Gaming 10", "desc": "Vendi 10 oggetti nella categoria Gaming / Videogiochi", "icon": "🎮", "reqType": "cat", "catName": "Gaming / Videogiochi", "reqVal": 10}, {"id": "cat_clothing_1", "name": "Esperto Abbigliamento 1", "desc": "Vendi 1 oggetto nella categoria Abbigliamento", "icon": "🧥", "reqType": "cat", "catName": "Abbigliamento", "reqVal": 1}, {"id": "cat_clothing_5", "name": "Esperto Abbigliamento 5", "desc": "Vendi 5 oggetti nella categoria Abbigliamento", "icon": "🧥", "reqType": "cat", "catName": "Abbigliamento", "reqVal": 5}, {"id": "cat_clothing_10", "name": "Esperto Abbigliamento 10", "desc": "Vendi 10 oggetti nella categoria Abbigliamento", "icon": "🧥", "reqType": "cat", "catName": "Abbigliamento", "reqVal": 10}, {"id": "cat_electronics_1", "name": "Esperto Elettronica 1", "desc": "Vendi 1 oggetto nella categoria Elettronica", "icon": "💻", "reqType": "cat", "catName": "Elettronica", "reqVal": 1}, {"id": "cat_electronics_5", "name": "Esperto Elettronica 5", "desc": "Vendi 5 oggetti nella categoria Elettronica", "icon": "💻", "reqType": "cat", "catName": "Elettronica", "reqVal": 5}, {"id": "cat_electronics_10", "name": "Esperto Elettronica 10", "desc": "Vendi 10 oggetti nella categoria Elettronica", "icon": "💻", "reqType": "cat", "catName": "Elettronica", "reqVal": 10}, {"id": "cat_books_1", "name": "Esperto Libri 1", "desc": "Vendi 1 oggetto nella categoria Libri", "icon": "📚", "reqType": "cat", "catName": "Libri", "reqVal": 1}, {"id": "cat_books_5", "name": "Esperto Libri 5", "desc": "Vendi 5 oggetti nella categoria Libri", "icon": "📚", "reqType": "cat", "catName": "Libri", "reqVal": 5}, {"id": "cat_books_10", "name": "Esperto Libri 10", "desc": "Vendi 10 oggetti nella categoria Libri", "icon": "📚", "reqType": "cat", "catName": "Libri", "reqVal": 10}, {"id": "cat_other_1", "name": "Esperto Altro 1", "desc": "Vendi 1 oggetto nella categoria Altro", "icon": "📦", "reqType": "cat", "catName": "Altro", "reqVal": 1}, {"id": "cat_other_5", "name": "Esperto Altro 5", "desc": "Vendi 5 oggetti nella categoria Altro", "icon": "📦", "reqType": "cat", "catName": "Altro", "reqVal": 5}, {"id": "cat_other_10", "name": "Esperto Altro 10", "desc": "Vendi 10 oggetti nella categoria Altro", "icon": "📦", "reqType": "cat", "catName": "Altro", "reqVal": 10}, {"id": "roi_50", "name": "ROI 50%", "desc": "Realizza una vendita con ROI pari o superiore al 50%", "icon": "📈", "reqType": "roi", "reqVal": 50}, {"id": "roi_100", "name": "ROI 100%", "desc": "Realizza una vendita con ROI pari o superiore al 100%", "icon": "📈", "reqType": "roi", "reqVal": 100}, {"id": "roi_150", "name": "ROI 150%", "desc": "Realizza una vendita con ROI pari o superiore al 150%", "icon": "📈", "reqType": "roi", "reqVal": 150}, {"id": "roi_200", "name": "ROI 200%", "desc": "Realizza una vendita con ROI pari o superiore al 200%", "icon": "📈", "reqType": "roi", "reqVal": 200}, {"id": "roi_300", "name": "ROI 300%", "desc": "Realizza una vendita con ROI pari o superiore al 300%", "icon": "📈", "reqType": "roi", "reqVal": 300}, {"id": "roi_500", "name": "ROI 500%", "desc": "Realizza una vendita con ROI pari o superiore al 500%", "icon": "📈", "reqType": "roi", "reqVal": 500}, {"id": "roi_1000", "name": "ROI 1000%", "desc": "Realizza una vendita con ROI pari o superiore al 1000%", "icon": "📈", "reqType": "roi", "reqVal": 1000}, {"id": "level_2", "name": "Livello 2", "desc": "Raggiungi il Livello 2 di esperienza", "icon": "⭐", "reqType": "level", "reqVal": 2}, {"id": "level_3", "name": "Livello 3", "desc": "Raggiungi il Livello 3 di esperienza", "icon": "⭐", "reqType": "level", "reqVal": 3}, {"id": "level_4", "name": "Livello 4", "desc": "Raggiungi il Livello 4 di esperienza", "icon": "⭐", "reqType": "level", "reqVal": 4}, {"id": "level_5", "name": "Livello 5", "desc": "Raggiungi il Livello 5 di esperienza", "icon": "⭐", "reqType": "level", "reqVal": 5}, {"id": "level_7", "name": "Livello 7", "desc": "Raggiungi il Livello 7 di esperienza", "icon": "⭐", "reqType": "level", "reqVal": 7}, {"id": "level_10", "name": "Livello 10", "desc": "Raggiungi il Livello 10 di esperienza", "icon": "⭐", "reqType": "level", "reqVal": 10}, {"id": "level_15", "name": "Livello 15", "desc": "Raggiungi il Livello 15 di esperienza", "icon": "⭐", "reqType": "level", "reqVal": 15}, {"id": "level_20", "name": "Livello 20", "desc": "Raggiungi il Livello 20 di esperienza", "icon": "⭐", "reqType": "level", "reqVal": 20}];
 
-    const userRealDataset = [
-      {"id":"1793884343763","t":"Felpa Napapijri","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.15,"sp":0,"s":"stock","d":"05/11/2026","soldPlatform":"","soldDate":""},
-      {"id":"1793884334722","t":"Felpa Guinness","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.15,"sp":0,"s":"stock","d":"05/11/2026","soldPlatform":"","soldDate":""},
-      {"id":"1793884319850","t":"Felpa DHL taglia M","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.15,"sp":0,"s":"stock","d":"05/11/2026","soldPlatform":"","soldDate":""},
-      {"id":"1793884304211","t":"Felpa DHL taglia L","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.15,"sp":0,"s":"stock","d":"05/11/2026","soldPlatform":"","soldDate":""},
-      {"id":"1793709293839","t":"Felpa Ascoli Nike","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3,"sp":0,"s":"stock","d":"03/11/2026","soldPlatform":"","soldDate":""},
-      {"id":"1793261983990","t":"Miti del nord","c":"Libri","src":"Mercatino / Di Persona","bp":0,"sp":0,"s":"stock","d":"29/10/2026","soldPlatform":"","soldDate":""},
-      {"id":"1793261971110","t":"Enciclopedia del fantastico","c":"Libri","src":"Mercatino / Di Persona","bp":0,"sp":0,"s":"stock","d":"29/10/2026","soldPlatform":"","soldDate":""},
-      {"id":"1793261957954","t":"Edda","c":"Libri","src":"Mercatino / Di Persona","bp":0,"sp":10,"s":"sold","d":"29/10/2026","soldPlatform":"Vinted","soldDate":"01/11/2026"},
-      {"id":"1793109700688","t":"Bushido","c":"Libri","src":"Mercatino / Di Persona","bp":0,"sp":0,"s":"stock","d":"27/10/2026","soldPlatform":"","soldDate":""},
-      {"id":"1793109690566","t":"Cuore oscuro","c":"Libri","src":"Mercatino / Di Persona","bp":0,"sp":0,"s":"stock","d":"27/10/2026","soldPlatform":"","soldDate":""},
-      {"id":"1793109674532","t":"Maglia DHL","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":2,"sp":17,"s":"sold","d":"27/10/2026","soldPlatform":"Vinted","soldDate":"28/10/2026"},
-      {"id":"1793109660940","t":"Maglia Lipsia","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":5,"sp":0,"s":"stock","d":"27/10/2026","soldPlatform":"","soldDate":""},
-      {"id":"1792655015266","t":"Don Chisciotte DVD","c":"Altro","src":"Mercatino / Di Persona","bp":0,"sp":0,"s":"stock","d":"22/10/2026","soldPlatform":"","soldDate":""},
-      {"id":"1792655005063","t":"Il miracolo di berna DVD","c":"Altro","src":"Mercatino / Di Persona","bp":0,"sp":0,"s":"stock","d":"22/10/2026","soldPlatform":"","soldDate":""},
-      {"id":"1792654995011","t":"Nella terra dei cannibali dvd","c":"Altro","src":"Mercatino / Di Persona","bp":0,"sp":0,"s":"stock","d":"22/10/2026","soldPlatform":"","soldDate":""},
-      {"id":"1792654978314","t":"The getaway Ps2","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":0,"sp":0,"s":"stock","d":"22/10/2026","soldPlatform":"","soldDate":""},
-      {"id":"1792499154342","t":"Felpa Borussia Dortmund","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.3,"sp":30,"s":"sold","d":"20/10/2026","soldPlatform":"Wallapop","soldDate":"29/10/2026"},
-      {"id":"1792499138053","t":"Maglia Chicago bulls","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.3,"sp":0,"s":"stock","d":"20/10/2026","soldPlatform":"","soldDate":""},
-      {"id":"1792499116883","t":"Maglia Jordan PSG","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.3,"sp":0,"s":"stock","d":"20/10/2026","soldPlatform":"","soldDate":""},
-      {"id":"1791914659856","t":"PS4 slim","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":25,"sp":0,"s":"stock","d":"13/10/2026","soldPlatform":"","soldDate":""},
-      {"id":"1791651300704","t":"Inazuma Eleven striker wii","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":5,"sp":0,"s":"stock","d":"10/10/2026","soldPlatform":"","soldDate":""},
-      {"id":"1791651288584","t":"Mario kart wii","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":5,"sp":0,"s":"stock","d":"10/10/2026","soldPlatform":"","soldDate":""},
-      {"id":"1791596827414","t":"Camicia uomo Tommy Hilfiger","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.75,"sp":0,"s":"stock","d":"06/10/2026","soldPlatform":"","soldDate":""},
-      {"id":"1791596810008","t":"Felpa Adidas donna con zip","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.75,"sp":0,"s":"stock","d":"06/10/2026","soldPlatform":"","soldDate":""},
-      {"id":"1791596787282","t":"Felpa Adidas oliva","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.75,"sp":0,"s":"stock","d":"06/10/2026","soldPlatform":"","soldDate":""},
-      {"id":"1791596760197","t":"Maglietta Rosario central","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":5.14,"sp":35,"s":"sold","d":"06/10/2026","soldPlatform":"Wallapop","soldDate":"29/10/2026"},
-      {"id":"1791157418467","t":"God of war ps3","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":6,"sp":0,"s":"stock","d":"05/10/2026","soldPlatform":"","soldDate":""},
-      {"id":"1791157403004","t":"Maglietta Marcelo burlon","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":16.65,"sp":0,"s":"stock","d":"05/10/2026","soldPlatform":"","soldDate":""},
-      {"id":"1791157390221","t":"Crash twinsanity","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":6.84,"sp":0,"s":"stock","d":"05/10/2026","soldPlatform":"","soldDate":""},
-      {"id":"1791157369967","t":"Spyro the eternal night","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":6.84,"sp":0,"s":"stock","d":"05/10/2026","soldPlatform":"","soldDate":""},
-      {"id":"1791157184294","t":"Crash 4","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":5,"sp":0,"s":"stock","d":"05/10/2026","soldPlatform":"","soldDate":""},
-      {"id":"1791157170580","t":"Rayman Legend","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":5,"sp":0,"s":"stock","d":"05/10/2026","soldPlatform":"","soldDate":""},
-      {"id":"1791157157611","t":"Crash Trilogy ps4","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":5,"sp":15,"s":"sold","d":"05/10/2026","soldPlatform":"Vinted","soldDate":"05/10/2026"},
-      {"id":"1791157144737","t":"Spyro Trilogy ps4","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":5,"sp":15,"s":"sold","d":"05/10/2026","soldPlatform":"Vinted","soldDate":"05/10/2026"},
-      {"id":"1791157109063","t":"PS4 fat","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":40,"sp":0,"s":"stock","d":"05/10/2026","soldPlatform":"","soldDate":""},
-      {"id":"1","t":"Onimusha: Dawn of Dreams (PS2)","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":20,"sp":0,"d":"05/09/2026","soldPlatform":"","soldDate":""},
-      {"id":"2","t":"Zerocalcare (Libro)","c":"Libri","src":"Vinted","s":"sold","bp":0,"sp":9,"d":"05/09/2026","soldPlatform":"Vinted","soldDate":"05/09/2026"},
-      {"id":"3","t":"Crash l'ira di Cortex","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":0,"sp":0,"d":"05/09/2026","soldPlatform":"","soldDate":""},
-      {"id":"4","t":"Gta V","c":"Gaming / Videogiochi","src":"Wallapop","s":"sold","bp":0,"sp":8,"d":"05/09/2026","soldPlatform":"Wallapop","soldDate":"05/09/2026"},
-      {"id":"5","t":"Jak e dexter","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":0,"sp":0,"d":"05/09/2026","soldPlatform":"","soldDate":""},
-      {"id":"6","t":"SmackDown shut your mouth","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":0,"sp":0,"d":"05/09/2026","soldPlatform":"","soldDate":""},
-      {"id":"7","t":"Smackdown here comes the pain","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":0,"sp":0,"d":"05/09/2026","soldPlatform":"","soldDate":""},
-      {"id":"8","t":"TMNT Wii","c":"Gaming / Videogiochi","src":"eBay","s":"sold","bp":0,"sp":6.94,"d":"05/09/2026","soldPlatform":"eBay","soldDate":"05/09/2026"},
-      {"id":"9","t":"Cardigan Abercrombie","c":"Abbigliamento","src":"Vinted","s":"sold","bp":0,"sp":7,"d":"05/09/2026","soldPlatform":"Vinted","soldDate":"05/09/2026"},
-      {"id":"10","t":"The last of us part 2","c":"Gaming / Videogiochi","src":"Vinted","s":"sold","bp":5,"sp":14,"d":"05/09/2026","soldPlatform":"Vinted","soldDate":"05/09/2026"},
-      {"id":"11","t":"Dying light","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"sold","bp":5,"sp":11.5,"d":"05/09/2026","soldPlatform":"Vinted","soldDate":"05/11/2026"},
-      {"id":"12","t":"Ring fit Adventure","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":20,"sp":0,"d":"06/09/2026","soldPlatform":"","soldDate":""},
-      {"id":"13","t":"Distruggi documenti","c":"Elettronica","src":"Mercatino / Di Persona","s":"stock","bp":0,"sp":0,"d":"09/09/2026","soldPlatform":"","soldDate":""},
-      {"id":"14","t":"Resistance 2","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":3,"sp":0,"d":"16/09/2026","soldPlatform":"","soldDate":""},
-      {"id":"15","t":"Resistance fall of man","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":3,"sp":0,"d":"16/09/2026","soldPlatform":"","soldDate":""},
-      {"id":"16","t":"Gran Turismo 6","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"sold","bp":3,"sp":6,"d":"16/09/2026","soldPlatform":"Vinted","soldDate":"01/11/2026"},
-      {"id":"17","t":"Street fighter IV","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":3,"sp":0,"d":"16/09/2026","soldPlatform":"","soldDate":""},
-      {"id":"18","t":"Metal Gear Solid guns of the patriots","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":3,"sp":0,"d":"16/09/2026","soldPlatform":"","soldDate":""},
-      {"id":"19","t":"Binary domain","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":3,"sp":0,"d":"16/09/2026","soldPlatform":"","soldDate":""},
-      {"id":"20","t":"Time crisis razing storm","c":"Gaming / Videogiochi","src":"Vinted","s":"sold","bp":3,"sp":13,"d":"16/09/2026","soldPlatform":"Vinted","soldDate":"16/09/2026"},
-      {"id":"21","t":"The Legend of Spyro","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"sold","bp":3,"sp":24,"d":"16/09/2026","soldPlatform":"Vinted","soldDate":"05/10/2026"},
-      {"id":"22","t":"The last of us","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":3,"sp":0,"d":"16/09/2026","soldPlatform":"","soldDate":""},
-      {"id":"23","t":"COD Advanced warfare","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":3,"sp":0,"d":"16/09/2026","soldPlatform":"","soldDate":""},
-      {"id":"24","t":"Costume adidas","c":"Abbigliamento","src":"Mercatino / Di Persona","s":"stock","bp":0,"sp":0,"d":"18/09/2026","soldPlatform":"","soldDate":""},
-      {"id":"25","t":"Castlevania","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"sold","bp":6,"sp":19,"d":"19/09/2026","soldPlatform":"Vinted","soldDate":"10/10/2026"},
-      {"id":"26","t":"Dead space 2","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":6,"sp":0,"d":"19/09/2026","soldPlatform":"","soldDate":""},
-      {"id":"27","t":"Polo Lacoste","c":"Abbigliamento","src":"Vinted","s":"sold","bp":5,"sp":19,"d":"19/09/2026","soldPlatform":"Vinted","soldDate":"19/09/2026"},
-      {"id":"28","t":"Life Is strange","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":11.39,"sp":0,"d":"24/09/2026","soldPlatform":"","soldDate":""},
-      {"id":"29","t":"GTA Trilogy ps4","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"sold","bp":9.63,"sp":15,"d":"27/09/2026","soldPlatform":"Vinted","soldDate":"05/10/2026"}
-    ];
+    // --- 100 PREMI SHOP ---
+    const SHOP_ITEMS = [{"id": "frame_silver", "category": "Cornici", "name": "Argento Cromata", "desc": "Un elegante bordo argento lucido", "cost": 150, "styleVal": "linear-gradient(135deg, #94a3b8, #e2e8f0)"}, {"id": "frame_gold", "category": "Cornici", "name": "Oro Lusso", "desc": "La brillante cornice dorata dei top reseller", "cost": 300, "styleVal": "linear-gradient(135deg, #f59e0b, #fef08a)"}, {"id": "frame_neon", "category": "Cornici", "name": "Neon Cyberpunk", "desc": "Sfumatura viola e ciano al plasma", "cost": 450, "styleVal": "linear-gradient(135deg, #a855f7, #06b6d4)"}, {"id": "frame_emerald", "category": "Cornici", "name": "Smeraldo Reale", "desc": "Bordo verde brillante portafortuna", "cost": 200, "styleVal": "linear-gradient(135deg, #10b981, #6ee7b7)"}, {"id": "frame_ruby", "category": "Cornici", "name": "Rubino Fiammante", "desc": "Rosso intenso al titanio", "cost": 250, "styleVal": "linear-gradient(135deg, #ef4444, #fca5a5)"}, {"id": "frame_diamond", "category": "Cornici", "name": "Diamante Puro", "desc": "Effetto cristallo olografico", "cost": 600, "styleVal": "linear-gradient(135deg, #e0f2fe, #38bdf8, #818cf8)"}, {"id": "frame_fire", "category": "Cornici", "name": "Fuoco Vulcanico", "desc": "Gradiente arancio e rosso caldissimo", "cost": 350, "styleVal": "linear-gradient(135deg, #f97316, #dc2626)"}, {"id": "frame_galaxy", "category": "Cornici", "name": "Spazio Galattico", "desc": "Misteriosa aura viola notte", "cost": 400, "styleVal": "linear-gradient(135deg, #4c1d95, #c084fc)"}, {"id": "frame_retro", "category": "Cornici", "name": "Retro Arcade 80s", "desc": "Stile pixel art synthwave", "cost": 300, "styleVal": "linear-gradient(135deg, #ec4899, #8b5cf6)"}, {"id": "frame_matrix", "category": "Cornici", "name": "Matrix Hacker", "desc": "Verde digitale ad alta energia", "cost": 350, "styleVal": "linear-gradient(135deg, #15803d, #4ade80)"}, {"id": "frame_rainbow", "category": "Cornici", "name": "Arcobaleno RGB", "desc": "Tutti i colori della vittoria", "cost": 700, "styleVal": "linear-gradient(135deg, #ef4444, #eab308, #22c55e, #3b82f6, #a855f7)"}, {"id": "frame_platinum", "category": "Cornici", "name": "Platino Supremo", "desc": "Lucentezza metallica di altissimo livello", "cost": 800, "styleVal": "linear-gradient(135deg, #cbd5e1, #ffffff, #64748b)"}, {"id": "frame_sunset", "category": "Cornici", "name": "Tramonto Tropicale", "desc": "Calde tonalità rosa e arancio", "cost": 220, "styleVal": "linear-gradient(135deg, #f43f5e, #fb923c)"}, {"id": "frame_ocean", "category": "Cornici", "name": "Abisso Marino", "desc": "Blu profondo ed incantevole", "cost": 240, "styleVal": "linear-gradient(135deg, #1e3a8a, #60a5fa)"}, {"id": "frame_shadow", "category": "Cornici", "name": "Ombra Oscura", "desc": "Bordo nero grafite fumé", "cost": 180, "styleVal": "linear-gradient(135deg, #1e293b, #475569)"}, {"id": "frame_gold_dragon", "category": "Cornici", "name": "Drago Dorato", "desc": "Aura di puro impero commerciale", "cost": 1000, "styleVal": "linear-gradient(135deg, #b45309, #fef08a, #d97706)"}, {"id": "frame_amethyst", "category": "Cornici", "name": "Ametista Viola", "desc": "Cristallo viola brillante", "cost": 280, "styleVal": "linear-gradient(135deg, #7e22ce, #e9d5ff)"}, {"id": "frame_mint", "category": "Cornici", "name": "Menta Fresca", "desc": "Verde acqua rilassante", "cost": 160, "styleVal": "linear-gradient(135deg, #0d9488, #99f6e4)"}, {"id": "frame_copper", "category": "Cornici", "name": "Rame Anticato", "desc": "Stile vintage industriale", "cost": 190, "styleVal": "linear-gradient(135deg, #78350f, #f97316)"}, {"id": "frame_ice", "category": "Cornici", "name": "Ghiaccio Glaciale", "desc": "Aura fredda e cristallina", "cost": 320, "styleVal": "linear-gradient(135deg, #a5f3fc, #0284c7)"}, {"id": "frame_carbon", "category": "Cornici", "name": "Fibra di Carbonio", "desc": "Trama sportiva e aggressiva", "cost": 380, "styleVal": "linear-gradient(135deg, #0f172a, #334155)"}, {"id": "frame_champagne", "category": "Cornici", "name": "Champagne Gold", "desc": "Eleganza senza tempo", "cost": 550, "styleVal": "linear-gradient(135deg, #fef3c7, #d97706)"}, {"id": "frame_sakura", "category": "Cornici", "name": "Fiori di Ciliegio", "desc": "Rosa delicato stile fioritura", "cost": 210, "styleVal": "linear-gradient(135deg, #f472b6, #fbcfe8)"}, {"id": "frame_electric", "category": "Cornici", "name": "Fulmine Elettrico", "desc": "Giallo fluorescente ad alta tensione", "cost": 420, "styleVal": "linear-gradient(135deg, #eab308, #fef08a)"}, {"id": "frame_lava", "category": "Cornici", "name": "Magma Incandescente", "desc": "Rosso vulcanico profondo", "cost": 460, "styleVal": "linear-gradient(135deg, #991b1b, #ef4444)"}, {"id": "frame_poison", "category": "Cornici", "name": "Tossico Fluorescente", "desc": "Verde acido cyberpunk", "cost": 310, "styleVal": "linear-gradient(135deg, #65a30d, #bef264)"}, {"id": "frame_sunburn", "category": "Cornici", "name": "Sole di Mezzogiorno", "desc": "Bagliore solare abbagliante", "cost": 290, "styleVal": "linear-gradient(135deg, #f59e0b, #fbbf24)"}, {"id": "frame_mystic", "category": "Cornici", "name": "Mistico Celestiale", "desc": "Sfumatura cosmica blu-viola", "cost": 500, "styleVal": "linear-gradient(135deg, #3b82f6, #8b5cf6)"}, {"id": "frame_titanium", "category": "Cornici", "name": "Titanio Spazzolato", "desc": "Resistenza ed eleganza metallica", "cost": 650, "styleVal": "linear-gradient(135deg, #475569, #94a3b8)"}, {"id": "frame_godly", "category": "Cornici", "name": "Aura Divina", "desc": "La cornice suprema sbloccabile solo dai migliori", "cost": 1500, "styleVal": "linear-gradient(135deg, #ffffff, #fef08a, #38bdf8, #a855f7)"}, {"id": "theme_emerald", "category": "Temi", "name": "Emerald Cash", "desc": "Sfondo verde smeraldo per veri affaristi", "cost": 250, "themeVal": "emerald"}, {"id": "theme_vaporwave", "category": "Temi", "name": "Sunset Vaporwave", "desc": "Tonalità viola e magenta retrò 80s", "cost": 350, "themeVal": "vaporwave"}, {"id": "theme_oled", "category": "Temi", "name": "Dark OLED Deep", "desc": "Nero assoluto per risparmiare batteria", "cost": 200, "themeVal": "oled"}, {"id": "theme_cyberpunk", "category": "Temi", "name": "Cyberpunk Neon", "desc": "Contrasti gialli e viola ad alto impatto", "cost": 400, "themeVal": "cyberpunk"}, {"id": "theme_retro_arcade", "category": "Temi", "name": "Retro Arcade", "desc": "Stile console vintage anni 90", "cost": 300, "themeVal": "arcade"}, {"id": "theme_sunset", "category": "Temi", "name": "Sunset Gold", "desc": "Warm sfumature calde del tramonto", "cost": 220, "themeVal": "sunset"}, {"id": "theme_midnight", "category": "Temi", "name": "Midnight Blue", "desc": "Blu notte elegante ed ergonomico", "cost": 180, "themeVal": "midnight"}, {"id": "theme_mint", "category": "Temi", "name": "Mint Freshness", "desc": "Design chiaro e fresco a base di menta", "cost": 150, "themeVal": "mint"}, {"id": "theme_crimson", "category": "Temi", "name": "Crimson Red", "desc": "Rosso passione per le trattative piú calde", "cost": 280, "themeVal": "crimson"}, {"id": "theme_royal", "category": "Temi", "name": "Royal Purple", "desc": "Nobile sfumatura viola reale", "cost": 320, "themeVal": "royal"}, {"id": "theme_solar", "category": "Temi", "name": "Solar Flare", "desc": "Giallo e arancio energetico", "cost": 210, "themeVal": "solar"}, {"id": "theme_coffee", "category": "Temi", "name": "Warm Coffee", "desc": "Toni marrone caldo e crema rilassante", "cost": 170, "themeVal": "coffee"}, {"id": "theme_ocean", "category": "Temi", "name": "Ocean Deep", "desc": "Abisso di blu rilassante per gli occhi", "cost": 230, "themeVal": "ocean"}, {"id": "theme_lavender", "category": "Temi", "name": "Soft Lavender", "desc": "Tonalità lilla e lavanda moderna", "cost": 190, "themeVal": "lavender"}, {"id": "theme_shadow", "category": "Temi", "name": "Shadow Stealth", "desc": "Grigio scuro tattico per sessioni notturne", "cost": 260, "themeVal": "shadow"}, {"id": "theme_pastel", "category": "Temi", "name": "Pastel Dream", "desc": "Colori pastello morbidi e puliti", "cost": 240, "themeVal": "pastel"}, {"id": "theme_carbon", "category": "Temi", "name": "Carbon Fiber", "desc": "Texture tecnica dark ad alta precisione", "cost": 380, "themeVal": "carbon"}, {"id": "theme_golden", "category": "Temi", "name": "Golden Luxe", "desc": "Grafica dorata d'alta classe", "cost": 500, "themeVal": "golden"}, {"id": "theme_space", "category": "Temi", "name": "Space Void", "desc": "Sfondo stellato cosmico scuro", "cost": 450, "themeVal": "space"}, {"id": "theme_cherry", "category": "Temi", "name": "Cherry Blossom", "desc": "Rosa tenue ispirato alla primavera giapponese", "cost": 270, "themeVal": "cherry"}, {"id": "theme_forest", "category": "Temi", "name": "Deep Forest", "desc": "Verde pino naturale e rilassante", "cost": 210, "themeVal": "forest"}, {"id": "theme_monochrome", "category": "Temi", "name": "Pure Monochrome", "desc": "Bianco e nero minimale e nitido", "cost": 160, "themeVal": "monochrome"}, {"id": "theme_matrix", "category": "Temi", "name": "Code Matrix", "desc": "Verde su nero per veri programmatori", "cost": 330, "themeVal": "matrix_theme"}, {"id": "theme_neon_pink", "category": "Temi", "name": "Neon Pink Party", "desc": "Rosa acceso fluo ad alta visibilità", "cost": 290, "themeVal": "neon_pink"}, {"id": "theme_iceberg", "category": "Temi", "name": "Iceberg Frost", "desc": "Toni azzurro freddo e pulito", "cost": 220, "themeVal": "iceberg"}, {"id": "theme_copper", "category": "Temi", "name": "Copper Vintage", "desc": "Stile rame ossidato elegante", "cost": 250, "themeVal": "copper_theme"}, {"id": "theme_gothic", "category": "Temi", "name": "Gothic Dark", "desc": "Oscuro con dettagli cremisi", "cost": 310, "themeVal": "gothic"}, {"id": "theme_supernova", "category": "Temi", "name": "Supernova Burst", "desc": "Giallo ed arancio esplosivo", "cost": 420, "themeVal": "supernova"}, {"id": "theme_cyber_blue", "category": "Temi", "name": "Cyber Blue", "desc": "Azzurro elettrico iper-tecnologico", "cost": 360, "themeVal": "cyber_blue"}, {"id": "theme_ultimate_gold", "category": "Temi", "name": "Ultimate Empire", "desc": "Il tema dorato supremo per veri re del flip", "cost": 1000, "themeVal": "ultimate_gold"}, {"id": "title_flip_king", "category": "Titoli", "name": "👑 Re del Flip", "desc": "Sblocca il titolo da mostrare nel tuo profilo: 👑 Re del Flip", "cost": 150, "titleVal": "👑 Re del Flip"}, {"id": "title_vinted_sniper", "category": "Titoli", "name": "🎯 Vinted Sniper", "desc": "Sblocca il titolo da mostrare nel tuo profilo: 🎯 Vinted Sniper", "cost": 200, "titleVal": "🎯 Vinted Sniper"}, {"id": "title_bargain_hunter", "category": "Titoli", "name": "🔍 Cacciatore d'Affari", "desc": "Sblocca il titolo da mostrare nel tuo profilo: 🔍 Cacciatore d'Affari", "cost": 100, "titleVal": "🔍 Cacciatore d'Affari"}, {"id": "title_retro_guru", "category": "Titoli", "name": "🕹️ Retrogame Guru", "desc": "Sblocca il titolo da mostrare nel tuo profilo: 🕹️ Retrogame Guru", "cost": 250, "titleVal": "🕹️ Retrogame Guru"}, {"id": "title_cash_machine", "category": "Titoli", "name": "💸 Macchina da Soldi", "desc": "Sblocca il titolo da mostrare nel tuo profilo: 💸 Macchina da Soldi", "cost": 300, "titleVal": "💸 Macchina da Soldi"}, {"id": "title_subito_boss", "category": "Titoli", "name": "⚡ Subito Boss", "desc": "Sblocca il titolo da mostrare nel tuo profilo: ⚡ Subito Boss", "cost": 180, "titleVal": "⚡ Subito Boss"}, {"id": "title_wallapop_pro", "category": "Titoli", "name": "🌟 Wallapop Legend", "desc": "Sblocca il titolo da mostrare nel tuo profilo: 🌟 Wallapop Legend", "cost": 180, "titleVal": "🌟 Wallapop Legend"}, {"id": "title_ebay_master", "category": "Titoli", "name": "🦅 eBay Master", "desc": "Sblocca il titolo da mostrare nel tuo profilo: 🦅 eBay Master", "cost": 220, "titleVal": "🦅 eBay Master"}, {"id": "title_market_king", "category": "Titoli", "name": "🎪 Mago dei Mercatini", "desc": "Sblocca il titolo da mostrare nel tuo profilo: 🎪 Mago dei Mercatini", "cost": 260, "titleVal": "🎪 Mago dei Mercatini"}, {"id": "title_margin_god", "category": "Titoli", "name": "📈 Dio del Margine", "desc": "Sblocca il titolo da mostrare nel tuo profilo: 📈 Dio del Margine", "cost": 400, "titleVal": "📈 Dio del Margine"}, {"id": "title_pomezia_broker", "category": "Titoli", "name": "🏛️ Broker di Pomezia", "desc": "Sblocca il titolo da mostrare nel tuo profilo: 🏛️ Broker di Pomezia", "cost": 350, "titleVal": "🏛️ Broker di Pomezia"}, {"id": "title_zero_cost", "category": "Titoli", "name": "🆓 Maestro del Gratis (€0)", "desc": "Sblocca il titolo da mostrare nel tuo profilo: 🆓 Maestro del Gratis (€0)", "cost": 150, "titleVal": "🆓 Maestro del Gratis (€0)"}, {"id": "title_fast_seller", "category": "Titoli", "name": "⚡ Venditore Lampo", "desc": "Sblocca il titolo da mostrare nel tuo profilo: ⚡ Venditore Lampo", "cost": 200, "titleVal": "⚡ Venditore Lampo"}, {"id": "title_pack_master", "category": "Titoli", "name": "📦 Imballatore Pro", "desc": "Sblocca il titolo da mostrare nel tuo profilo: 📦 Imballatore Pro", "cost": 120, "titleVal": "📦 Imballatore Pro"}, {"id": "title_negotiator", "category": "Titoli", "name": "🤝 Trattatore Spieato", "desc": "Sblocca il titolo da mostrare nel tuo profilo: 🤝 Trattatore Spieato", "cost": 230, "titleVal": "🤝 Trattatore Spieato"}, {"id": "title_cloth_stylist", "category": "Titoli", "name": "🧥 Fashion Reseller", "desc": "Sblocca il titolo da mostrare nel tuo profilo: 🧥 Fashion Reseller", "cost": 170, "titleVal": "🧥 Fashion Reseller"}, {"id": "title_tech_wizard", "category": "Titoli", "name": "💻 Tech Wizard", "desc": "Sblocca il titolo da mostrare nel tuo profilo: 💻 Tech Wizard", "cost": 240, "titleVal": "💻 Tech Wizard"}, {"id": "title_book_worm", "category": "Titoli", "name": "📚 Collezionista di Libri", "desc": "Sblocca il titolo da mostrare nel tuo profilo: 📚 Collezionista di Libri", "cost": 160, "titleVal": "📚 Collezionista di Libri"}, {"id": "title_roi_monster", "category": "Titoli", "name": "🚀 ROI Monstruoso", "desc": "Sblocca il titolo da mostrare nel tuo profilo: 🚀 ROI Monstruoso", "cost": 320, "titleVal": "🚀 ROI Monstruoso"}, {"id": "title_streak_master", "category": "Titoli", "name": "🔥 Guerriero dello Streak", "desc": "Sblocca il titolo da mostrare nel tuo profilo: 🔥 Guerriero dello Streak", "cost": 280, "titleVal": "🔥 Guerriero dello Streak"}, {"id": "title_vault_keeper", "category": "Titoli", "name": "🔐 Custode della Cassa", "desc": "Sblocca il titolo da mostrare nel tuo profilo: 🔐 Custode della Cassa", "cost": 190, "titleVal": "🔐 Custode della Cassa"}, {"id": "title_baffo_oro", "category": "Titoli", "name": "👨‍🍳 Pizzaiolo degli Affari", "desc": "Sblocca il titolo da mostrare nel tuo profilo: 👨‍🍳 Pizzaiolo degli Affari", "cost": 300, "titleVal": "👨‍🍳 Pizzaiolo degli Affari"}, {"id": "title_side_hustler", "category": "Titoli", "name": "💼 Side Hustle King", "desc": "Sblocca il titolo da mostrare nel tuo profilo: 💼 Side Hustle King", "cost": 220, "titleVal": "💼 Side Hustle King"}, {"id": "title_loot_goblin", "category": "Titoli", "name": "👺 Loot Goblin", "desc": "Sblocca il titolo da mostrare nel tuo profilo: 👺 Loot Goblin", "cost": 210, "titleVal": "👺 Loot Goblin"}, {"id": "title_imperatore", "category": "Titoli", "name": "🏛️ Imperatore del Resell", "desc": "Sblocca il titolo da mostrare nel tuo profilo: 🏛️ Imperatore del Resell", "cost": 500, "titleVal": "🏛️ Imperatore del Resell"}, {"id": "title_leggenda", "category": "Titoli", "name": "✨ Leggenda Vivente", "desc": "Sblocca il titolo da mostrare nel tuo profilo: ✨ Leggenda Vivente", "cost": 750, "titleVal": "✨ Leggenda Vivente"}, {"id": "title_overlord", "category": "Titoli", "name": "👾 Overlord delle Aste", "desc": "Sblocca il titolo da mostrare nel tuo profilo: 👾 Overlord delle Aste", "cost": 600, "titleVal": "👾 Overlord delle Aste"}, {"id": "title_gold_finger", "category": "Titoli", "name": "🖐️ Baffo d'Oro", "desc": "Sblocca il titolo da mostrare nel tuo profilo: 🖐️ Baffo d'Oro", "cost": 450, "titleVal": "🖐️ Baffo d'Oro"}, {"id": "title_affarista", "category": "Titoli", "name": "💼 Affarista Seriale", "desc": "Sblocca il titolo da mostrare nel tuo profilo: 💼 Affarista Seriale", "cost": 270, "titleVal": "💼 Affarista Seriale"}, {"id": "title_supreme", "category": "Titoli", "name": "💎 Reseller Supremo", "desc": "Sblocca il titolo da mostrare nel tuo profilo: 💎 Reseller Supremo", "cost": 1000, "titleVal": "💎 Reseller Supremo"}, {"id": "avatar_gamer", "category": "Avatar", "name": "Avatar Gamer Pro", "desc": "Avatar esclusivo sbloccabile nello shop", "cost": 150, "avatarUrl": "https://api.dicebear.com/7.x/avataaars/svg?seed=GamerPro"}, {"id": "avatar_boss", "category": "Avatar", "name": "Avatar Big Boss", "desc": "Avatar esclusivo sbloccabile nello shop", "cost": 200, "avatarUrl": "https://api.dicebear.com/7.x/avataaars/svg?seed=BigBoss"}, {"id": "avatar_cyber", "category": "Avatar", "name": "Avatar Cyber Girl", "desc": "Avatar esclusivo sbloccabile nello shop", "cost": 200, "avatarUrl": "https://api.dicebear.com/7.x/avataaars/svg?seed=CyberGirl"}, {"id": "avatar_ninja", "category": "Avatar", "name": "Avatar Resell Ninja", "desc": "Avatar esclusivo sbloccabile nello shop", "cost": 250, "avatarUrl": "https://api.dicebear.com/7.x/avataaars/svg?seed=ResellNinja"}, {"id": "avatar_king", "category": "Avatar", "name": "Avatar Golden King", "desc": "Avatar esclusivo sbloccabile nello shop", "cost": 300, "avatarUrl": "https://api.dicebear.com/7.x/avataaars/svg?seed=GoldenKing"}, {"id": "avatar_wizard", "category": "Avatar", "name": "Avatar Trade Wizard", "desc": "Avatar esclusivo sbloccabile nello shop", "cost": 220, "avatarUrl": "https://api.dicebear.com/7.x/avataaars/svg?seed=TradeWizard"}, {"id": "avatar_detective", "category": "Avatar", "name": "Avatar Bargain Hunter", "desc": "Avatar esclusivo sbloccabile nello shop", "cost": 180, "avatarUrl": "https://api.dicebear.com/7.x/avataaars/svg?seed=BargainHunter"}, {"id": "avatar_astro", "category": "Avatar", "name": "Avatar Astro Reseller", "desc": "Avatar esclusivo sbloccabile nello shop", "cost": 280, "avatarUrl": "https://api.dicebear.com/7.x/avataaars/svg?seed=AstroReseller"}, {"id": "avatar_retro", "category": "Avatar", "name": "Avatar 80s Guy", "desc": "Avatar esclusivo sbloccabile nello shop", "cost": 190, "avatarUrl": "https://api.dicebear.com/7.x/avataaars/svg?seed=80sGuy"}, {"id": "avatar_legend", "category": "Avatar", "name": "Avatar Legend Master", "desc": "Avatar esclusivo sbloccabile nello shop", "cost": 500, "avatarUrl": "https://api.dicebear.com/7.x/avataaars/svg?seed=LegendMaster"}];
 
-    let db = [];
-    let adjustments = [];
-    let currentStatusFilter = "ALL";
-    let activeSheetItemId = null;
-    let platformChartInst = null, monthChartInst = null, categoryChartInst = null;
-    let ownedShopItems = [];
+    // Database & Progress State
+    let db = JSON.parse(localStorage.getItem("cantareal_db")) || [];
+    let progress = JSON.parse(localStorage.getItem("cantareal_progress")) || {
+      xp: 0,
+      level: 1,
+      unlockedBadges: [],
+      inventoryUnlocked: [],
+      activeFrame: null,
+      activeTheme: null,
+      activeTitle: "⚡ Reseller Debuttante",
+      activeAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Cantareal",
+      streak: 1,
+      lastAccess: new Date().toISOString().split('T')[0]
+    };
 
-    // Caricamento Dati
-    try {
-      const saved = localStorage.getItem(DB_KEY);
-      db = saved ? JSON.parse(saved) : userRealDataset;
-      if (!saved) localStorage.setItem(DB_KEY, JSON.stringify(db));
-    } catch(e) { db = userRealDataset; }
+    let activeCatFilter = "ALL";
+    let activeBadgeFilter = "ALL";
+    let activeShopFilter = "ALL";
+    let chartInstance = null;
 
-    try {
-      adjustments = JSON.parse(localStorage.getItem(ADJ_KEY) || "[]");
-    } catch(e) { adjustments = []; }
+    // --- INIT APP ---
+    window.addEventListener("DOMContentLoaded", () => {
+      checkDailyStreak();
+      applyUserCustomizations();
+      updateHeader();
+      renderDashboard();
+      renderInventory();
+      renderBadges();
+      renderShop();
+    });
 
-    try {
-      ownedShopItems = JSON.parse(localStorage.getItem(SHOP_KEY) || "[]");
-    } catch(e) { ownedShopItems = []; }
-
-    // Carica Avatar salvato
-    const savedAvatar = localStorage.getItem(AVATAR_KEY);
-    if (savedAvatar) {
-      document.getElementById("headerAvatarImg").src = savedAvatar;
-      document.getElementById("settingsAvatarImg").src = savedAvatar;
+    function checkDailyStreak() {
+      const today = new Date().toISOString().split('T')[0];
+      if (progress.lastAccess !== today) {
+        const last = new Date(progress.lastAccess);
+        const current = new Date(today);
+        const diffDays = Math.round((current - last) / (1000 * 60 * 60 * 24));
+        if (diffDays === 1) {
+          progress.streak = (progress.streak || 1) + 1;
+        } else if (diffDays > 1) {
+          progress.streak = 1;
+        }
+        progress.lastAccess = today;
+        saveProgress();
+      }
     }
 
-    // Tema
-    const savedTheme = localStorage.getItem(THEME_KEY);
-    if (savedTheme) {
-      document.documentElement.setAttribute("data-theme", savedTheme);
-      document.getElementById("settingsThemeBtn").innerText = savedTheme === "dark" ? "☀️ Chiaro" : "🌙 Scuro";
-    }
-
-    const savedGoal = localStorage.getItem(GOAL_KEY);
-    if (savedGoal) document.getElementById("targetGoalInput").value = savedGoal;
-
-    function setAvatar(url) {
-      if (!url) return;
-      localStorage.setItem(AVATAR_KEY, url);
-      document.getElementById("headerAvatarImg").src = url;
-      document.getElementById("settingsAvatarImg").src = url;
+    function saveProgress() {
+      localStorage.setItem("cantareal_progress", JSON.stringify(progress));
     }
 
     function saveData() {
-      localStorage.setItem(DB_KEY, JSON.stringify(db));
-      localStorage.setItem(ADJ_KEY, JSON.stringify(adjustments));
-      if (currentStatusFilter === "STATS") renderCharts();
-      else renderApp();
+      localStorage.setItem("cantareal_db", JSON.stringify(db));
     }
 
-    function manualSave() {
-      saveData();
-      alert("Dati salvati con successo!");
+    function addXp(amount) {
+      progress.xp = Math.max(0, (progress.xp || 0) + amount);
+      checkLevelUp();
+      saveProgress();
+      updateHeader();
+      checkBadges();
     }
 
-    function todayFormatted() {
-      const t = new Date();
-      return String(t.getDate()).padStart(2,"0") + "/" + String(t.getMonth()+1).padStart(2,"0") + "/" + t.getFullYear();
+    function checkLevelUp() {
+      // Level formula: Level = Math.floor(xp / 100) + 1
+      const newLevel = Math.floor(progress.xp / 100) + 1;
+      if (newLevel !== progress.level) {
+        progress.level = newLevel;
+        alert(`🎉 COMPLIMENTI! Sei salito al Livello ${newLevel}!`);
+      }
     }
 
-    function parseDate(dStr) {
-      if (!dStr) return null;
-      const p = dStr.split("/");
-      if (p.length === 3) return new Date(+p[2], +p[1]-1, +p[0]);
-      return null;
+    function updateHeader() {
+      document.getElementById("headerLevel").innerText = `Lvl ${progress.level}`;
+      document.getElementById("headerXp").innerText = `${progress.xp} XP`;
+      document.getElementById("headerTitle").innerText = progress.activeTitle || "⚡ Reseller Debuttante";
+      document.getElementById("headerAvatar").src = progress.activeAvatar;
+      
+      const xpInCurrentLvl = progress.xp %% 100;
+      document.getElementById("xpBarFill").style.width = `${xpInCurrentLvl}%%`;
+
+      document.getElementById("profileLvl").innerText = progress.level;
+      document.getElementById("profileXp").innerText = progress.xp;
+      document.getElementById("profileTitle").innerText = progress.activeTitle;
+      document.getElementById("profileAvatar").src = progress.activeAvatar;
+      document.getElementById("profileBadgesUnlocked").innerText = `${progress.unlockedBadges.length} / 100`;
     }
 
-    function daysInStock(item) {
-      if (item.s !== "stock") return 0;
-      const d = parseDate(item.d);
-      if (!d) return 0;
-      return Math.max(0, Math.floor((Date.now() - d.getTime()) / 86400000));
-    }
-
-    function getInitialStateHash() {
-      let invested = 0, salesRevenue = 0;
-      userRealDataset.forEach(i => {
-        invested += parseFloat(i.bp) || 0;
-        if (i.s === "sold") salesRevenue += parseFloat(i.sp) || 0;
-      });
-      return { invested, salesRevenue };
-    }
-    const initialBaseHash = getInitialStateHash();
-
-    function getTotalAdjustments() {
-      return adjustments.reduce((s, a) => s + (parseFloat(a.amount) || 0), 0);
-    }
-
-    function toggleTheme() {
-      const html = document.documentElement;
-      const current = html.getAttribute("data-theme");
-      const next = current === "dark" ? "light" : "dark";
-      html.setAttribute("data-theme", next);
-      localStorage.setItem(THEME_KEY, next);
-      document.getElementById("settingsThemeBtn").innerText = next === "dark" ? "☀️ Chiaro" : "🌙 Scuro";
-      if (currentStatusFilter === "STATS") renderCharts();
-    }
-
-    function setStatusFilter(status) {
-      currentStatusFilter = status;
-      document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-      if (status === "STATS") {
-        document.getElementById("tabSTATS").classList.add("active");
-        document.getElementById("mainView").style.display = "none";
-        document.getElementById("chartsView").style.display = "block";
-        renderCharts();
+    function applyUserCustomizations() {
+      // Apply theme
+      document.body.className = progress.activeTheme ? `theme-${progress.activeTheme}` : '';
+      
+      // Apply frame
+      const wrapper = document.getElementById("headerAvatarWrapper");
+      const profileWrapper = document.getElementById("profileAvatarWrapper");
+      if (progress.activeFrameStyle) {
+        wrapper.style.background = progress.activeFrameStyle;
+        profileWrapper.style.background = progress.activeFrameStyle;
       } else {
-        const el = document.getElementById("tab" + status);
-        if (el) el.classList.add("active");
-        document.getElementById("mainView").style.display = "block";
-        document.getElementById("chartsView").style.display = "none";
-        renderApp();
+        wrapper.style.background = "none";
+        profileWrapper.style.background = "none";
       }
     }
 
-    function openCashAdjust() {
-      document.getElementById("cashAmount").value = "";
-      document.getElementById("cashReason").value = "";
-      renderAdjustList();
-      document.getElementById("cashModal").style.display = "flex";
+    // --- NAVIGATION ---
+    function switchView(viewId) {
+      document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
+      document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
+      
+      document.getElementById(`view-${viewId}`).classList.add("active");
+      const navBtn = Array.from(document.querySelectorAll(".nav-item")).find(b => b.getAttribute("onclick").includes(viewId));
+      if (navBtn) navBtn.classList.add("active");
+
+      if (viewId === "dashboard") renderDashboard();
+      if (viewId === "inventory") renderInventory();
+      if (viewId === "badges") renderBadges();
+      if (viewId === "shop") renderShop();
     }
 
-    function renderAdjustList() {
-      const list = document.getElementById("adjustList");
-      if (!adjustments.length) {
-        list.innerHTML = '<div style="color:var(--text-muted);padding:8px 0;">Nessun aggiustamento ancora.</div>';
-        return;
-      }
-      list.innerHTML = "<div style='font-weight:700;margin-bottom:6px;'>Storico aggiustamenti:</div>" +
-        adjustments.slice().reverse().map(a => {
-          const cls = a.amount >= 0 ? "adjust-pos" : "adjust-neg";
-          const sign = a.amount >= 0 ? "+" : "";
-          return `<div class="adjust-item"><span>${a.date} — ${a.reason || "Senza motivo"}</span><span class="${cls}">${sign}€${a.amount.toFixed(2)}</span></div>`;
-        }).join("");
-    }
+    // --- DASHBOARD ---
+    function renderDashboard() {
+      let totalProfit = 0;
+      let stockValue = 0;
+      let stockCount = 0;
+      let salesCount = 0;
 
-    function confirmCashAdjust() {
-      let raw = document.getElementById("cashAmount").value.trim().replace(",", ".");
-      raw = raw.replace(/[−–—]/g, "-");
-      const amount = parseFloat(raw);
-      if (isNaN(amount) || amount === 0) {
-        return alert("Inserisci un importo valido (es. 50 oppure -30).");
-      }
-      const reason = document.getElementById("cashReason").value.trim() || "Aggiustamento";
-      adjustments.push({ amount: amount, reason: reason, date: todayFormatted(), id: Date.now() });
-      localStorage.setItem(ADJ_KEY, JSON.stringify(adjustments));
-      localStorage.setItem(DB_KEY, JSON.stringify(db));
-      closeModal("cashModal");
-      if (currentStatusFilter === "STATS") renderCharts();
-      else renderApp();
-      alert("Cassa aggiornata di " + (amount >= 0 ? "+" : "") + "€" + amount.toFixed(2));
-    }
-
-    function getCategoryEmoji(cat) {
-      switch(cat) {
-        case "Gaming / Videogiochi": return "🎮";
-        case "Abbigliamento": return "🧥";
-        case "Elettronica": return "💻";
-        case "Libri": return "📚";
-        default: return "📦";
-      }
-    }
-
-    function renderApp() {
-      if (currentStatusFilter === "STATS") return;
-
-      const search = document.getElementById("searchInput").value.toLowerCase();
-      const category = document.getElementById("filterCategory").value;
-      const monthFilter = document.getElementById("filterMonth").value;
-      const sortBy = document.getElementById("sortBy").value;
-      const now = new Date();
-      const currentMMYYYY = String(now.getMonth()+1).padStart(2,"0") + "/" + now.getFullYear();
-
-      let filtered = db.filter(item => {
-        const matchSearch = item.t.toLowerCase().includes(search);
-        const matchCat = category === "ALL" || item.c === category;
-        const matchStatus = currentStatusFilter === "ALL" || item.s === currentStatusFilter;
-        let matchMonth = true;
-        if (monthFilter === "CURR_MONTH") {
-          const d = item.s === "sold" ? (item.soldDate || item.d) : item.d;
-          matchMonth = d && d.endsWith(currentMMYYYY);
-        }
-        return matchSearch && matchCat && matchStatus && matchMonth;
-      });
-
-      const getROI = i => i.bp > 0 ? ((i.sp||0) - i.bp) / i.bp : ((i.sp||0) > 0 ? 9999 : 0);
-      const getMargin = i => (i.sp||0) - (i.bp||0);
-      const parseD = dStr => {
-        if (!dStr) return 0;
-        const p = dStr.split("/");
-        return p.length === 3 ? new Date(+p[2], +p[1]-1, +p[0]).getTime() : 0;
-      };
-
-      filtered.sort((a,b) => {
-        if (sortBy === "price-desc") return (b.sp||b.bp) - (a.sp||a.bp);
-        if (sortBy === "price-asc") return (a.sp||a.bp) - (b.sp||b.bp);
-        if (sortBy === "alpha-asc") return a.t.localeCompare(b.t);
-        if (sortBy === "soldDate-desc") return parseD(b.soldDate || b.d) - parseD(a.soldDate || a.d);
-        if (sortBy === "roi-desc") return getROI(b) - getROI(a);
-        if (sortBy === "margin-desc") return getMargin(b) - getMargin(a);
-        if (sortBy === "days-desc") return daysInStock(b) - daysInStock(a);
-        if (sortBy === "date-asc") {
-          const diff = parseD(a.d) - parseD(b.d);
-          return diff !== 0 ? diff : Number(a.id) - Number(b.id);
-        }
-        const diff = parseD(b.d) - parseD(a.d);
-        return diff !== 0 ? diff : Number(b.id) - Number(a.id);
-      });
-
-      let stockVal = 0, totalProfit = 0, monthProfit = 0, currentInvested = 0, currentSalesRevenue = 0;
       db.forEach(item => {
-        const bp = parseFloat(item.bp)||0, sp = parseFloat(item.sp)||0;
-        currentInvested += bp;
-        if (item.s === "stock") {
-          stockVal += bp;
-        } else if (item.s === "sold") {
-          const profit = sp - bp;
-          totalProfit += profit;
-          currentSalesRevenue += sp;
-          const sd = item.soldDate || item.d;
-          if (sd && sd.endsWith(currentMMYYYY)) monthProfit += profit;
+        if (item.s === "sold") {
+          salesCount++;
+          const net = (parseFloat(item.sp) || 0) - (parseFloat(item.bp) || 0) - (parseFloat(item.f) || 0);
+          totalProfit += net;
+        } else {
+          stockCount++;
+          stockValue += (parseFloat(item.bp) || 0);
         }
       });
 
-      const deltaRev = currentSalesRevenue - initialBaseHash.salesRevenue;
-      const deltaInvested = currentInvested - initialBaseHash.invested;
-      const cashVal = BASELINE_CASH - deltaInvested + deltaRev + getTotalAdjustments();
+      document.getElementById("dashProfit").innerText = `€${totalProfit.toFixed(2)}`;
+      document.getElementById("dashStockValue").innerText = `€${stockValue.toFixed(2)}`;
+      document.getElementById("dashStockCount").innerText = stockCount;
+      document.getElementById("dashSalesCount").innerText = salesCount;
 
-      document.getElementById("statStockVal").innerText = `€${stockVal.toFixed(2)}`;
-      document.getElementById("statCash").innerText = `€${cashVal.toFixed(2)}`;
-      document.getElementById("statProfit").innerText = `€${totalProfit.toFixed(2)}`;
-      document.getElementById("statMonthProfit").innerText = `€${monthProfit.toFixed(2)}`;
-      updateGoalProgress(monthProfit);
-      updateHeaderHeaderLevel();
+      renderChart();
+    }
 
-      const listEl = document.getElementById("itemList");
-      listEl.innerHTML = "";
-      if (!filtered.length) {
-        listEl.innerHTML = '<div style="text-align:center;padding:24px;color:var(--text-muted);">Nessun articolo trovato.</div>';
+    function renderChart() {
+      const ctx = document.getElementById("salesChart").getContext("2d");
+      if (chartInstance) chartInstance.destroy();
+
+      const soldItems = db.filter(x => x.s === "sold");
+      const labels = soldItems.map((x, i) => `V${i+1}`);
+      const data = soldItems.map(x => (parseFloat(x.sp) || 0) - (parseFloat(x.bp) || 0) - (parseFloat(x.f) || 0));
+
+      chartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels.length ? labels : ['Nessuna vendita'],
+          datasets: [{
+            label: 'Profitto (€)',
+            data: data.length ? data : [0],
+            borderColor: '#10b981',
+            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+            fill: true,
+            tension: 0.3
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { grid: { color: 'rgba(255,255,255,0.05)' } },
+            y: { grid: { color: 'rgba(255,255,255,0.05)' } }
+          }
+        }
+      });
+    }
+
+    // --- INVENTORY MANAGEMENT ---
+    function openAddModal() {
+      document.getElementById("addTitle").value = "";
+      document.getElementById("addBuyPrice").value = "";
+      document.getElementById("addModal").classList.add("active");
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove("active");
+    }
+
+    function saveNewItem(e) {
+      e.preventDefault();
+      const newItem = {
+        id: "item_" + Date.now(),
+        t: document.getElementById("addTitle").value,
+        c: document.getElementById("addCategory").value,
+        bp: parseFloat(document.getElementById("addBuyPrice").value) || 0,
+        p: document.getElementById("addPlatform").value,
+        s: "stock",
+        date: new Date().toISOString()
+      };
+      
+      db.push(newItem);
+      saveData();
+      closeModal("addModal");
+      
+      // Accredita +10 XP per inserimento
+      addXp(10);
+      alert("✅ Oggetto aggiunto! Hai guadagnato +10 XP.");
+      renderInventory();
+    }
+
+    function filterCategory(cat, btn) {
+      activeCatFilter = cat;
+      document.querySelectorAll("#view-inventory .tab-btn").forEach(b => b.classList.remove("active"));
+      if (btn) btn.classList.add("active");
+      renderInventory();
+    }
+
+    function renderInventory() {
+      const list = document.getElementById("inventoryList");
+      const search = document.getElementById("searchInput").value.toLowerCase();
+      list.innerHTML = "";
+
+      const filtered = db.filter(item => {
+        const matchesSearch = item.t.toLowerCase().includes(search) || item.c.toLowerCase().includes(search) || (item.p && item.p.toLowerCase().includes(search));
+        if (!matchesSearch) return false;
+
+        if (activeCatFilter === "ALL") return true;
+        if (activeCatFilter === "STOCK") return item.s === "stock";
+        if (activeCatFilter === "SOLD") return item.s === "sold";
+        return item.c.includes(activeCatFilter);
+      });
+
+      if (filtered.length === 0) {
+        list.innerHTML = `<div style="text-align:center; color: var(--text-muted); padding: 30px;">Nessun oggetto trovato.</div>`;
         return;
       }
 
       filtered.forEach(item => {
         const isSold = item.s === "sold";
-        const bp = parseFloat(item.bp)||0, sp = parseFloat(item.sp)||0;
-        const profit = sp - bp;
-        const days = daysInStock(item);
-        let roiHtml = "";
-        if (isSold) {
-          const roi = bp > 0 ? ((profit/bp)*100).toFixed(0) : "∞";
-          const cls = profit >= 0 ? "roi-pos" : "roi-neg";
-          roiHtml = `<span class="${cls}">(+€${profit.toFixed(2)} • ROI ${roi}%)</span>`;
-        }
+        const div = document.createElement("div");
+        div.className = "item-card";
+        div.onclick = () => openEditModal(item.id);
+        
+        const catIcon = item.c.includes("Gaming") ? "🎮" : item.c.includes("Abbigliamento") ? "🧥" : item.c.includes("Elettronica") ? "💻" : item.c.includes("Libri") ? "📚" : "📦";
 
-        const wrapper = document.createElement("div");
-        wrapper.className = "swipe-container";
-        const swipeBg = document.createElement("div");
-        swipeBg.className = "swipe-background";
-        swipeBg.innerHTML = `<div class="swipe-bg-left">🛒 Vendi</div><div class="swipe-bg-right">✏️ Modifica</div>`;
-
-        const card = document.createElement("div");
-        card.className = "item-card" + (!isSold && days >= 30 ? " old-stock" : "");
-        card.innerHTML = `
-          <div class="item-info">
-            <div class="item-title">${getCategoryEmoji(item.c)} ${item.t}</div>
-            <div class="item-meta">
-              <span class="badge ${isSold ? "badge-sold" : "badge-stock"}">${isSold ? "✅ Venduto" : "STOCK"}</span>
-              ${item.c} • Acq: €${bp.toFixed(2)} (${item.d})
-              ${!isSold && days > 0 ? `<br><span class="days-tag">In stock da ${days} giorni</span>` : ""}
-              ${isSold ? `<br>Vend: €${sp.toFixed(2)} (${item.soldDate||"-"}) ${roiHtml}` : ""}
+        div.innerHTML = `
+          <div class="item-left">
+            <div class="item-icon">${catIcon}</div>
+            <div>
+              <div class="item-title">${item.t}</div>
+              <div class="item-sub">Acquisto: €${item.bp.toFixed(2)} • ${item.p || 'Generale'}</div>
             </div>
           </div>
-          <div style="color:var(--text-muted);font-size:1.2rem;">➔</div>
+          <div class="item-right">
+            <div class="item-price">${isSold ? '€' + (item.sp || 0).toFixed(2) : '€' + item.bp.toFixed(2)}</div>
+            <div class="status-badge ${isSold ? 'status-sold' : 'status-stock'}">${isSold ? 'VENDUTO' : 'IN STOCK'}</div>
+          </div>
         `;
-
-        let startX = 0, startY = 0, currentX = 0, isSwiping = false, isScrolling = false;
-        card.addEventListener("touchstart", e => {
-          startX = e.touches[0].clientX;
-          startY = e.touches[0].clientY;
-          card.style.transition = "none";
-          isSwiping = false;
-          isScrolling = false;
-        }, {passive:true});
-
-        card.addEventListener("touchmove", e => {
-          if (isScrolling) return;
-          const diffX = e.touches[0].clientX - startX;
-          const diffY = e.touches[0].clientY - startY;
-
-          if (!isSwiping && Math.abs(diffY) > Math.abs(diffX)) {
-            isScrolling = true;
-            return;
-          }
-
-          if (Math.abs(diffX) > 10) isSwiping = true;
-          currentX = Math.max(-90, Math.min(90, diffX));
-          card.style.transform = `translateX(${currentX}px)`;
-        }, {passive:true});
-
-        card.addEventListener("touchend", () => {
-          card.style.transition = "transform 0.25s ease-out";
-          card.style.transform = "translateX(0)";
-          if (currentX > 50 && !isSold) openSellSheet(item.id);
-          else if (currentX < -50) openEditModal(item.id);
-          setTimeout(() => { isSwiping = false; currentX = 0; }, 100);
-        });
-
-        card.onclick = () => { if (!isSwiping) openEditModal(item.id); };
-
-        wrapper.appendChild(swipeBg);
-        wrapper.appendChild(card);
-        listEl.appendChild(wrapper);
+        list.appendChild(div);
       });
-    }
-
-    function updateGoal() {
-      localStorage.setItem(GOAL_KEY, document.getElementById("targetGoalInput").value);
-      const mp = parseFloat(document.getElementById("statMonthProfit").innerText.replace("€","")) || 0;
-      updateGoalProgress(mp);
-    }
-
-    function updateGoalProgress(monthProfit) {
-      const target = parseFloat(document.getElementById("targetGoalInput").value) || 200;
-      const pct = Math.min(Math.round((monthProfit / target) * 100), 100);
-      document.getElementById("goalProgressBar").style.width = Math.max(pct, 0) + "%";
-      document.getElementById("goalPercentText").innerText = pct + "%";
-    }
-
-    function renderCharts() {
-      const textColor = getComputedStyle(document.documentElement).getPropertyValue("--text-color").trim();
-      const cardBg = getComputedStyle(document.documentElement).getPropertyValue("--card-bg").trim();
-
-      const plat = {};
-      db.forEach(i => {
-        if (i.s === "sold" && i.soldPlatform) {
-          const p = (parseFloat(i.sp)||0) - (parseFloat(i.bp)||0);
-          if (p !== 0) plat[i.soldPlatform] = (plat[i.soldPlatform]||0) + p;
-        }
-      });
-      if (platformChartInst) platformChartInst.destroy();
-      platformChartInst = new Chart(document.getElementById("platformChart"), {
-        type: "doughnut",
-        data: { labels: Object.keys(plat), datasets: [{ data: Object.values(plat), backgroundColor: ["#007782","#13c1a3","#ff4d4d","#0064d2","#475569","#8b5cf6"], borderColor: cardBg, borderWidth: 2 }] },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: "bottom", labels: { color: textColor, font: { size: 11 } } } } }
-      });
-
-      const months = {};
-      db.forEach(i => {
-        if (i.s === "sold") {
-          const d = i.soldDate || i.d || "";
-          const key = d.length >= 7 ? d.slice(3) : "Sconosciuto";
-          const p = (parseFloat(i.sp)||0) - (parseFloat(i.bp)||0);
-          months[key] = (months[key]||0) + p;
-        }
-      });
-      const mLabels = Object.keys(months).sort((a,b) => {
-        const pa = a.split("/"), pb = b.split("/");
-        return (+pa[1]*12 + +pa[0]) - (+pb[1]*12 + +pb[0]);
-      });
-      if (monthChartInst) monthChartInst.destroy();
-      monthChartInst = new Chart(document.getElementById("monthChart"), {
-        type: "bar",
-        data: { labels: mLabels, datasets: [{ label: "Profitto €", data: mLabels.map(k => months[k]), backgroundColor: "#3b82f6", borderRadius: 6 }] },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: textColor } }, y: { ticks: { color: textColor } } } }
-      });
-
-      const cats = {};
-      db.forEach(i => {
-        if (i.s === "sold") {
-          const p = (parseFloat(i.sp)||0) - (parseFloat(i.bp)||0);
-          cats[i.c] = (cats[i.c]||0) + p;
-        }
-      });
-      if (categoryChartInst) categoryChartInst.destroy();
-      categoryChartInst = new Chart(document.getElementById("categoryChart"), {
-        type: "doughnut",
-        data: { labels: Object.keys(cats), datasets: [{ data: Object.values(cats), backgroundColor: ["#3b82f6","#22c55e","#f59e0b","#a855f7","#ef4444"], borderColor: cardBg, borderWidth: 2 }] },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: "bottom", labels: { color: textColor, font: { size: 11 } } } } }
-      });
-    }
-
-    /* MODALE NUOVO OGGETTO CON ANTEPRIMA MARGINE ATTESO */
-    function setQuickBuyPrice(val) {
-      document.getElementById("addBuyPrice").value = val;
-      updateAddPreview();
-    }
-
-    function updateAddPreview() {
-      const bp = parseFloat(document.getElementById("addBuyPrice").value.replace(",", ".")) || 0;
-      const tp = parseFloat(document.getElementById("addTargetPrice").value.replace(",", ".")) || 0;
-
-      const profit = tp - bp;
-      const profitEl = document.getElementById("previewProfitVal");
-      profitEl.innerText = (profit >= 0 ? "+€" : "-€") + Math.abs(profit).toFixed(2);
-      profitEl.style.color = profit >= 0 ? "var(--success-color)" : "var(--danger-color)";
-    }
-
-    function openAddModal() {
-      document.getElementById("addItemDate").valueAsDate = new Date();
-      document.getElementById("addTitle").value = "";
-      document.getElementById("addBuyPrice").value = "";
-      document.getElementById("addTargetPrice").value = "";
-      updateAddPreview();
-      document.getElementById("addModal").style.display = "flex";
-    }
-    
-    function openSettingsModal() {
-      document.getElementById("settingsModal").style.display = "flex";
-    }
-    
-    function openShopModal() {
-      document.getElementById("shopXpBalance").innerText = progress.xp + " XP";
-      
-      // Aggiorna stato bottoni acquisto nello shop
-      ownedShopItems.forEach(itemId => {
-        const btn = document.getElementById("buy_" + itemId);
-        if (btn) {
-          btn.innerText = "Sbloccato ✅";
-          btn.classList.add("owned");
-          btn.onclick = null;
-        }
-      });
-
-      document.getElementById("shopModal").style.display = "flex";
-    }
-
-    function buyShopItem(itemId, cost) {
-      if (ownedShopItems.includes(itemId)) return;
-      if (progress.xp < cost) {
-        return alert("Non hai abbastanza XP per questo sblocco! Servono " + cost + " XP.");
-      }
-
-      progress.xp -= cost;
-      ownedShopItems.push(itemId);
-      localStorage.setItem(SHOP_KEY, JSON.stringify(ownedShopItems));
-      saveProgress();
-
-      // Applica sblocco
-      if (itemId === 'frame_silver') {
-        document.documentElement.style.setProperty('--frame-gradient', 'linear-gradient(135deg, #94a3b8, #e2e8f0)');
-      } else if (itemId === 'frame_gold') {
-        document.documentElement.style.setProperty('--frame-gradient', 'linear-gradient(135deg, #f59e0b, #fef08a)');
-      } else if (itemId === 'frame_neon') {
-        document.documentElement.style.setProperty('--frame-gradient', 'linear-gradient(135deg, #a855f7, #06b6d4)');
-      } else if (itemId === 'theme_emerald') {
-        document.documentElement.setAttribute('data-theme', 'emerald');
-      } else if (itemId === 'theme_vaporwave') {
-        document.documentElement.setAttribute('data-theme', 'vaporwave');
-      }
-
-      alert("🎉 Oggetto sbloccato con successo!");
-      openShopModal();
-    }
-    
-    function closeModal(id) { document.getElementById(id).style.display = "none"; }
-
-    function addItem() {
-      const title = document.getElementById("addTitle").value.trim();
-      if (!title) return alert("Inserisci un nome.");
-      const dateInput = document.getElementById("addItemDate").value;
-      let d = todayFormatted();
-      if (dateInput) {
-        const p = dateInput.split("-");
-        d = p[2] + "/" + p[1] + "/" + p[0];
-      }
-      const buyPrice = parseFloat(document.getElementById("addBuyPrice").value.replace(",", ".")) || 0;
-      db.unshift({
-        id: String(Date.now()), t: title,
-        c: document.getElementById("addCategory").value,
-        src: document.getElementById("addSource").value,
-        bp: buyPrice,
-        sp: 0, s: "stock", d, soldPlatform: "", soldDate: ""
-      });
-      
-      addXp(10);
-      saveData();
-      closeModal("addModal");
     }
 
     function openEditModal(id) {
-      const item = db.find(x => x.id === String(id));
+      const item = db.find(x => x.id === id);
       if (!item) return;
+
       document.getElementById("editId").value = item.id;
       document.getElementById("editTitle").value = item.t;
-      document.getElementById("editCategory").value = item.c;
-      document.getElementById("editSource").value = item.src || "Mercatino / Di Persona";
       document.getElementById("editBuyPrice").value = item.bp;
-      document.getElementById("editDate").value = item.d;
+      document.getElementById("editStatus").value = item.s;
       document.getElementById("editSellPrice").value = item.sp || "";
-      document.getElementById("editSoldPlatform").value = item.soldPlatform || "";
-      document.getElementById("editSoldDate").value = item.soldDate || "";
-      const btn = document.getElementById("btnQuickSell");
-      if (item.s === "stock") {
-        btn.style.display = "block";
-        btn.onclick = () => { closeModal("editModal"); openSellSheet(item.id); };
-      } else btn.style.display = "none";
-      document.getElementById("editModal").style.display = "flex";
+      document.getElementById("editFees").value = item.f || 0;
+
+      toggleSellFields();
+      document.getElementById("editModal").classList.add("active");
     }
 
-    function saveEditChanges() {
+    function toggleSellFields() {
+      const status = document.getElementById("editStatus").value;
+      document.getElementById("sellFields").style.display = status === "sold" ? "block" : "none";
+    }
+
+    function updateItem(e) {
+      e.preventDefault();
       const id = document.getElementById("editId").value;
       const item = db.find(x => x.id === id);
       if (!item) return;
-      item.t = document.getElementById("editTitle").value.trim() || item.t;
-      item.c = document.getElementById("editCategory").value;
-      item.src = document.getElementById("editSource").value;
-      item.bp = parseFloat(String(document.getElementById("editBuyPrice").value).replace(",", ".")) || 0;
-      item.d = document.getElementById("editDate").value;
-      const rawSell = String(document.getElementById("editSellPrice").value).replace(",", ".");
-      const sp = parseFloat(rawSell);
-      const platform = document.getElementById("editSoldPlatform").value;
-      const soldDate = document.getElementById("editSoldDate").value;
-      if (!isNaN(sp)) item.sp = sp; else item.sp = 0;
-      item.soldPlatform = platform;
-      item.soldDate = soldDate;
-      if (item.sp > 0 && platform) {
-        item.s = "sold";
-        if (!item.soldDate) item.soldDate = todayFormatted();
-      } else item.s = "stock";
+
+      const oldStatus = item.s;
+      item.t = document.getElementById("editTitle").value;
+      item.bp = parseFloat(document.getElementById("editBuyPrice").value) || 0;
+      item.s = document.getElementById("editStatus").value;
+
+      if (item.s === "sold") {
+        item.sp = parseFloat(document.getElementById("editSellPrice").value) || 0;
+        item.f = parseFloat(document.getElementById("editFees").value) || 0;
+        
+        if (oldStatus !== "sold") {
+          // Bonus XP per Vendita (+25 XP)
+          addXp(25);
+          const profit = item.sp - item.bp - item.f;
+          if (profit > 0) {
+            const profitBonus = Math.floor(profit / 10) * 5;
+            if (profitBonus > 0) addXp(profitBonus);
+          }
+          alert("🎉 Vendita registrata! Hai guadagnato XP extra!");
+        }
+      }
+
       saveData();
       closeModal("editModal");
+      renderInventory();
     }
 
+    // --- CORREZIONE LOGICA ELIMINAZIONE OGGETTO (DEDUZIONE XP) ---
     function deleteCurrentItem() {
       const id = document.getElementById("editId").value;
-      if (confirm("Eliminare questo oggetto dall'inventario?")) {
+      const item = db.find(x => x.id === id);
+      if (!item) return;
+
+      if (confirm("Sei sicuro di voler eliminare questo oggetto? Gli XP guadagnati verranno ricalcolati e rimossi.")) {
+        let xpDeduction = 10; // Detrazione XP per l'inserimento dell'oggetto
+
+        if (item.s === "sold") {
+          // Se era già stato venduto, detrai anche l'XP di vendita (+25) ed eventuale profit bonus
+          xpDeduction += 25;
+          const profit = (item.sp || 0) - item.bp - (item.f || 0);
+          if (profit > 0) {
+            xpDeduction += Math.floor(profit / 10) * 5;
+          }
+        }
+
+        // Rimuovi XP senza scendere sotto lo zero
+        progress.xp = Math.max(0, (progress.xp || 0) - xpDeduction);
+        checkLevelUp();
+        saveProgress();
+        updateHeader();
+
+        // Rimuovi oggetto dal DB
         db = db.filter(x => x.id !== id);
         saveData();
         closeModal("editModal");
+        
+        alert(`🗑️ Oggetto eliminato. Riconteggiati -${xpDeduction} XP.`);
+        renderInventory();
+        renderDashboard();
       }
     }
 
-    function openSellSheet(id) {
-      const item = db.find(x => x.id === String(id));
-      if (!item) return;
-      activeSheetItemId = item.id;
-      document.getElementById("sheetItemTitle").innerText = item.t;
-      document.getElementById("sheetSellPrice").value = item.sp > 0 ? item.sp : "";
-      document.getElementById("sellSheet").classList.remove("hidden");
-    }
-
-    function closeSellSheet() {
-      document.getElementById("sellSheet").classList.add("hidden");
-      activeSheetItemId = null;
-    }
-
-    function confirmSheetSell(platform) {
-      const priceVal = document.getElementById("sheetSellPrice").value.replace(",", ".");
-      const price = parseFloat(priceVal);
-      if (isNaN(price) || price <= 0) return alert("Inserisci un prezzo valido.");
-      const item = db.find(x => x.id === activeSheetItemId);
-      if (item) {
-        const bp = parseFloat(item.bp) || 0;
-        const profit = price - bp;
-        item.s = "sold"; item.sp = price; item.soldPlatform = platform; item.soldDate = todayFormatted();
-        saveData();
-        onSaleCompleted(profit, price);
-      }
-      closeSellSheet();
-    }
-
-    function copyData() {
-      const payload = JSON.stringify({ db, adjustments });
-      navigator.clipboard.writeText(payload).then(() => {
-        alert("Dati copiati negli appunti con successo!");
-      }).catch(() => {
-        prompt("Copia questo testo per l'importazione:", payload);
-      });
-    }
-
-    function importData() {
-      const input = prompt("Incolla qui il JSON di backup:");
-      if (!input || !input.trim()) return;
-
-      let text = input.trim();
-      if (text.charCodeAt(0) === 0xFEFF) text = text.slice(1);
-
-      try {
-        const parsed = JSON.parse(text);
-
-        if (Array.isArray(parsed)) {
-          db = parsed;
-        } else if (parsed && Array.isArray(parsed.db)) {
-          db = parsed.db;
-          if (Array.isArray(parsed.adjustments)) {
-            adjustments = parsed.adjustments;
-          }
-        } else {
-          return alert("Formato non valido. Deve essere un array di oggetti o una struttura di backup valida.");
-        }
-
-        localStorage.setItem(DB_KEY, JSON.stringify(db));
-        localStorage.setItem(ADJ_KEY, JSON.stringify(adjustments));
-        renderApp();
-        alert("Dati importati con successo! Oggetti caricati: " + db.length);
-      } catch (e) {
-        alert("Errore durante la lettura del JSON. Verificare di aver copiato il testo completo.");
-        console.error(e);
-      }
-    }
-
-    function downloadCSV() {
-      const headers = ["ID","Titolo","Categoria","Fonte","Stato","PrezzoAcq","PrezzoVend","Profitto","ROI%","DataAcq","DataVend","Piattaforma"];
-      const rows = db.map(i => {
-        const bp = parseFloat(i.bp)||0, sp = parseFloat(i.sp)||0;
-        const profit = i.s === "sold" ? (sp - bp).toFixed(2) : "";
-        const roi = i.s === "sold" && bp > 0 ? (((sp-bp)/bp)*100).toFixed(1) : "";
-        return [i.id, `"${i.t.replace(/"/g,'""')}"`, i.c, i.src, i.s, bp, sp||"", profit, roi, i.d, i.soldDate||"", i.soldPlatform||""].join(",");
-      });
-      const csv = [headers.join(","), ...rows].join("\n");
-      const a = document.createElement("a");
-      a.href = "data:text/csv;charset=utf-8," + encodeURIComponent(csv);
-      a.download = `reselling_export_${new Date().toISOString().slice(0,10)}.csv`;
-      a.click();
-    }
-
-    function downloadBackup() {
-      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ db, adjustments }, null, 2));
-      const a = document.createElement("a");
-      a.href = dataStr;
-      a.download = `reselling_backup_${new Date().toISOString().slice(0,10)}.json`;
-      a.click();
-    }
-
-    function filterThisMonth() {
-      document.getElementById("filterMonth").value = "CURR_MONTH";
-      setStatusFilter("ALL");
-      renderApp();
-    }
-
-    /* SISTEMA PROGRESSI: XP / STREAK / MISSIONI */
-    const PROG_KEY = "cantareal_progress_v1";
-    const XP_PER_LEVEL = 100;
-
-    const BADGE_DEFS = [
-      { id: "first_sale", name: "Prima vendita", desc: "Registra la prima vendita", icon: "🥇" },
-      { id: "sales_5", name: "5 vendite", desc: "Completa 5 vendite", icon: "5️⃣" },
-      { id: "sales_10", name: "10 vendite", desc: "Completa 10 vendite", icon: "🔟" },
-      { id: "streak_3", name: "Streak 3", desc: "Apri l'app 3 giorni di fila", icon: "🔥" },
-      { id: "streak_7", name: "Streak 7", desc: "Apri l'app 7 giorni di fila", icon: "🔥" },
-      { id: "profit_50", name: "€50 profitto", desc: "Raggiungi €50 di profitto totale", icon: "💶" },
-      { id: "profit_100", name: "€100 profitto", desc: "Raggiungi €100 di profitto totale", icon: "💰" },
-      { id: "roi_100", name: "ROI 100%", desc: "Vendi con ROI ≥ 100%", icon: "📈" }
-    ];
-
-    function defaultProgress() {
-      return {
-        xp: 0, streak: 0, lastOpen: "", salesCount: 0, totalProfitTracked: 0,
-        weekKey: "", weekSales: 0, weekProfit: 0, missionsClaimed: {}, badges: {}
-      };
-    }
-
-    let progress = defaultProgress();
-    try {
-      const raw = localStorage.getItem(PROG_KEY);
-      if (raw) progress = { ...defaultProgress(), ...JSON.parse(raw) };
-    } catch (e) {}
-
-    function saveProgress() {
-      localStorage.setItem(PROG_KEY, JSON.stringify(progress));
-      updateHeaderHeaderLevel();
-    }
-
-    function weekKeyNow() {
-      const d = new Date();
-      const onejan = new Date(d.getFullYear(), 0, 1);
-      const week = Math.ceil((((d - onejan) / 86400000) + onejan.getDay() + 1) / 7);
-      return d.getFullYear() + "-W" + week;
-    }
-
-    function ensureWeek() {
-      const wk = weekKeyNow();
-      if (progress.weekKey !== wk) {
-        progress.weekKey = wk;
-        progress.weekSales = 0;
-        progress.weekProfit = 0;
-        progress.missionsClaimed = {};
-        saveProgress();
-      }
-    }
-
-    function xpForLevel(level) { return level * XP_PER_LEVEL; }
-
-    function getLevel() {
-      let lvl = 1, remaining = progress.xp;
-      while (remaining >= xpForLevel(lvl)) {
-        remaining -= xpForLevel(lvl);
-        lvl++;
-        if (lvl > 99) break;
-      }
-      
-      let title = "Novizio";
-      if (lvl >= 15) title = "Imperatore del Flip";
-      else if (lvl >= 10) title = "Master Trader";
-      else if (lvl >= 7) title = "Re del Flip";
-      else if (lvl >= 4) title = "Cacciatore di Affari";
-      else if (lvl >= 2) title = "Apprendista Reseller";
-
-      return { level: lvl, into: remaining, need: xpForLevel(lvl), title: title };
-    }
-
-    function addXp(amount) {
-      if (!amount) return;
-      progress.xp += amount;
-      saveProgress();
-    }
-
-    function updateHeaderHeaderLevel() {
-      const lv = getLevel();
-      const text = `Liv. ${lv.level} • ${lv.title}`;
-      document.getElementById("headerUserLevelText").innerText = text;
-      document.getElementById("settingsLevelText").innerText = text;
-      document.getElementById("headerXpTag").innerText = `${progress.xp} XP`;
-    }
-
-    function unlockBadge(id) {
-      if (progress.badges[id]) return false;
-      progress.badges[id] = todayFormatted();
-      saveProgress();
-      return true;
+    // --- OBIETTIVI (BADGES) LOGIC ---
+    function filterBadges(category, btn) {
+      activeBadgeFilter = category;
+      document.querySelectorAll("#view-badges .tab-btn").forEach(b => b.classList.remove("active"));
+      if (btn) btn.classList.add("active");
+      renderBadges();
     }
 
     function checkBadges() {
-      const soldN = db.filter(i => i.s === "sold").length;
-      const totalProfit = db.reduce((s, i) => i.s === "sold" ? s + ((parseFloat(i.sp)||0) - (parseFloat(i.bp)||0)) : s, 0);
-      if (soldN >= 1) unlockBadge("first_sale");
-      if (soldN >= 5) unlockBadge("sales_5");
-      if (soldN >= 10) unlockBadge("sales_10");
-      if (progress.streak >= 3) unlockBadge("streak_3");
-      if (progress.streak >= 7) unlockBadge("streak_7");
-      if (totalProfit >= 50) unlockBadge("profit_50");
-      if (totalProfit >= 100) unlockBadge("profit_100");
-    }
+      const salesCount = db.filter(x => x.s === "sold").length;
+      const totalProfit = db.filter(x => x.s === "sold").reduce((acc, x) => acc + (x.sp - x.bp - (x.f || 0)), 0);
+      const stockCount = db.filter(x => x.s === "stock").length;
 
-    function registerDailyOpen() {
-      const today = todayFormatted();
-      if (progress.lastOpen === today) return;
-      const y = new Date();
-      y.setDate(y.getDate() - 1);
-      const yesterday = String(y.getDate()).padStart(2,"0") + "/" + String(y.getMonth()+1).padStart(2,"0") + "/" + y.getFullYear();
-      if (progress.lastOpen === yesterday) progress.streak += 1;
-      else progress.streak = 1;
-      progress.lastOpen = today;
-      addXp(5);
-      checkBadges();
-      saveProgress();
-    }
+      BADGES.forEach(b => {
+        if (progress.unlockedBadges.includes(b.id)) return;
+        let unlocked = false;
 
-    function onSaleCompleted(profit, price) {
-      ensureWeek();
-      progress.salesCount = (progress.salesCount || 0) + 1;
-      progress.weekSales = (progress.weekSales || 0) + 1;
-      progress.weekProfit = (progress.weekProfit || 0) + profit;
-      progress.totalProfitTracked = (progress.totalProfitTracked || 0) + profit;
-
-      let xpGain = 25;
-      if (profit > 0) xpGain += Math.min(50, Math.round(profit));
-      if (profit > 0 && price > 0) {
-        const bpEst = price - profit;
-        if (bpEst > 0 && profit / bpEst >= 1) {
-          xpGain += 15;
-          unlockBadge("roi_100");
+        if (b.reqType === "sales" && salesCount >= b.reqVal) unlocked = true;
+        if (b.reqType === "profit" && totalProfit >= b.reqVal) unlocked = true;
+        if (b.reqType === "stock" && stockCount >= b.reqVal) unlocked = true;
+        if (b.reqType === "streak" && (progress.streak || 1) >= b.reqVal) unlocked = true;
+        if (b.reqType === "level" && progress.level >= b.reqVal) unlocked = true;
+        if (b.reqType === "cat") {
+          const catSales = db.filter(x => x.s === "sold" && x.c.includes(b.catName)).length;
+          if (catSales >= b.reqVal) unlocked = true;
         }
-      }
-      addXp(xpGain);
-      checkBadges();
-      tryClaimMissions();
-      showCelebration(profit, xpGain);
-    }
 
-    function getMissions() {
-      ensureWeek();
-      return [
-        { id: "m_sale_1", title: "Vendi 1 oggetto questa settimana", done: progress.weekSales >= 1, xp: 20 },
-        { id: "m_sale_3", title: "Vendi 3 oggetti questa settimana", done: progress.weekSales >= 3, xp: 40 },
-        { id: "m_profit_30", title: "Fai almeno €30 di profitto questa settimana", done: progress.weekProfit >= 30, xp: 35 },
-        { id: "m_streak_keep", title: "Mantieni lo streak almeno a 3", done: progress.streak >= 3, xp: 15 }
-      ];
-    }
-
-    function tryClaimMissions() {
-      getMissions().forEach(m => {
-        if (m.done && !progress.missionsClaimed[m.id]) {
-          progress.missionsClaimed[m.id] = true;
-          addXp(m.xp);
+        if (unlocked) {
+          progress.unlockedBadges.push(b.id);
+          saveProgress();
+          alert(`🏆 OBIETTIVO SBLOCCATO: "${b.name}"!
+${b.desc}`);
         }
       });
-      saveProgress();
     }
 
-    function openProgressPanel() {
-      tryClaimMissions();
+    function renderBadges() {
       checkBadges();
-      const lv = getLevel();
-      document.getElementById("progLevel").innerText = lv.level;
-      const pct = Math.min(100, Math.round((lv.into / lv.need) * 100));
-      document.getElementById("progXpBar").style.width = pct + "%";
-      document.getElementById("progXpText").innerText = lv.into + " / " + lv.need + " XP";
-      document.getElementById("progStreak").innerText = "Streak: " + progress.streak + " giorni";
+      const grid = document.getElementById("badgeGrid");
+      grid.innerHTML = "";
 
-      const missionsEl = document.getElementById("progMissions");
-      missionsEl.innerHTML = getMissions().map(m => {
-        const claimed = !!progress.missionsClaimed[m.id];
-        return `<div class="mission-item ${m.done ? "done" : ""}">
+      const filtered = BADGES.filter(b => {
+        if (activeBadgeFilter === "ALL") return true;
+        return b.reqType === activeBadgeFilter;
+      });
+
+      filtered.forEach(b => {
+        const isUnlocked = progress.unlockedBadges.includes(b.id);
+        const div = document.createElement("div");
+        div.className = `badge-item ${isUnlocked ? 'unlocked' : ''}`;
+        div.innerHTML = `
+          <div class="badge-icon">${b.icon}</div>
+          <div class="badge-name">${b.name}</div>
+          <div class="badge-desc">${b.desc}</div>
+          <div class="badge-progress">${isUnlocked ? '✅ Completato' : '🔒 Bloccato'}</div>
+        `;
+        grid.appendChild(div);
+      });
+    }
+
+    // --- SHOP LOGIC ---
+    function filterShop(cat, btn) {
+      activeShopFilter = cat;
+      document.querySelectorAll("#view-shop .tab-btn").forEach(b => b.classList.remove("active"));
+      if (btn) btn.classList.add("active");
+      renderShop();
+    }
+
+    function renderShop() {
+      const grid = document.getElementById("shopGrid");
+      grid.innerHTML = "";
+
+      const filtered = SHOP_ITEMS.filter(item => {
+        if (activeShopFilter === "ALL") return true;
+        return item.category === activeShopFilter;
+      });
+
+      filtered.forEach(item => {
+        const isOwned = (progress.inventoryUnlocked || []).includes(item.id);
+        const div = document.createElement("div");
+        div.className = "shop-card";
+
+        let previewHtml = "🎁";
+        if (item.category === "Cornici") previewHtml = `<div style="width:30px;height:30px;border-radius:50%;background:${item.styleVal}"></div>`;
+        if (item.category === "Temi") previewHtml = "🎨";
+        if (item.category === "Titoli") previewHtml = "🏷️";
+        if (item.category === "Avatar") previewHtml = `<img src="${item.avatarUrl}" style="width:36px;height:36px;border-radius:50%;">`;
+
+        let actionBtnHtml = "";
+        if (isOwned) {
+          actionBtnHtml = `<button class="btn btn-secondary btn-sm" onclick="equipShopItem('${item.id}')">Equipaggia</button>`;
+        } else {
+          actionBtnHtml = `<button class="btn btn-sm" onclick="buyShopItem('${item.id}', ${item.cost})">Acquista</button>`;
+        }
+
+        div.innerHTML = `
           <div>
-            <div style="font-weight:700;font-size:0.85rem;">${m.done ? "✅ " : "⬜ "}${m.title}</div>
-            <div style="font-size:0.7rem;color:var(--text-muted);">${claimed ? "Ricompensa raccolta" : "In corso"}</div>
+            <div class="shop-preview">${previewHtml}</div>
+            <div class="shop-name">${item.name}</div>
+            <div class="shop-desc">${item.desc}</div>
           </div>
-          <span class="${claimed || m.done ? "tag-ok" : "tag-xp"}">${claimed ? "OK" : "+" + m.xp + " XP"}</span>
-        </div>`;
-      }).join("");
-
-      const badgesEl = document.getElementById("progBadges");
-      badgesEl.innerHTML = BADGE_DEFS.map(b => {
-        const unlocked = !!progress.badges[b.id];
-        return `<div class="badge-item ${unlocked ? "unlocked" : "locked"}">
-          <div style="display:flex;gap:8px;align-items:center;">
-            <span style="font-size:1.2rem;">${b.icon}</span>
-            <div>
-              <div style="font-weight:700;font-size:0.85rem;">${b.name}</div>
-              <div style="font-size:0.7rem;color:var(--text-muted);">${b.desc}</div>
-            </div>
+          <div>
+            <div class="shop-cost">${item.cost} XP</div>
+            ${actionBtnHtml}
           </div>
-          <span class="${unlocked ? "tag-ok" : "tag-xp"}">${unlocked ? "Sbloccato" : "Bloccato"}</span>
-        </div>`;
-      }).join("");
-
-      document.getElementById("progressModal").style.display = "flex";
+        `;
+        grid.appendChild(div);
+      });
     }
 
-    function showCelebration(profit, xpGain) {
-      const el = document.getElementById("celebOverlay");
-      document.getElementById("celebProfit").innerText = (profit >= 0 ? "+" : "") + "€" + profit.toFixed(2);
-      document.getElementById("celebXp").innerText = "+" + xpGain + " XP";
-      el.classList.add("show");
-      setTimeout(() => el.classList.remove("show"), 2200);
+    function buyShopItem(id, cost) {
+      if (progress.xp < cost) {
+        alert(`❌ Non hai abbastanza XP! Ti mancano ${cost - progress.xp} XP.`);
+        return;
+      }
+
+      if (confirm(`Vuoi acquistare questo elemento per ${cost} XP?`)) {
+        progress.xp -= cost;
+        progress.inventoryUnlocked = progress.inventoryUnlocked || [];
+        progress.inventoryUnlocked.push(id);
+        saveProgress();
+        updateHeader();
+        equipShopItem(id);
+        renderShop();
+        alert("🎉 Acquisto completato ed equipaggiato!");
+      }
     }
 
-    registerDailyOpen();
-    renderApp();
+    function equipShopItem(id) {
+      const item = SHOP_ITEMS.find(x => x.id === id);
+      if (!item) return;
+
+      if (item.category === "Cornici") {
+        progress.activeFrameStyle = item.styleVal;
+      } else if (item.category === "Temi") {
+        progress.activeTheme = item.themeVal;
+      } else if (item.category === "Titoli") {
+        progress.activeTitle = item.titleVal;
+      } else if (item.category === "Avatar") {
+        progress.activeAvatar = item.avatarUrl;
+      }
+
+      saveProgress();
+      applyUserCustomizations();
+      updateHeader();
+      alert(`✨ Equipaggiato: ${item.name}`);
+    }
+
+    // --- BACKUP & IMPORT ---
+    function exportBackup() {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ db, progress }));
+      const dlAnchorElem = document.createElement('a');
+      dlAnchorElem.setAttribute("href", dataStr);
+      dlAnchorElem.setAttribute("download", `cantareal_backup_${new Date().toISOString().split('T')[0]}.json`);
+      dlAnchorElem.click();
+    }
+
+    function triggerImport() {
+      document.getElementById("importFile").click();
+    }
+
+    function importBackup(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        try {
+          const imported = JSON.parse(event.target.result);
+          if (imported.db && imported.progress) {
+            db = imported.db;
+            progress = imported.progress;
+            saveData();
+            saveProgress();
+            location.reload();
+          }
+        } catch (err) {
+          alert("❌ File di backup non valido!");
+        }
+      };
+      reader.readAsText(file);
+    }
   </script>
 </body>
 </html>
+
