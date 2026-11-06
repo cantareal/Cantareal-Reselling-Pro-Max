@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="Cantareal">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="application-name" content="Cantareal">
-  <title>Cantareal — Reselling Pro</title>
+  <title>Cantareal — Reselling Pro MAX</title>
   <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
@@ -29,9 +29,18 @@
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     body { background: var(--bg-color); color: var(--text-color); padding: 12px; padding-bottom: 90px; max-width: 600px; margin: 0 auto; }
-    .header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-    h1 { font-size: 1.25rem; }
-    .theme-toggle { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-color); padding: 6px 12px; border-radius: 20px; font-size: 0.85rem; cursor: pointer; width: auto; }
+    
+    /* HEADER CON AVATAR E CORNICE */
+    .header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+    .profile-card-header { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+    .avatar-frame { position: relative; width: 44px; height: 44px; flex-shrink: 0; }
+    .avatar-border { position: absolute; inset: -3px; background: linear-gradient(135deg, #f59e0b, #ec4899); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(245,158,11,0.4); }
+    .avatar-img { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 50%; background: var(--card-bg); object-fit: cover; border: 2px solid var(--card-bg); }
+    .user-info-text .user-name { font-weight: 800; font-size: 1rem; line-height: 1.1; }
+    .user-info-text .user-title { font-size: 0.7rem; color: #a855f7; font-weight: 700; margin-top: 2px; }
+
+    .header-actions { display: flex; gap: 6px; align-items: center; }
+    .btn-header-icon { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-color); padding: 6px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; cursor: pointer; width: auto; display: flex; align-items: center; gap: 4px; }
 
     .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
     .stat-card { padding: 12px 10px; border-radius: 14px; text-align: left; position: relative; border: none; color: #fff; min-height: 72px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 12px rgba(0,0,0,0.25); }
@@ -60,11 +69,8 @@
     .filter-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-top: 8px; }
     .filter-row label { font-size: 0.65rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 2px; }
 
-    .sync-row { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 6px; margin-bottom: 12px; }
-    .btn-sync { background: #475569; color: white; border: none; font-weight: 700; font-size: 0.8rem; padding: 9px 4px; cursor: pointer; border-radius: 8px; }
-    .btn-sync.green { background: var(--success-color); }
-    .btn-sync.purple { background: #8b5cf6; }
-    .btn-sync.orange { background: #d97706; }
+    .quick-chips-container { display: flex; gap: 6px; margin-top: 6px; overflow-x: auto; padding-bottom: 4px; }
+    .chip-btn { padding: 5px 10px; font-size: 0.72rem; font-weight: 700; border-radius: 6px; width: auto; border: 1px solid var(--border-color); background: var(--card-bg); cursor: pointer; white-space: nowrap; }
 
     .swipe-container { position: relative; margin-bottom: 8px; border-radius: 10px; overflow: hidden; }
     .swipe-background { position: absolute; inset: 0; display: flex; justify-content: space-between; align-items: center; font-weight: 700; color: white; font-size: 0.85rem; z-index: 0; }
@@ -119,14 +125,43 @@
     .adjust-list { max-height: 160px; overflow-y: auto; margin-top: 12px; font-size: 0.8rem; }
     .adjust-item { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border-color); }
     .adjust-pos { color: var(--success-color); } .adjust-neg { color: var(--danger-color); }
+
+    /* STILI GAMIFICATION & IMPOSTAZIONI */
+    .progress-panel .xp-bar-bg { background:var(--border-color); border-radius:8px; height:12px; overflow:hidden; margin:8px 0 4px; }
+    .progress-panel .xp-bar-fill { background:linear-gradient(90deg,#a855f7,#3b82f6); height:100%; width:0%; transition:width .3s; }
+    .progress-panel .streak-box { display:flex; align-items:center; gap:10px; background:rgba(249,115,22,.15); border:1px solid rgba(249,115,22,.4); border-radius:10px; padding:10px 12px; margin:12px 0; }
+    .progress-panel .mission-item, .progress-panel .badge-item { background:var(--input-bg); border:1px solid var(--border-color); border-radius:10px; padding:10px 12px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; gap:8px; }
+    .progress-panel .mission-item.done { opacity:.75; border-color:var(--success-color); }
+    .progress-panel .badge-item.locked { opacity:.4; }
+    .progress-panel .badge-item.unlocked { border-color:#a855f7; }
+    .progress-panel .tag-xp { font-size:.7rem; font-weight:700; color:#a855f7; white-space:nowrap; }
+    .progress-panel .tag-ok { font-size:.7rem; font-weight:700; color:var(--success-color); }
+    .celeb-overlay { position:fixed; inset:0; z-index:300; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.4); }
+    .celeb-overlay.show { display:flex; }
+    .celeb-box { background:var(--card-bg); border:1px solid var(--border-color); border-radius:16px; padding:24px 28px; text-align:center; max-width:280px; }
+    .celeb-box .big { font-size:2rem; font-weight:800; color:var(--success-color); margin:8px 0; }
+    
+    .settings-item-btn { display: flex; align-items: center; justify-content: space-between; padding: 12px; background: var(--input-bg); border: 1px solid var(--border-color); border-radius: 10px; color: var(--text-color); font-weight: 700; cursor: pointer; margin-bottom: 8px; text-align: left; }
   </style>
 </head>
 <body>
+
+  <!-- HEADER CON AVATAR E TITOLO DINAMICO -->
   <div class="header-row">
-    <h1>📦 Cantareal</h1>
-    <div style="display:flex;gap:6px;align-items:center;">
-      <button id="installBtn" onclick="installPWA()" style="display:none;background:#d97706;color:#fff;border:none;padding:6px 10px;border-radius:20px;font-size:0.8rem;font-weight:700;cursor:pointer;width:auto;">⬇ Installa</button>
-      <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()">☀️ Chiaro</button>
+    <div class="profile-card-header" onclick="openSettingsModal()" title="Apri Profilo e Impostazioni">
+      <div class="avatar-frame">
+        <div class="avatar-border"></div>
+        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Cantareal" alt="Avatar" class="avatar-img">
+      </div>
+      <div class="user-info-text">
+        <div class="user-name">Cantareal</div>
+        <div class="user-title" id="headerUserLevelText">Liv. 1 • Novizio</div>
+      </div>
+    </div>
+    
+    <div class="header-actions">
+      <button class="btn-header-icon" onclick="openProgressPanel()" title="Progressi">🏆 <span id="headerXpTag">0 XP</span></button>
+      <button class="btn-header-icon" onclick="openSettingsModal()" title="Impostazioni">⚙️</button>
     </div>
   </div>
 
@@ -209,15 +244,6 @@
       </div>
     </div>
 
-    <div class="sync-row">
-      <button class="btn-sync" onclick="copyData()">📋 Copia</button>
-      <button class="btn-sync" onclick="importData()">📥 Importa</button>
-      <button class="btn-sync green" onclick="manualSave()">💾 Salva</button>
-      <button class="btn-sync purple" onclick="downloadBackup()">📂 Backup</button>
-    </div>
-    <div style="margin-bottom:12px;">
-      <button class="btn-sync orange" onclick="downloadCSV()">📊 Esporta CSV</button>
-    </div>
     <div id="itemList"></div>
   </div>
 
@@ -238,17 +264,20 @@
 
   <button class="fab-btn" onclick="openAddModal()">+</button>
 
-  <!-- MODALE AGGIUNGI -->
+  <!-- MODALE AGGIUNGI (VERSIONE CON RARITÀ & PREZZI RAPIDI) -->
   <div class="modal-overlay" id="addModal">
     <div class="modal-content">
       <div class="modal-header">
-        <span class="modal-title">➕ Nuovo Oggetto</span>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span class="modal-title">➕ Nuovo Oggetto</span>
+          <span style="font-size:0.72rem;font-weight:800;background:rgba(168,85,247,0.2);color:#a855f7;padding:2px 8px;border-radius:12px;border:1px solid rgba(168,85,247,0.4);">+10 XP</span>
+        </div>
         <button class="close-modal" onclick="closeModal('addModal')">✕</button>
       </div>
       <div class="form-grid">
         <div class="full-width">
-          <label style="font-size:0.75rem;font-weight:700;">NOME</label>
-          <input type="text" id="addTitle" placeholder="es. PS4 Fat">
+          <label style="font-size:0.75rem;font-weight:700;">NOME OGGETTO</label>
+          <input type="text" id="addTitle" placeholder="es. PS4 Fat con Joypad">
         </div>
         <div>
           <label style="font-size:0.75rem;font-weight:700;">CATEGORIA</label>
@@ -261,7 +290,7 @@
           </select>
         </div>
         <div>
-          <label style="font-size:0.75rem;font-weight:700;">FONTE</label>
+          <label style="font-size:0.75rem;font-weight:700;">FONTE ACQUISTO</label>
           <select id="addSource">
             <option value="Mercatino / Di Persona">Mercatino / Di Persona</option>
             <option value="Vinted">Vinted</option>
@@ -270,16 +299,43 @@
             <option value="eBay">eBay</option>
           </select>
         </div>
-        <div>
-          <label style="font-size:0.75rem;font-weight:700;">PREZZO ACQ (€)</label>
-          <input type="number" id="addBuyPrice" step="0.01" placeholder="0.00">
+
+        <div class="full-width">
+          <label style="font-size:0.75rem;font-weight:700;">PREZZO ACQUISTO (€)</label>
+          <input type="number" id="addBuyPrice" step="0.01" placeholder="0.00" oninput="updateAddPreview()">
+          <div class="quick-chips-container">
+            <button type="button" class="chip-btn" onclick="setQuickBuyPrice(0)">€0 (Gratis)</button>
+            <button type="button" class="chip-btn" onclick="setQuickBuyPrice(2)">€2</button>
+            <button type="button" class="chip-btn" onclick="setQuickBuyPrice(5)">€5</button>
+            <button type="button" class="chip-btn" onclick="setQuickBuyPrice(10)">€10</button>
+            <button type="button" class="chip-btn" onclick="setQuickBuyPrice(20)">€20</button>
+          </div>
         </div>
+
+        <div>
+          <label style="font-size:0.75rem;font-weight:700;">TARGET STIMATO (€)</label>
+          <input type="number" id="addTargetPrice" step="0.01" placeholder="es. 40.00" oninput="updateAddPreview()">
+        </div>
+
         <div>
           <label style="font-size:0.75rem;font-weight:700;">DATA ACQUISTO</label>
           <input type="date" id="addItemDate">
         </div>
+
+        <!-- ANTEPRIMA RARITÀ IN TEMPO REALE -->
+        <div class="full-width" id="previewRarityCard" style="background:var(--input-bg); border:1px solid var(--border-color); border-radius:10px; padding:10px; display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <div style="font-size:0.68rem; color:var(--text-muted); font-weight:700;">RARITÀ STIMATA</div>
+            <div id="previewRarityBadge" style="font-size:0.85rem; font-weight:800; color:var(--text-muted);">⚪ COMUNE</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:0.68rem; color:var(--text-muted); font-weight:700;">PROFITTO ATTESO</div>
+            <div id="previewProfitVal" style="font-size:0.9rem; font-weight:800; color:var(--success-color);">€0.00</div>
+          </div>
+        </div>
+
         <div class="full-width">
-          <button class="btn-main" onclick="addItem()">Salva nell'Inventario</button>
+          <button class="btn-main" onclick="addItem()">💾 Salva nell'Inventario</button>
         </div>
       </div>
     </div>
@@ -381,6 +437,94 @@
         </div>
       </div>
       <div class="adjust-list" id="adjustList"></div>
+    </div>
+  </div>
+
+  <!-- MODALE IMPOSTAZIONI E PROFILO (PULIZIA DATI) -->
+  <div class="modal-overlay" id="settingsModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="modal-title">⚙️ Profilo & Impostazioni</span>
+        <button class="close-modal" onclick="closeModal('settingsModal')">✕</button>
+      </div>
+      
+      <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px; padding:10px; background:var(--input-bg); border-radius:10px; border:1px solid var(--border-color);">
+        <div class="avatar-frame">
+          <div class="avatar-border"></div>
+          <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Cantareal" alt="Avatar" class="avatar-img">
+        </div>
+        <div>
+          <div style="font-weight:800; font-size:1rem;">Cantareal</div>
+          <div style="font-size:0.75rem; color:#a855f7; font-weight:700;" id="settingsLevelText">Livello 1 • Novizio</div>
+        </div>
+      </div>
+
+      <div style="font-size:0.75rem; font-weight:800; color:var(--text-muted); margin-bottom:8px;">GESTIONE DATI & BACKUP</div>
+      
+      <div class="settings-item-btn" onclick="copyData()">
+        <span>📋 Copia Dati negli Appunti</span>
+        <span>➔</span>
+      </div>
+      <div class="settings-item-btn" onclick="importData()">
+        <span>📥 Importa Backup JSON</span>
+        <span>➔</span>
+      </div>
+      <div class="settings-item-btn" onclick="downloadBackup()">
+        <span>📂 Scarica Backup (JSON)</span>
+        <span>➔</span>
+      </div>
+      <div class="settings-item-btn" onclick="downloadCSV()">
+        <span>📊 Esporta in Excel (CSV)</span>
+        <span>➔</span>
+      </div>
+      <div class="settings-item-btn" onclick="manualSave()">
+        <span>💾 Salva Stato Attuale</span>
+        <span>➔</span>
+      </div>
+
+      <div style="font-size:0.75rem; font-weight:800; color:var(--text-muted); margin:14px 0 8px;">PERSONALIZZAZIONE</div>
+      
+      <div class="settings-item-btn" onclick="toggleTheme()">
+        <span>Tema Grafico</span>
+        <span id="settingsThemeBtn">☀️ Chiaro</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANNELLO PROGRESSI (XP / STREAK / MISSIONI) -->
+  <div class="modal-overlay" id="progressModal">
+    <div class="modal-content progress-panel">
+      <div class="modal-header">
+        <span class="modal-title">🏆 Progressi & Livello</span>
+        <button class="close-modal" onclick="closeModal('progressModal')">✕</button>
+      </div>
+      <div style="text-align:center;margin-bottom:4px;">
+        <div style="font-size:0.75rem;color:var(--text-muted);">LIVELLO ATTUALE</div>
+        <div style="font-size:1.8rem;font-weight:800;" id="progLevel">1</div>
+        <div class="xp-bar-bg"><div class="xp-bar-fill" id="progXpBar"></div></div>
+        <div style="font-size:0.75rem;color:var(--text-muted);" id="progXpText">0 / 100 XP</div>
+      </div>
+      <div class="streak-box">
+        <span style="font-size:1.6rem;">🔥</span>
+        <div>
+          <div style="font-weight:800;" id="progStreak">Streak: 0 giorni</div>
+          <div style="font-size:0.75rem;color:var(--text-muted);">Apri l'app ogni giorno per non perderlo</div>
+        </div>
+      </div>
+      <div style="font-weight:700;margin:12px 0 8px;">🎯 Missioni della Settimana</div>
+      <div id="progMissions"></div>
+      <div style="font-weight:700;margin:14px 0 8px;">🏅 Badge Sbloccati</div>
+      <div id="progBadges"></div>
+    </div>
+  </div>
+
+  <!-- CELEBRAZIONE VENDITA -->
+  <div class="celeb-overlay" id="celebOverlay" onclick="this.classList.remove('show')">
+    <div class="celeb-box">
+      <div style="font-size:1.5rem;">🎉</div>
+      <div class="big" id="celebProfit">+€0</div>
+      <div style="font-weight:700;">Vendita registrata!</div>
+      <div style="font-size:0.8rem;color:var(--text-muted);margin-top:4px;" id="celebXp">+0 XP</div>
     </div>
   </div>
 
@@ -486,7 +630,7 @@
     let activeSheetItemId = null;
     let platformChartInst = null, monthChartInst = null, categoryChartInst = null;
 
-    // Load data
+    // Caricamento Dati
     try {
       const saved = localStorage.getItem(DB_KEY);
       db = saved ? JSON.parse(saved) : userRealDataset;
@@ -497,11 +641,11 @@
       adjustments = JSON.parse(localStorage.getItem(ADJ_KEY) || "[]");
     } catch(e) { adjustments = []; }
 
-    // Theme
+    // Tema
     const savedTheme = localStorage.getItem(THEME_KEY);
     if (savedTheme) {
       document.documentElement.setAttribute("data-theme", savedTheme);
-      document.getElementById("themeBtn").innerText = savedTheme === "dark" ? "☀️ Chiaro" : "🌙 Scuro";
+      document.getElementById("settingsThemeBtn").innerText = savedTheme === "dark" ? "☀️ Chiaro" : "🌙 Scuro";
     }
 
     const savedGoal = localStorage.getItem(GOAL_KEY);
@@ -538,11 +682,6 @@
       return Math.max(0, Math.floor((Date.now() - d.getTime()) / 86400000));
     }
 
-    // Baseline calibrata sullo stato iniziale del dataset.
-    // investito = somma di TUTTI i prezzi di acquisto (stock + venduti)
-    // incassi   = somma dei prezzi di vendita dei soli venduti
-    // Cassa = Baseline - (investito attuale - investito iniziale) + (incassi attuali - incassi iniziali) + aggiustamenti
-    // Così una vendita aggiunge SOLO il prezzo di vendita, non anche il costo di acquisto.
     function getInitialStateHash() {
       let invested = 0, salesRevenue = 0;
       userRealDataset.forEach(i => {
@@ -562,7 +701,7 @@
       const next = html.getAttribute("data-theme") === "dark" ? "light" : "dark";
       html.setAttribute("data-theme", next);
       localStorage.setItem(THEME_KEY, next);
-      document.getElementById("themeBtn").innerText = next === "dark" ? "☀️ Chiaro" : "🌙 Scuro";
+      document.getElementById("settingsThemeBtn").innerText = next === "dark" ? "☀️ Chiaro" : "🌙 Scuro";
       if (currentStatusFilter === "STATS") renderCharts();
     }
 
@@ -673,16 +812,15 @@
           const diff = parseD(a.d) - parseD(b.d);
           return diff !== 0 ? diff : Number(a.id) - Number(b.id);
         }
-        // default: date-desc
         const diff = parseD(b.d) - parseD(a.d);
         return diff !== 0 ? diff : Number(b.id) - Number(a.id);
       });
 
-      // Stats
+      // Calcolo Statistiche
       let stockVal = 0, totalProfit = 0, monthProfit = 0, currentInvested = 0, currentSalesRevenue = 0;
       db.forEach(item => {
         const bp = parseFloat(item.bp)||0, sp = parseFloat(item.sp)||0;
-        currentInvested += bp; // tutto il capitale impiegato (stock + venduti)
+        currentInvested += bp;
         if (item.s === "stock") {
           stockVal += bp;
         } else if (item.s === "sold") {
@@ -694,9 +832,6 @@
         }
       });
 
-      // Formula corretta:
-      // - nuovo acquisto → investito sale → cassa scende di bp
-      // - vendita        → solo incassi salgono → cassa sale di sp (NON anche di bp)
       const deltaRev = currentSalesRevenue - initialBaseHash.salesRevenue;
       const deltaInvested = currentInvested - initialBaseHash.invested;
       const cashVal = BASELINE_CASH - deltaInvested + deltaRev + getTotalAdjustments();
@@ -706,6 +841,7 @@
       document.getElementById("statProfit").innerText = `€${totalProfit.toFixed(2)}`;
       document.getElementById("statMonthProfit").innerText = `€${monthProfit.toFixed(2)}`;
       updateGoalProgress(monthProfit);
+      updateHeaderHeaderLevel();
 
       const listEl = document.getElementById("itemList");
       listEl.innerHTML = "";
@@ -804,7 +940,6 @@
       const textColor = getComputedStyle(document.documentElement).getPropertyValue("--text-color").trim();
       const cardBg = getComputedStyle(document.documentElement).getPropertyValue("--card-bg").trim();
 
-      // Platform
       const plat = {};
       db.forEach(i => {
         if (i.s === "sold" && i.soldPlatform) {
@@ -819,12 +954,11 @@
         options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: "bottom", labels: { color: textColor, font: { size: 11 } } } } }
       });
 
-      // Monthly
       const months = {};
       db.forEach(i => {
         if (i.s === "sold") {
           const d = i.soldDate || i.d || "";
-          const key = d.length >= 7 ? d.slice(3) : "Sconosciuto"; // MM/YYYY
+          const key = d.length >= 7 ? d.slice(3) : "Sconosciuto";
           const p = (parseFloat(i.sp)||0) - (parseFloat(i.bp)||0);
           months[key] = (months[key]||0) + p;
         }
@@ -840,7 +974,6 @@
         options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: textColor } }, y: { ticks: { color: textColor } } } }
       });
 
-      // Category
       const cats = {};
       db.forEach(i => {
         if (i.s === "sold") {
@@ -856,10 +989,62 @@
       });
     }
 
+    /* MODALE NUOVO OGGETTO CON ANTEPRIMA RARITÀ & PREZZI RAPIDI */
+    function setQuickBuyPrice(val) {
+      document.getElementById("addBuyPrice").value = val;
+      updateAddPreview();
+    }
+
+    function updateAddPreview() {
+      const bp = parseFloat(document.getElementById("addBuyPrice").value.replace(",", ".")) || 0;
+      const tp = parseFloat(document.getElementById("addTargetPrice").value.replace(",", ".")) || 0;
+
+      const profit = tp - bp;
+      const roi = bp > 0 ? (profit / bp) * 100 : (tp > 0 ? 999 : 0);
+
+      const profitEl = document.getElementById("previewProfitVal");
+      const badgeEl = document.getElementById("previewRarityBadge");
+      const cardEl = document.getElementById("previewRarityCard");
+
+      profitEl.innerText = (profit >= 0 ? "+€" : "-€") + Math.abs(profit).toFixed(2);
+      profitEl.style.color = profit >= 0 ? "var(--success-color)" : "var(--danger-color)";
+
+      if (tp === 0) {
+        badgeEl.innerText = "⚪ COMUNE";
+        badgeEl.style.color = "var(--text-muted)";
+        cardEl.style.borderColor = "var(--border-color)";
+      } else if (roi >= 200 || profit >= 60) {
+        badgeEl.innerText = "🟡 LEGGENDARIO";
+        badgeEl.style.color = "#f59e0b";
+        cardEl.style.borderColor = "#f59e0b";
+      } else if (roi >= 80 || profit >= 25) {
+        badgeEl.innerText = "🟣 EPICO";
+        badgeEl.style.color = "#a855f7";
+        cardEl.style.borderColor = "#a855f7";
+      } else if (roi >= 30 || profit >= 10) {
+        badgeEl.innerText = "🔵 RARO";
+        badgeEl.style.color = "#3b82f6";
+        cardEl.style.borderColor = "#3b82f6";
+      } else {
+        badgeEl.innerText = "⚪ COMUNE";
+        badgeEl.style.color = "var(--text-muted)";
+        cardEl.style.borderColor = "var(--border-color)";
+      }
+    }
+
     function openAddModal() {
       document.getElementById("addItemDate").valueAsDate = new Date();
+      document.getElementById("addTitle").value = "";
+      document.getElementById("addBuyPrice").value = "";
+      document.getElementById("addTargetPrice").value = "";
+      updateAddPreview();
       document.getElementById("addModal").style.display = "flex";
     }
+    
+    function openSettingsModal() {
+      document.getElementById("settingsModal").style.display = "flex";
+    }
+    
     function closeModal(id) { document.getElementById(id).style.display = "none"; }
 
     function addItem() {
@@ -879,10 +1064,10 @@
         bp: buyPrice,
         sp: 0, s: "stock", d, soldPlatform: "", soldDate: ""
       });
+      
+      addXp(10); // Bonus XP inserimento
       saveData();
       closeModal("addModal");
-      document.getElementById("addTitle").value = "";
-      document.getElementById("addBuyPrice").value = "";
     }
 
     function openEditModal(id) {
@@ -958,8 +1143,11 @@
       if (isNaN(price) || price <= 0) return alert("Inserisci un prezzo valido.");
       const item = db.find(x => x.id === activeSheetItemId);
       if (item) {
+        const bp = parseFloat(item.bp) || 0;
+        const profit = price - bp;
         item.s = "sold"; item.sp = price; item.soldPlatform = platform; item.soldDate = todayFormatted();
         saveData();
+        onSaleCompleted(profit, price);
       }
       closeSellSheet();
     }
@@ -1033,6 +1221,215 @@
       renderApp();
     }
 
+    /* SISTEMA PROGRESSI: XP / STREAK / MISSIONI */
+    const PROG_KEY = "cantareal_progress_v1";
+    const XP_PER_LEVEL = 100;
+
+    const BADGE_DEFS = [
+      { id: "first_sale", name: "Prima vendita", desc: "Registra la prima vendita", icon: "🥇" },
+      { id: "sales_5", name: "5 vendite", desc: "Completa 5 vendite", icon: "5️⃣" },
+      { id: "sales_10", name: "10 vendite", desc: "Completa 10 vendite", icon: "🔟" },
+      { id: "streak_3", name: "Streak 3", desc: "Apri l'app 3 giorni di fila", icon: "🔥" },
+      { id: "streak_7", name: "Streak 7", desc: "Apri l'app 7 giorni di fila", icon: "🔥" },
+      { id: "profit_50", name: "€50 profitto", desc: "Raggiungi €50 di profitto totale", icon: "💶" },
+      { id: "profit_100", name: "€100 profitto", desc: "Raggiungi €100 di profitto totale", icon: "💰" },
+      { id: "roi_100", name: "ROI 100%", desc: "Vendi con ROI ≥ 100%", icon: "📈" }
+    ];
+
+    function defaultProgress() {
+      return {
+        xp: 0, streak: 0, lastOpen: "", salesCount: 0, totalProfitTracked: 0,
+        weekKey: "", weekSales: 0, weekProfit: 0, missionsClaimed: {}, badges: {}
+      };
+    }
+
+    let progress = defaultProgress();
+    try {
+      const raw = localStorage.getItem(PROG_KEY);
+      if (raw) progress = { ...defaultProgress(), ...JSON.parse(raw) };
+    } catch (e) {}
+
+    function saveProgress() {
+      localStorage.setItem(PROG_KEY, JSON.stringify(progress));
+      updateHeaderHeaderLevel();
+    }
+
+    function weekKeyNow() {
+      const d = new Date();
+      const onejan = new Date(d.getFullYear(), 0, 1);
+      const week = Math.ceil((((d - onejan) / 86400000) + onejan.getDay() + 1) / 7);
+      return d.getFullYear() + "-W" + week;
+    }
+
+    function ensureWeek() {
+      const wk = weekKeyNow();
+      if (progress.weekKey !== wk) {
+        progress.weekKey = wk;
+        progress.weekSales = 0;
+        progress.weekProfit = 0;
+        progress.missionsClaimed = {};
+        saveProgress();
+      }
+    }
+
+    function xpForLevel(level) { return level * XP_PER_LEVEL; }
+
+    function getLevel() {
+      let lvl = 1, remaining = progress.xp;
+      while (remaining >= xpForLevel(lvl)) {
+        remaining -= xpForLevel(lvl);
+        lvl++;
+        if (lvl > 99) break;
+      }
+      
+      let title = "Novizio";
+      if (lvl >= 15) title = "Imperatore del Flip";
+      else if (lvl >= 10) title = "Master Trader";
+      else if (lvl >= 7) title = "Re del Flip";
+      else if (lvl >= 4) title = "Cacciatore di Affari";
+      else if (lvl >= 2) title = "Apprendista Reseller";
+
+      return { level: lvl, into: remaining, need: xpForLevel(lvl), title: title };
+    }
+
+    function addXp(amount) {
+      if (!amount) return;
+      progress.xp += amount;
+      saveProgress();
+    }
+
+    function updateHeaderHeaderLevel() {
+      const lv = getLevel();
+      const text = `Liv. ${lv.level} • ${lv.title}`;
+      document.getElementById("headerUserLevelText").innerText = text;
+      document.getElementById("settingsLevelText").innerText = text;
+      document.getElementById("headerXpTag").innerText = `${progress.xp} XP`;
+    }
+
+    function unlockBadge(id) {
+      if (progress.badges[id]) return false;
+      progress.badges[id] = todayFormatted();
+      saveProgress();
+      return true;
+    }
+
+    function checkBadges() {
+      const soldN = db.filter(i => i.s === "sold").length;
+      const totalProfit = db.reduce((s, i) => i.s === "sold" ? s + ((parseFloat(i.sp)||0) - (parseFloat(i.bp)||0)) : s, 0);
+      if (soldN >= 1) unlockBadge("first_sale");
+      if (soldN >= 5) unlockBadge("sales_5");
+      if (soldN >= 10) unlockBadge("sales_10");
+      if (progress.streak >= 3) unlockBadge("streak_3");
+      if (progress.streak >= 7) unlockBadge("streak_7");
+      if (totalProfit >= 50) unlockBadge("profit_50");
+      if (totalProfit >= 100) unlockBadge("profit_100");
+    }
+
+    function registerDailyOpen() {
+      const today = todayFormatted();
+      if (progress.lastOpen === today) return;
+      const y = new Date();
+      y.setDate(y.getDate() - 1);
+      const yesterday = String(y.getDate()).padStart(2,"0") + "/" + String(y.getMonth()+1).padStart(2,"0") + "/" + y.getFullYear();
+      if (progress.lastOpen === yesterday) progress.streak += 1;
+      else progress.streak = 1;
+      progress.lastOpen = today;
+      addXp(5);
+      checkBadges();
+      saveProgress();
+    }
+
+    function onSaleCompleted(profit, price) {
+      ensureWeek();
+      progress.salesCount = (progress.salesCount || 0) + 1;
+      progress.weekSales = (progress.weekSales || 0) + 1;
+      progress.weekProfit = (progress.weekProfit || 0) + profit;
+      progress.totalProfitTracked = (progress.totalProfitTracked || 0) + profit;
+
+      let xpGain = 25;
+      if (profit > 0) xpGain += Math.min(50, Math.round(profit));
+      if (profit > 0 && price > 0) {
+        const bpEst = price - profit;
+        if (bpEst > 0 && profit / bpEst >= 1) {
+          xpGain += 15;
+          unlockBadge("roi_100");
+        }
+      }
+      addXp(xpGain);
+      checkBadges();
+      tryClaimMissions();
+      showCelebration(profit, xpGain);
+    }
+
+    function getMissions() {
+      ensureWeek();
+      return [
+        { id: "m_sale_1", title: "Vendi 1 oggetto questa settimana", done: progress.weekSales >= 1, xp: 20 },
+        { id: "m_sale_3", title: "Vendi 3 oggetti questa settimana", done: progress.weekSales >= 3, xp: 40 },
+        { id: "m_profit_30", title: "Fai almeno €30 di profitto questa settimana", done: progress.weekProfit >= 30, xp: 35 },
+        { id: "m_streak_keep", title: "Mantieni lo streak almeno a 3", done: progress.streak >= 3, xp: 15 }
+      ];
+    }
+
+    function tryClaimMissions() {
+      getMissions().forEach(m => {
+        if (m.done && !progress.missionsClaimed[m.id]) {
+          progress.missionsClaimed[m.id] = true;
+          addXp(m.xp);
+        }
+      });
+      saveProgress();
+    }
+
+    function openProgressPanel() {
+      tryClaimMissions();
+      checkBadges();
+      const lv = getLevel();
+      document.getElementById("progLevel").innerText = lv.level;
+      const pct = Math.min(100, Math.round((lv.into / lv.need) * 100));
+      document.getElementById("progXpBar").style.width = pct + "%";
+      document.getElementById("progXpText").innerText = lv.into + " / " + lv.need + " XP";
+      document.getElementById("progStreak").innerText = "Streak: " + progress.streak + " giorni";
+
+      const missionsEl = document.getElementById("progMissions");
+      missionsEl.innerHTML = getMissions().map(m => {
+        const claimed = !!progress.missionsClaimed[m.id];
+        return `<div class="mission-item ${m.done ? "done" : ""}">
+          <div>
+            <div style="font-weight:700;font-size:0.85rem;">${m.done ? "✅ " : "⬜ "}${m.title}</div>
+            <div style="font-size:0.7rem;color:var(--text-muted);">${claimed ? "Ricompensa raccolta" : "In corso"}</div>
+          </div>
+          <span class="${claimed || m.done ? "tag-ok" : "tag-xp"}">${claimed ? "OK" : "+" + m.xp + " XP"}</span>
+        </div>`;
+      }).join("");
+
+      const badgesEl = document.getElementById("progBadges");
+      badgesEl.innerHTML = BADGE_DEFS.map(b => {
+        const unlocked = !!progress.badges[b.id];
+        return `<div class="badge-item ${unlocked ? "unlocked" : "locked"}">
+          <div style="display:flex;gap:8px;align-items:center;">
+            <span style="font-size:1.2rem;">${b.icon}</span>
+            <div>
+              <div style="font-weight:700;font-size:0.85rem;">${b.name}</div>
+              <div style="font-size:0.7rem;color:var(--text-muted);">${b.desc}</div>
+            </div>
+          </div>
+          <span class="${unlocked ? "tag-ok" : "tag-xp"}">${unlocked ? "Sbloccato" : "Bloccato"}</span>
+        </div>`;
+      }).join("");
+
+      document.getElementById("progressModal").style.display = "flex";
+    }
+
+    function showCelebration(profit, xpGain) {
+      const el = document.getElementById("celebOverlay");
+      document.getElementById("celebProfit").innerText = (profit >= 0 ? "+" : "") + "€" + profit.toFixed(2);
+      document.getElementById("celebXp").innerText = "+" + xpGain + " XP";
+      el.classList.add("show");
+      setTimeout(() => el.classList.remove("show"), 2200);
+    }
+
+    registerDailyOpen();
     renderApp();
   </script>
 </body>
