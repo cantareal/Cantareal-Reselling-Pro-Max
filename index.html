@@ -19,6 +19,7 @@
       --border-color: #e5e7eb; --input-bg: #ffffff; --badge-stock-bg: #dbeafe; --badge-stock-text: #1e40af;
       --badge-sold-bg: #dcfce7; --badge-sold-text: #166534; --tab-active: #2563eb; --tab-active-text: #fff;
       --modal-overlay: rgba(0,0,0,0.5); --warn-color: #f59e0b;
+      --frame-gradient: linear-gradient(135deg, #f59e0b, #ec4899);
     }
     [data-theme="dark"] {
       --bg-color: #0f172a; --card-bg: #1e293b; --text-color: #f8fafc; --text-muted: #94a3b8;
@@ -27,6 +28,22 @@
       --badge-sold-bg: #14532d; --badge-sold-text: #86efac; --tab-active: #3b82f6; --tab-active-text: #fff;
       --modal-overlay: rgba(0,0,0,0.7); --warn-color: #fbbf24;
     }
+    /* TEMI EXTRA SBLOCCABILI */
+    [data-theme="emerald"] {
+      --bg-color: #064e3b; --card-bg: #047857; --text-color: #ecfdf5; --text-muted: #a7f3d0;
+      --accent-color: #10b981; --success-color: #34d399; --danger-color: #f87171;
+      --border-color: #059669; --input-bg: #065f46; --badge-stock-bg: #064e3b; --badge-stock-text: #a7f3d0;
+      --badge-sold-bg: #022c22; --badge-sold-text: #6ee7b7; --tab-active: #10b981; --tab-active-text: #fff;
+      --modal-overlay: rgba(0,0,0,0.8); --warn-color: #fbbf24;
+    }
+    [data-theme="vaporwave"] {
+      --bg-color: #2d1b4e; --card-bg: #1a0b2e; --text-color: #f0abfc; --text-muted: #c084fc;
+      --accent-color: #d946ef; --success-color: #22c55e; --danger-color: #f43f5e;
+      --border-color: #581c87; --input-bg: #3b0764; --badge-stock-bg: #4c1d95; --badge-stock-text: #e9d5ff;
+      --badge-sold-bg: #701a75; --badge-sold-text: #f5d0fe; --tab-active: #d946ef; --tab-active-text: #fff;
+      --modal-overlay: rgba(0,0,0,0.8); --warn-color: #f59e0b;
+    }
+
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     body { background: var(--bg-color); color: var(--text-color); padding: 12px; padding-bottom: 90px; max-width: 600px; margin: 0 auto; }
     
@@ -34,7 +51,7 @@
     .header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
     .profile-card-header { display: flex; align-items: center; gap: 10px; cursor: pointer; }
     .avatar-frame { position: relative; width: 44px; height: 44px; flex-shrink: 0; }
-    .avatar-border { position: absolute; inset: -3px; background: linear-gradient(135deg, #f59e0b, #ec4899); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(245,158,11,0.4); }
+    .avatar-border { position: absolute; inset: -3px; background: var(--frame-gradient); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(245,158,11,0.4); }
     .avatar-img { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 50%; background: var(--card-bg); object-fit: cover; border: 2px solid var(--card-bg); }
     .user-info-text .user-name { font-weight: 800; font-size: 1rem; line-height: 1.1; }
     .user-info-text .user-title { font-size: 0.7rem; color: #a855f7; font-weight: 700; margin-top: 2px; }
@@ -126,7 +143,17 @@
     .adjust-item { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border-color); }
     .adjust-pos { color: var(--success-color); } .adjust-neg { color: var(--danger-color); }
 
-    /* STILI GAMIFICATION & IMPOSTAZIONI */
+    /* STILI SHOP & SELEZIONE AVATAR */
+    .avatar-picker-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 10px 0; }
+    .avatar-opt { width: 50px; height: 50px; border-radius: 50%; border: 2px solid var(--border-color); cursor: pointer; object-fit: cover; background: var(--input-bg); }
+    .avatar-opt.active { border-color: #a855f7; box-shadow: 0 0 8px rgba(168,85,247,0.5); }
+
+    .shop-item-card { background: var(--input-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+    .shop-item-info .title { font-weight: 700; font-size: 0.9rem; }
+    .shop-item-info .desc { font-size: 0.72rem; color: var(--text-muted); }
+    .btn-buy-shop { padding: 6px 12px; border-radius: 8px; border: none; background: linear-gradient(135deg, #a855f7, #3b82f6); color: #fff; font-size: 0.75rem; font-weight: 800; cursor: pointer; width: auto; }
+    .btn-buy-shop.owned { background: var(--border-color); color: var(--text-muted); cursor: default; }
+
     .progress-panel .xp-bar-bg { background:var(--border-color); border-radius:8px; height:12px; overflow:hidden; margin:8px 0 4px; }
     .progress-panel .xp-bar-fill { background:linear-gradient(90deg,#a855f7,#3b82f6); height:100%; width:0%; transition:width .3s; }
     .progress-panel .streak-box { display:flex; align-items:center; gap:10px; background:rgba(249,115,22,.15); border:1px solid rgba(249,115,22,.4); border-radius:10px; padding:10px 12px; margin:12px 0; }
@@ -150,8 +177,8 @@
   <div class="header-row">
     <div class="profile-card-header" onclick="openSettingsModal()" title="Apri Profilo e Impostazioni">
       <div class="avatar-frame">
-        <div class="avatar-border"></div>
-        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Cantareal" alt="Avatar" class="avatar-img">
+        <div class="avatar-border" id="headerAvatarBorder"></div>
+        <img id="headerAvatarImg" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Cantareal" alt="Avatar" class="avatar-img">
       </div>
       <div class="user-info-text">
         <div class="user-name">Cantareal</div>
@@ -160,6 +187,7 @@
     </div>
     
     <div class="header-actions">
+      <button class="btn-header-icon" onclick="openShopModal()" title="Shop Premi XP" style="background: linear-gradient(135deg, rgba(168,85,247,0.2), rgba(59,130,246,0.2)); border-color: #a855f7;">🛒 Shop</button>
       <button class="btn-header-icon" onclick="openProgressPanel()" title="Progressi">🏆 <span id="headerXpTag">0 XP</span></button>
       <button class="btn-header-icon" onclick="openSettingsModal()" title="Impostazioni">⚙️</button>
     </div>
@@ -264,7 +292,7 @@
 
   <button class="fab-btn" onclick="openAddModal()">+</button>
 
-  <!-- MODALE AGGIUNGI (VERSIONE CON RARITÀ & PREZZI RAPIDI) -->
+  <!-- MODALE AGGIUNGI (SENZA ANTEPRIMA RARITÀ) -->
   <div class="modal-overlay" id="addModal">
     <div class="modal-content">
       <div class="modal-header">
@@ -313,7 +341,7 @@
         </div>
 
         <div>
-          <label style="font-size:0.75rem;font-weight:700;">TARGET STIMATO (€)</label>
+          <label style="font-size:0.75rem;font-weight:700;">TARGET VENDITA STIMATO (€)</label>
           <input type="number" id="addTargetPrice" step="0.01" placeholder="es. 40.00" oninput="updateAddPreview()">
         </div>
 
@@ -322,21 +350,74 @@
           <input type="date" id="addItemDate">
         </div>
 
-        <!-- ANTEPRIMA RARITÀ IN TEMPO REALE -->
-        <div class="full-width" id="previewRarityCard" style="background:var(--input-bg); border:1px solid var(--border-color); border-radius:10px; padding:10px; display:flex; justify-content:space-between; align-items:center;">
-          <div>
-            <div style="font-size:0.68rem; color:var(--text-muted); font-weight:700;">RARITÀ STIMATA</div>
-            <div id="previewRarityBadge" style="font-size:0.85rem; font-weight:800; color:var(--text-muted);">⚪ COMUNE</div>
-          </div>
-          <div style="text-align:right;">
-            <div style="font-size:0.68rem; color:var(--text-muted); font-weight:700;">PROFITTO ATTESO</div>
-            <div id="previewProfitVal" style="font-size:0.9rem; font-weight:800; color:var(--success-color);">€0.00</div>
-          </div>
+        <!-- BOX MARGINE ATTESO -->
+        <div class="full-width" style="background:var(--input-bg); border:1px solid var(--border-color); border-radius:10px; padding:10px; display:flex; justify-content:space-between; align-items:center;">
+          <div style="font-size:0.75rem; font-weight:700; color:var(--text-muted);">PROFITTO ATTESO STIMATO</div>
+          <div id="previewProfitVal" style="font-size:0.95rem; font-weight:800; color:var(--success-color);">€0.00</div>
         </div>
 
         <div class="full-width">
           <button class="btn-main" onclick="addItem()">💾 Salva nell'Inventario</button>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODALE SHOP PREMI XP -->
+  <div class="modal-overlay" id="shopModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="modal-title">🛒 Shop Premi XP</span>
+        <button class="close-modal" onclick="closeModal('shopModal')">✕</button>
+      </div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(168,85,247,0.15); border:1px solid rgba(168,85,247,0.3); border-radius:10px; padding:10px 12px; margin-bottom:14px;">
+        <span style="font-weight:700; font-size:0.85rem;">Saldo XP Disponibile:</span>
+        <span style="font-weight:800; font-size:1.1rem; color:#a855f7;" id="shopXpBalance">0 XP</span>
+      </div>
+
+      <div style="font-size:0.75rem; font-weight:800; color:var(--text-muted); margin-bottom:8px;">🎨 CORNICI PROFILO</div>
+      
+      <div class="shop-item-card">
+        <div class="shop-item-info">
+          <div class="title">Cornice Argento Cromata</div>
+          <div class="desc">Un elegante bordo argento brillante</div>
+        </div>
+        <button class="btn-buy-shop" id="buy_frame_silver" onclick="buyShopItem('frame_silver', 150)">150 XP</button>
+      </div>
+
+      <div class="shop-item-card">
+        <div class="shop-item-info">
+          <div class="title">Cornice Oro Lusso</div>
+          <div class="desc">La leggendaria cornice dorata dei top reseller</div>
+        </div>
+        <button class="btn-buy-shop" id="buy_frame_gold" onclick="buyShopItem('frame_gold', 300)">300 XP</button>
+      </div>
+
+      <div class="shop-item-card">
+        <div class="shop-item-info">
+          <div class="title">Cornice Neon Cyberpunk</div>
+          <div class="desc">Sfumatura viola e blu acceso</div>
+        </div>
+        <button class="btn-buy-shop" id="buy_frame_neon" onclick="buyShopItem('frame_neon', 500)">500 XP</button>
+      </div>
+
+      <div style="font-size:0.75rem; font-weight:800; color:var(--text-muted); margin:14px 0 8px;">🌈 TEMI GRAFICI ESCLUSIVI</div>
+
+      <div class="shop-item-card">
+        <div class="shop-item-info">
+          <div class="title">Tema Emerald Cash</div>
+          <div class="desc">Sfondo verde smeraldo per veri affaristi</div>
+        </div>
+        <button class="btn-buy-shop" id="buy_theme_emerald" onclick="buyShopItem('theme_emerald', 250)">250 XP</button>
+      </div>
+
+      <div class="shop-item-card">
+        <div class="shop-item-info">
+          <div class="title">Tema Sunset Vaporwave</div>
+          <div class="desc">Tonalità viola e magenta retrò</div>
+        </div>
+        <button class="btn-buy-shop" id="buy_theme_vaporwave" onclick="buyShopItem('theme_vaporwave', 350)">350 XP</button>
       </div>
     </div>
   </div>
@@ -440,7 +521,7 @@
     </div>
   </div>
 
-  <!-- MODALE IMPOSTAZIONI E PROFILO (PULIZIA DATI) -->
+  <!-- MODALE IMPOSTAZIONI E SELEZIONE AVATAR -->
   <div class="modal-overlay" id="settingsModal">
     <div class="modal-content">
       <div class="modal-header">
@@ -448,15 +529,27 @@
         <button class="close-modal" onclick="closeModal('settingsModal')">✕</button>
       </div>
       
-      <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px; padding:10px; background:var(--input-bg); border-radius:10px; border:1px solid var(--border-color);">
+      <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px; padding:10px; background:var(--input-bg); border-radius:10px; border:1px solid var(--border-color);">
         <div class="avatar-frame">
-          <div class="avatar-border"></div>
-          <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Cantareal" alt="Avatar" class="avatar-img">
+          <div class="avatar-border" id="settingsAvatarBorder"></div>
+          <img id="settingsAvatarImg" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Cantareal" alt="Avatar" class="avatar-img">
         </div>
         <div>
           <div style="font-weight:800; font-size:1rem;">Cantareal</div>
           <div style="font-size:0.75rem; color:#a855f7; font-weight:700;" id="settingsLevelText">Livello 1 • Novizio</div>
         </div>
+      </div>
+
+      <!-- SCELTA IMMAGINE PROFILO -->
+      <div style="font-size:0.75rem; font-weight:800; color:var(--text-muted); margin-bottom:6px;">SCEGLI IMMAGINE PROFILO</div>
+      <div class="avatar-picker-grid">
+        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Cantareal" class="avatar-opt" onclick="setAvatar(this.src)">
+        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" class="avatar-opt" onclick="setAvatar(this.src)">
+        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Aneka" class="avatar-opt" onclick="setAvatar(this.src)">
+        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Jack" class="avatar-opt" onclick="setAvatar(this.src)">
+      </div>
+      <div style="margin-bottom:14px;">
+        <input type="text" id="customAvatarUrlInput" placeholder="O incolla URL immagine personalizzata..." style="font-size:0.75rem; padding:6px 10px;" onchange="setAvatar(this.value)">
       </div>
 
       <div style="font-size:0.75rem; font-weight:800; color:var(--text-muted); margin-bottom:8px;">GESTIONE DATI & BACKUP</div>
@@ -485,7 +578,7 @@
       <div style="font-size:0.75rem; font-weight:800; color:var(--text-muted); margin:14px 0 8px;">PERSONALIZZAZIONE</div>
       
       <div class="settings-item-btn" onclick="toggleTheme()">
-        <span>Tema Grafico</span>
+        <span>Tema Grafico Base</span>
         <span id="settingsThemeBtn">☀️ Chiaro</span>
       </div>
     </div>
@@ -556,6 +649,8 @@
     const ADJ_KEY = "reselling_pro_max_adjustments";
     const GOAL_KEY = "reselling_pro_max_goal";
     const THEME_KEY = "reselling_pro_max_theme";
+    const AVATAR_KEY = "reselling_pro_max_avatar";
+    const SHOP_KEY = "reselling_pro_max_shop";
 
     const userRealDataset = [
       {"id":"1793884343763","t":"Felpa Napapijri","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.15,"sp":0,"s":"stock","d":"05/11/2026","soldPlatform":"","soldDate":""},
@@ -629,6 +724,7 @@
     let currentStatusFilter = "ALL";
     let activeSheetItemId = null;
     let platformChartInst = null, monthChartInst = null, categoryChartInst = null;
+    let ownedShopItems = [];
 
     // Caricamento Dati
     try {
@@ -641,6 +737,17 @@
       adjustments = JSON.parse(localStorage.getItem(ADJ_KEY) || "[]");
     } catch(e) { adjustments = []; }
 
+    try {
+      ownedShopItems = JSON.parse(localStorage.getItem(SHOP_KEY) || "[]");
+    } catch(e) { ownedShopItems = []; }
+
+    // Carica Avatar salvato
+    const savedAvatar = localStorage.getItem(AVATAR_KEY);
+    if (savedAvatar) {
+      document.getElementById("headerAvatarImg").src = savedAvatar;
+      document.getElementById("settingsAvatarImg").src = savedAvatar;
+    }
+
     // Tema
     const savedTheme = localStorage.getItem(THEME_KEY);
     if (savedTheme) {
@@ -650,6 +757,13 @@
 
     const savedGoal = localStorage.getItem(GOAL_KEY);
     if (savedGoal) document.getElementById("targetGoalInput").value = savedGoal;
+
+    function setAvatar(url) {
+      if (!url) return;
+      localStorage.setItem(AVATAR_KEY, url);
+      document.getElementById("headerAvatarImg").src = url;
+      document.getElementById("settingsAvatarImg").src = url;
+    }
 
     function saveData() {
       localStorage.setItem(DB_KEY, JSON.stringify(db));
@@ -698,7 +812,8 @@
 
     function toggleTheme() {
       const html = document.documentElement;
-      const next = html.getAttribute("data-theme") === "dark" ? "light" : "dark";
+      const current = html.getAttribute("data-theme");
+      const next = current === "dark" ? "light" : "dark";
       html.setAttribute("data-theme", next);
       localStorage.setItem(THEME_KEY, next);
       document.getElementById("settingsThemeBtn").innerText = next === "dark" ? "☀️ Chiaro" : "🌙 Scuro";
@@ -816,7 +931,6 @@
         return diff !== 0 ? diff : Number(b.id) - Number(a.id);
       });
 
-      // Calcolo Statistiche
       let stockVal = 0, totalProfit = 0, monthProfit = 0, currentInvested = 0, currentSalesRevenue = 0;
       db.forEach(item => {
         const bp = parseFloat(item.bp)||0, sp = parseFloat(item.sp)||0;
@@ -989,7 +1103,7 @@
       });
     }
 
-    /* MODALE NUOVO OGGETTO CON ANTEPRIMA RARITÀ & PREZZI RAPIDI */
+    /* MODALE NUOVO OGGETTO CON ANTEPRIMA MARGINE ATTESO */
     function setQuickBuyPrice(val) {
       document.getElementById("addBuyPrice").value = val;
       updateAddPreview();
@@ -1000,36 +1114,9 @@
       const tp = parseFloat(document.getElementById("addTargetPrice").value.replace(",", ".")) || 0;
 
       const profit = tp - bp;
-      const roi = bp > 0 ? (profit / bp) * 100 : (tp > 0 ? 999 : 0);
-
       const profitEl = document.getElementById("previewProfitVal");
-      const badgeEl = document.getElementById("previewRarityBadge");
-      const cardEl = document.getElementById("previewRarityCard");
-
       profitEl.innerText = (profit >= 0 ? "+€" : "-€") + Math.abs(profit).toFixed(2);
       profitEl.style.color = profit >= 0 ? "var(--success-color)" : "var(--danger-color)";
-
-      if (tp === 0) {
-        badgeEl.innerText = "⚪ COMUNE";
-        badgeEl.style.color = "var(--text-muted)";
-        cardEl.style.borderColor = "var(--border-color)";
-      } else if (roi >= 200 || profit >= 60) {
-        badgeEl.innerText = "🟡 LEGGENDARIO";
-        badgeEl.style.color = "#f59e0b";
-        cardEl.style.borderColor = "#f59e0b";
-      } else if (roi >= 80 || profit >= 25) {
-        badgeEl.innerText = "🟣 EPICO";
-        badgeEl.style.color = "#a855f7";
-        cardEl.style.borderColor = "#a855f7";
-      } else if (roi >= 30 || profit >= 10) {
-        badgeEl.innerText = "🔵 RARO";
-        badgeEl.style.color = "#3b82f6";
-        cardEl.style.borderColor = "#3b82f6";
-      } else {
-        badgeEl.innerText = "⚪ COMUNE";
-        badgeEl.style.color = "var(--text-muted)";
-        cardEl.style.borderColor = "var(--border-color)";
-      }
     }
 
     function openAddModal() {
@@ -1043,6 +1130,50 @@
     
     function openSettingsModal() {
       document.getElementById("settingsModal").style.display = "flex";
+    }
+    
+    function openShopModal() {
+      document.getElementById("shopXpBalance").innerText = progress.xp + " XP";
+      
+      // Aggiorna stato bottoni acquisto nello shop
+      ownedShopItems.forEach(itemId => {
+        const btn = document.getElementById("buy_" + itemId);
+        if (btn) {
+          btn.innerText = "Sbloccato ✅";
+          btn.classList.add("owned");
+          btn.onclick = null;
+        }
+      });
+
+      document.getElementById("shopModal").style.display = "flex";
+    }
+
+    function buyShopItem(itemId, cost) {
+      if (ownedShopItems.includes(itemId)) return;
+      if (progress.xp < cost) {
+        return alert("Non hai abbastanza XP per questo sblocco! Servono " + cost + " XP.");
+      }
+
+      progress.xp -= cost;
+      ownedShopItems.push(itemId);
+      localStorage.setItem(SHOP_KEY, JSON.stringify(ownedShopItems));
+      saveProgress();
+
+      // Applica sblocco
+      if (itemId === 'frame_silver') {
+        document.documentElement.style.setProperty('--frame-gradient', 'linear-gradient(135deg, #94a3b8, #e2e8f0)');
+      } else if (itemId === 'frame_gold') {
+        document.documentElement.style.setProperty('--frame-gradient', 'linear-gradient(135deg, #f59e0b, #fef08a)');
+      } else if (itemId === 'frame_neon') {
+        document.documentElement.style.setProperty('--frame-gradient', 'linear-gradient(135deg, #a855f7, #06b6d4)');
+      } else if (itemId === 'theme_emerald') {
+        document.documentElement.setAttribute('data-theme', 'emerald');
+      } else if (itemId === 'theme_vaporwave') {
+        document.documentElement.setAttribute('data-theme', 'vaporwave');
+      }
+
+      alert("🎉 Oggetto sbloccato con successo!");
+      openShopModal();
     }
     
     function closeModal(id) { document.getElementById(id).style.display = "none"; }
@@ -1065,7 +1196,7 @@
         sp: 0, s: "stock", d, soldPlatform: "", soldDate: ""
       });
       
-      addXp(10); // Bonus XP inserimento
+      addXp(10);
       saveData();
       closeModal("addModal");
     }
