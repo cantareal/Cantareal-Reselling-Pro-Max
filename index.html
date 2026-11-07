@@ -71,11 +71,11 @@
     .swipe-bg-left { background: var(--success-color); padding-left: 16px; display: flex; align-items: center; width: 50%; height: 100%; }
     .swipe-bg-right { background: var(--danger-color); padding-right: 16px; display: flex; justify-content: flex-end; align-items: center; width: 50%; height: 100%; }
 
-    /* INTEGRAZIONE CARD CON FOTO E FALLBACK EMOJI */
+    /* CARD ANTEPRIMA INGRANDITA A 68px */
     .item-card { background: var(--card-bg); padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; cursor: pointer; position: relative; z-index: 1; touch-action: pan-y; }
     .item-card.old-stock { border-left: 3px solid var(--warn-color); }
-    .item-card-thumb { width: 52px; height: 52px; border-radius: 10px; object-fit: cover; flex-shrink: 0; margin-right: 12px; border: 1px solid var(--border-color); }
-    .item-card-placeholder { width: 52px; height: 52px; border-radius: 10px; background: var(--input-bg); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0; margin-right: 12px; border: 1px solid var(--border-color); }
+    .item-card-thumb { width: 68px; height: 68px; border-radius: 10px; object-fit: cover; flex-shrink: 0; margin-right: 12px; border: 1px solid var(--border-color); }
+    .item-card-placeholder { width: 68px; height: 68px; border-radius: 10px; background: var(--input-bg); display: flex; align-items: center; justify-content: center; font-size: 1.8rem; flex-shrink: 0; margin-right: 12px; border: 1px solid var(--border-color); }
 
     .item-info { flex-grow: 1; padding-right: 8px; pointer-events: none; }
     .item-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 2px; }
@@ -104,12 +104,12 @@
     .btn-sell-modal { background: var(--success-color); color: white; border: none; font-weight: 700; cursor: pointer; margin-top: 8px; }
     .btn-danger { background: var(--danger-color); color: white; border: none; font-weight: 700; cursor: pointer; margin-top: 8px; }
 
-    /* STILI SELETTORE FOTO ED ANTEPRIMA NEI MODALI */
+    /* ANTEPRIMA NEI MODALI */
     .photo-upload-box { display: flex; align-items: center; gap: 12px; margin-top: 4px; }
     .btn-upload-photo { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 10px 14px; background: var(--input-bg); border: 1px dashed var(--accent-color); color: var(--accent-color); border-radius: 8px; font-size: 0.8rem; font-weight: 700; cursor: pointer; flex-grow: 1; }
-    .photo-preview-box { position: relative; width: 52px; height: 52px; flex-shrink: 0; }
+    .photo-preview-box { position: relative; width: 68px; height: 68px; flex-shrink: 0; }
     .photo-preview-box img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; border: 1px solid var(--border-color); }
-    .btn-remove-photo { position: absolute; top: -6px; right: -6px; background: var(--danger-color); color: #fff; border: none; border-radius: 50%; width: 20px; height: 20px; font-size: 0.75rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
+    .btn-remove-photo { position: absolute; top: -6px; right: -6px; background: var(--danger-color); color: #fff; border: none; border-radius: 50%; width: 22px; height: 22px; font-size: 0.8rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
 
     .bottom-sheet-overlay { position: fixed; inset: 0; background: var(--modal-overlay); z-index: 200; display: flex; align-items: flex-end; justify-content: center; }
     .bottom-sheet-overlay.hidden { display: none; }
@@ -131,7 +131,6 @@
     .adjust-item { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border-color); }
     .adjust-pos { color: var(--success-color); } .adjust-neg { color: var(--danger-color); }
 
-    /* RESTYLING MODALE CELEBRATIVA FEDELE ALL'ANTEPRIMA */
     .celebrate-modal-content {
       background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
       width: 100%;
@@ -380,7 +379,7 @@
 
   <button class="fab-btn" onclick="openAddModal()">+</button>
 
-  <!-- MODALE AGGIUNGI CON CARICAMENTO FOTO -->
+  <!-- MODALE AGGIUNGI -->
   <div class="modal-overlay" id="addModal">
     <div class="modal-content">
       <div class="modal-header">
@@ -443,7 +442,7 @@
     </div>
   </div>
 
-  <!-- MODALE MODIFICA CON CARICAMENTO FOTO -->
+  <!-- MODALE MODIFICA -->
   <div class="modal-overlay" id="editModal">
     <div class="modal-content">
       <div class="modal-header">
@@ -688,7 +687,6 @@
     let activeSheetItemId = null;
     let platformChartInst = null, monthChartInst = null, categoryChartInst = null;
 
-    // GESTIONE INDEXEDDB PER LE FOTO
     let imageDB = null;
     const IDB_NAME = "CantarealImageDB";
     const IDB_STORE = "photos";
@@ -750,7 +748,6 @@
       });
     }
 
-    // COMPRESSIONE IMMAGINI IN BACKGROUND (CANVAS)
     function compressPhotoFile(file) {
       return new Promise((resolve, reject) => {
         if (!file) return resolve(null);
@@ -815,7 +812,6 @@
       }
     }
 
-    // Load data
     try {
       const saved = localStorage.getItem(DB_KEY);
       db = saved ? JSON.parse(saved) : userRealDataset;
@@ -826,7 +822,6 @@
       adjustments = JSON.parse(localStorage.getItem(ADJ_KEY) || "[]");
     } catch(e) { adjustments = []; }
 
-    // Theme
     const savedTheme = localStorage.getItem(THEME_KEY);
     if (savedTheme) {
       document.documentElement.setAttribute("data-theme", savedTheme);
@@ -1078,7 +1073,6 @@
           <div style="color:var(--text-muted);font-size:1.2rem;">➔</div>
         `;
 
-        // CARICAMENTO ASINCRONO DELLA FOTO DA INDEXEDDB
         getPhotoIDB(item.id).then(photoData => {
           if (photoData) {
             const thumbEl = document.getElementById(`thumb-${item.id}`);
@@ -1407,7 +1401,6 @@
       renderApp();
     }
 
-    // LISTA FRASI CELEBRATIVE CASUALI PER LE VENDITE
     const CELEBRATION_PHRASES = [
       "Un altro affare andato a segno! Il saldo cassa ringrazia. 🚀",
       "Margine incassato e liquidità subito pronta per il prossimo acquisto! 💶",
@@ -1430,7 +1423,7 @@
       "Niente male davvero! Avanti così verso il prossimo obiettivo. 🔥",
       "Colpo grosso! Questa vendita è una piccola opera d'arte. 🏆",
       "Trasformare l'usato in valore reale: un classico che non delude mai. ✨",
-      "Un passo avanti verso il traguardo del mese. Grande lavoro!! 🚀",
+      "Un passo avanti verso il traguardo del mese. Grande lavoro! 🚀",
       "Comprare bene, vendere meglio, sorridere alla cassa. 😎",
       "Centro perfetto! Quando il reselling diventa una scienza esatta. 🎯",
       "Vendita esplosiva! Un altro pezzo portato a termine. 💣"
@@ -1454,7 +1447,6 @@
       document.getElementById("celebrateModal").style.display = "flex";
     }
 
-    // INIZIALIZZAZIONE CON INDEXEDDB
     initIndexedDB().then(() => {
       renderApp();
     });
