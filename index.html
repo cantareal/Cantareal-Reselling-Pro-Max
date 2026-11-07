@@ -31,7 +31,8 @@
     body { background: var(--bg-color); color: var(--text-color); padding: 12px; padding-bottom: 90px; max-width: 600px; margin: 0 auto; }
     .header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
     h1 { font-size: 1.25rem; }
-    .theme-toggle { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-color); padding: 6px 12px; border-radius: 20px; font-size: 0.85rem; cursor: pointer; width: auto; }
+    .header-actions { display: flex; gap: 6px; align-items: center; }
+    .theme-toggle { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-color); padding: 6px 12px; border-radius: 20px; font-size: 0.85rem; cursor: pointer; width: auto; font-weight: 600; }
 
     .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
     .stat-card { padding: 12px 10px; border-radius: 14px; text-align: left; position: relative; border: none; color: #fff; min-height: 72px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 12px rgba(0,0,0,0.25); }
@@ -65,13 +66,11 @@
     .filter-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-top: 8px; }
     .filter-row label { font-size: 0.65rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 2px; }
 
-    .sync-row { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 6px; margin-bottom: 12px; }
-    .btn-sync { background: #475569; color: white; border: none; font-weight: 700; font-size: 0.8rem; padding: 9px 4px; cursor: pointer; border-radius: 8px; }
+    .btn-sync { background: #475569; color: white; border: none; font-weight: 700; font-size: 0.85rem; padding: 12px; cursor: pointer; border-radius: 8px; text-align: center; }
     .btn-sync.green { background: var(--success-color); }
     .btn-sync.purple { background: #8b5cf6; }
     .btn-sync.orange { background: #d97706; }
 
-    /* LAYOUT DELLE CARD: LISTA O GRIGLIA */
     .swipe-container { position: relative; margin-bottom: 8px; border-radius: 10px; overflow: hidden; }
     .swipe-background { position: absolute; inset: 0; display: flex; justify-content: space-between; align-items: center; font-weight: 700; color: white; font-size: 0.85rem; z-index: 0; }
     .swipe-bg-left { background: var(--success-color); padding-left: 16px; display: flex; align-items: center; width: 50%; height: 100%; }
@@ -92,7 +91,6 @@
     .roi-neg { color: var(--danger-color); font-weight: 700; }
     .days-tag { color: var(--warn-color); font-weight: 600; }
 
-    /* STILI ESCLUSIVI VISTA A GRIGLIA (2 COLONNE) */
     #itemList.grid-mode { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     #itemList.grid-mode .swipe-container { margin-bottom: 0; }
     #itemList.grid-mode .item-card { flex-direction: column; align-items: stretch; padding: 10px; height: 100%; }
@@ -278,8 +276,9 @@
 <body>
   <div class="header-row">
     <h1>📦 Cantareal</h1>
-    <div style="display:flex;gap:6px;align-items:center;">
+    <div class="header-actions">
       <button id="installBtn" onclick="installPWA()" style="display:none;background:#d97706;color:#fff;border:none;padding:6px 10px;border-radius:20px;font-size:0.8rem;font-weight:700;cursor:pointer;width:auto;">⬇ Installa</button>
+      <button class="theme-toggle" onclick="openDataModal()">⚙️ Dati</button>
       <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()">☀️ Chiaro</button>
     </div>
   </div>
@@ -367,15 +366,6 @@
       </div>
     </div>
 
-    <div class="sync-row">
-      <button class="btn-sync" onclick="copyData()">📋 Copia</button>
-      <button class="btn-sync" onclick="importData()">📥 Importa</button>
-      <button class="btn-sync green" onclick="manualSave()">💾 Salva</button>
-      <button class="btn-sync purple" onclick="downloadBackup()">📂 Backup</button>
-    </div>
-    <div style="margin-bottom:12px;">
-      <button class="btn-sync orange" onclick="downloadCSV()">📊 Esporta CSV</button>
-    </div>
     <div id="itemList"></div>
   </div>
 
@@ -395,6 +385,26 @@
   </div>
 
   <button class="fab-btn" onclick="openAddModal()">+</button>
+
+  <!-- MODALE GESTIONE DATI -->
+  <div class="modal-overlay" id="dataModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="modal-title">⚙️ Gestione Dati & Backup</span>
+        <button class="close-modal" onclick="closeModal('dataModal')">✕</button>
+      </div>
+      <p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:14px;">
+        Gestisci i tuoi dati contabili, effettua salvataggi manuali o esporta il registro.
+      </p>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <button class="btn-sync green" onclick="manualSave(); closeModal('dataModal');">💾 Salva Modifiche Locale</button>
+        <button class="btn-sync purple" onclick="downloadBackup(); closeModal('dataModal');">📂 Scarica Backup (.JSON)</button>
+        <button class="btn-sync orange" onclick="downloadCSV(); closeModal('dataModal');">📊 Esporta Registro (.CSV)</button>
+        <button class="btn-sync" onclick="copyData(); closeModal('dataModal');">📋 Copia Dati Negli Appunti</button>
+        <button class="btn-sync" onclick="importData(); closeModal('dataModal');">📥 Importa Backup JSON</button>
+      </div>
+    </div>
+  </div>
 
   <!-- MODALE AGGIUNGI -->
   <div class="modal-overlay" id="addModal">
@@ -849,6 +859,10 @@
 
     const savedGoal = localStorage.getItem(GOAL_KEY);
     if (savedGoal) document.getElementById("targetGoalInput").value = savedGoal;
+
+    function openDataModal() {
+      document.getElementById("dataModal").style.display = "flex";
+    }
 
     function setViewMode(mode) {
       viewMode = mode;
