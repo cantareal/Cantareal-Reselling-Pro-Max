@@ -119,6 +119,119 @@
     .adjust-list { max-height: 160px; overflow-y: auto; margin-top: 12px; font-size: 0.8rem; }
     .adjust-item { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border-color); }
     .adjust-pos { color: var(--success-color); } .adjust-neg { color: var(--danger-color); }
+
+    /* STILE MODALE CELEBRATIVO VENDITA */
+    .celebrate-modal-content {
+      background: var(--card-bg);
+      width: 100%;
+      max-width: 420px;
+      border-radius: 20px;
+      padding: 24px 20px;
+      text-align: center;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+      position: relative;
+      animation: popIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    @keyframes popIn {
+      0% { transform: scale(0.7); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .celebrate-icon-wrapper {
+      font-size: 3rem;
+      margin-bottom: 8px;
+      animation: bounce 1s infinite alternate;
+    }
+    @keyframes bounce {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-8px); }
+    }
+    .celebrate-title {
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: var(--success-color);
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+    .celebrate-item-name {
+      font-size: 1.1rem;
+      font-weight: 800;
+      margin-bottom: 10px;
+      color: var(--text-color);
+    }
+    .celebrate-trans-row {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+      background: rgba(0,0,0,0.05);
+      padding: 6px 12px;
+      border-radius: 8px;
+      display: inline-block;
+    }
+    [data-theme="dark"] .celebrate-trans-row {
+      background: rgba(255,255,255,0.05);
+    }
+    .celebrate-metrics-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .celebrate-box {
+      border-radius: 12px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .celebrate-box.profit {
+      background: rgba(34, 197, 94, 0.15);
+      border: 1px solid var(--success-color);
+    }
+    .celebrate-box.roi {
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid var(--warn-color);
+    }
+    .celebrate-box-lbl {
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+    .celebrate-box-val {
+      font-size: 1.25rem;
+      font-weight: 900;
+    }
+    .celebrate-box.profit .celebrate-box-val { color: var(--success-color); }
+    .celebrate-box.roi .celebrate-box-val { color: var(--warn-color); }
+
+    .celebrate-quote-box {
+      background: rgba(37, 99, 235, 0.08);
+      border-left: 3px solid var(--accent-color);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 0.85rem;
+      font-style: italic;
+      color: var(--text-color);
+      margin-bottom: 20px;
+      line-height: 1.4;
+      text-align: left;
+    }
+    .btn-celebrate-close {
+      background: linear-gradient(135deg, var(--success-color), #15803d);
+      color: white;
+      border: none;
+      font-size: 0.95rem;
+      font-weight: 800;
+      padding: 12px 18px;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3);
+      width: 100%;
+      letter-spacing: 0.5px;
+    }
   </style>
 </head>
 <body>
@@ -384,6 +497,33 @@
     </div>
   </div>
 
+  <!-- MODALE CELEBRATIVA VENDITA -->
+  <div class="modal-overlay" id="celebrateModal" style="z-index: 300;">
+    <div class="celebrate-modal-content">
+      <div class="celebrate-icon-wrapper">🎉</div>
+      <div class="celebrate-title">VENDITA REGISTRATA!</div>
+      <div class="celebrate-item-name" id="celebrateItemTitle">Nome Oggetto</div>
+      <div class="celebrate-trans-row" id="celebrateTransRow">Acquisto: €0.00 ➔ Vendita: €0.00</div>
+      
+      <div class="celebrate-metrics-grid">
+        <div class="celebrate-box profit">
+          <div class="celebrate-box-lbl">PROFITTO NETTO</div>
+          <div class="celebrate-box-val" id="celebrateProfitVal">+€0.00</div>
+        </div>
+        <div class="celebrate-box roi">
+          <div class="celebrate-box-lbl">RITORNO (ROI)</div>
+          <div class="celebrate-box-val" id="celebrateRoiVal">+0%</div>
+        </div>
+      </div>
+
+      <div class="celebrate-quote-box" id="celebrateQuoteText">
+        "Un altro affare andato a segno!"
+      </div>
+
+      <button class="btn-celebrate-close" onclick="closeModal('celebrateModal')">AVANTI IL PROSSIMO 🚀</button>
+    </div>
+  </div>
+
   <!-- BOTTOM SHEET VENDITA -->
   <div id="sellSheet" class="bottom-sheet-overlay hidden" onclick="closeSellSheet(event)">
     <div class="bottom-sheet-content" onclick="event.stopPropagation()">
@@ -538,11 +678,6 @@
       return Math.max(0, Math.floor((Date.now() - d.getTime()) / 86400000));
     }
 
-    // Baseline calibrata sullo stato iniziale del dataset.
-    // investito = somma di TUTTI i prezzi di acquisto (stock + venduti)
-    // incassi   = somma dei prezzi di vendita dei soli venduti
-    // Cassa = Baseline - (investito attuale - investito iniziale) + (incassi attuali - incassi iniziali) + aggiustamenti
-    // Così una vendita aggiunge SOLO il prezzo di vendita, non anche il costo di acquisto.
     function getInitialStateHash() {
       let invested = 0, salesRevenue = 0;
       userRealDataset.forEach(i => {
@@ -673,16 +808,14 @@
           const diff = parseD(a.d) - parseD(b.d);
           return diff !== 0 ? diff : Number(a.id) - Number(b.id);
         }
-        // default: date-desc
         const diff = parseD(b.d) - parseD(a.d);
         return diff !== 0 ? diff : Number(b.id) - Number(a.id);
       });
 
-      // Stats
       let stockVal = 0, totalProfit = 0, monthProfit = 0, currentInvested = 0, currentSalesRevenue = 0;
       db.forEach(item => {
         const bp = parseFloat(item.bp)||0, sp = parseFloat(item.sp)||0;
-        currentInvested += bp; // tutto il capitale impiegato (stock + venduti)
+        currentInvested += bp;
         if (item.s === "stock") {
           stockVal += bp;
         } else if (item.s === "sold") {
@@ -694,9 +827,6 @@
         }
       });
 
-      // Formula corretta:
-      // - nuovo acquisto → investito sale → cassa scende di bp
-      // - vendita        → solo incassi salgono → cassa sale di sp (NON anche di bp)
       const deltaRev = currentSalesRevenue - initialBaseHash.salesRevenue;
       const deltaInvested = currentInvested - initialBaseHash.invested;
       const cashVal = BASELINE_CASH - deltaInvested + deltaRev + getTotalAdjustments();
@@ -804,7 +934,6 @@
       const textColor = getComputedStyle(document.documentElement).getPropertyValue("--text-color").trim();
       const cardBg = getComputedStyle(document.documentElement).getPropertyValue("--card-bg").trim();
 
-      // Platform
       const plat = {};
       db.forEach(i => {
         if (i.s === "sold" && i.soldPlatform) {
@@ -819,12 +948,11 @@
         options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: "bottom", labels: { color: textColor, font: { size: 11 } } } } }
       });
 
-      // Monthly
       const months = {};
       db.forEach(i => {
         if (i.s === "sold") {
           const d = i.soldDate || i.d || "";
-          const key = d.length >= 7 ? d.slice(3) : "Sconosciuto"; // MM/YYYY
+          const key = d.length >= 7 ? d.slice(3) : "Sconosciuto";
           const p = (parseFloat(i.sp)||0) - (parseFloat(i.bp)||0);
           months[key] = (months[key]||0) + p;
         }
@@ -840,7 +968,6 @@
         options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: textColor } }, y: { ticks: { color: textColor } } } }
       });
 
-      // Category
       const cats = {};
       db.forEach(i => {
         if (i.s === "sold") {
@@ -909,6 +1036,7 @@
       const id = document.getElementById("editId").value;
       const item = db.find(x => x.id === id);
       if (!item) return;
+      const wasStock = item.s === "stock";
       item.t = document.getElementById("editTitle").value.trim() || item.t;
       item.c = document.getElementById("editCategory").value;
       item.src = document.getElementById("editSource").value;
@@ -921,12 +1049,16 @@
       if (!isNaN(sp)) item.sp = sp; else item.sp = 0;
       item.soldPlatform = platform;
       item.soldDate = soldDate;
-      if (item.sp > 0 && platform) {
+      const isNowSold = item.sp > 0 && platform;
+      if (isNowSold) {
         item.s = "sold";
         if (!item.soldDate) item.soldDate = todayFormatted();
       } else item.s = "stock";
       saveData();
       closeModal("editModal");
+      if (wasStock && isNowSold) {
+        showCelebrationModal(item);
+      }
     }
 
     function deleteCurrentItem() {
@@ -960,8 +1092,9 @@
       if (item) {
         item.s = "sold"; item.sp = price; item.soldPlatform = platform; item.soldDate = todayFormatted();
         saveData();
+        closeSellSheet();
+        showCelebrationModal(item);
       }
-      closeSellSheet();
     }
 
     function copyData() {
@@ -1031,6 +1164,53 @@
       document.getElementById("filterMonth").value = "CURR_MONTH";
       setStatusFilter("ALL");
       renderApp();
+    }
+
+    // LISTA FRASI CELEBRATIVE CASUALI PER LE VENDITE
+    const CELEBRATION_PHRASES = [
+      "Un altro affare andato a segno! Il saldo cassa ringrazia. 🚀",
+      "Margine incassato e liquidità subito pronta per il prossimo acquisto! 💶",
+      "Capitale sbloccato e profitto netto in tasca. Lavoro pulito! 💰",
+      "ROI da incorniciare! Questo è reselling di alto livello. 📈",
+      "Altro margine messo al sicuro. Saldo in costante crescita! 🏦",
+      "Incasso confermato: il capitale gira che è una bellezza! 💸",
+      "Trasformare oggetti in liquidità pura è il tuo superpotere. 🪙",
+      "Fiuto imbattibile! Hai fiutato l'affare e l'hai portato a casa. 🎯",
+      "Trattativa da manuale: comprato al prezzo giusto, venduto al top! 🤝",
+      "Visione strategica al 100%. Questo flip era scritto nelle stelle. 🧠",
+      "Occhio di falco per il margine! Un altro colpo magistrale. 🦅",
+      "Reazione rapida e chiusura perfetta: trattativa chiusa a chiave! ⚡",
+      "Chi cerca trova... e chi sa valutare incassa! 🔍",
+      "Stock alleggerito e cassa appesantita. Rotazione perfetta! 📦",
+      "Spazio in magazzino liberato: pronto per il prossimo lotto! 🧹",
+      "Vendita lampo! L'oggetto non ha fatto in tempo a prendere polvere. ⏱️",
+      "Pezzo piazzato, cliente accontentato e profitto intascato. 🚚",
+      "Il ciclo del resell continua: acquista, piazza, incassa! 🔄",
+      "Niente male davvero! Avanti così verso il prossimo obiettivo. 🔥",
+      "Colpo grosso! Questa vendita è una piccola opera d'arte. 🏆",
+      "Trasformare l'usato in valore reale: un classico che non delude mai. ✨",
+      "Un passo avanti verso il traguardo del mese. Grande lavoro! 🚀",
+      "Comprare bene, vendere meglio, sorridere alla cassa. 😎",
+      "Centro perfetto! Quando il reselling diventa una scienza esatta. 🎯",
+      "Vendita esplosiva! Un altro pezzo portato a termine. 💣"
+    ];
+
+    function showCelebrationModal(item) {
+      if (!item) return;
+      const bp = parseFloat(item.bp) || 0;
+      const sp = parseFloat(item.sp) || 0;
+      const profit = sp - bp;
+      const roi = bp > 0 ? ((profit / bp) * 100).toFixed(0) : "∞";
+
+      document.getElementById("celebrateItemTitle").innerText = item.t;
+      document.getElementById("celebrateTransRow").innerText = `Acq: €${bp.toFixed(2)} ➔ Vend: €${sp.toFixed(2)} (${item.soldPlatform || "Generale"})`;
+      document.getElementById("celebrateProfitVal").innerText = (profit >= 0 ? "+€" : "-€") + Math.abs(profit).toFixed(2);
+      document.getElementById("celebrateRoiVal").innerText = (profit >= 0 ? "+" : "") + roi + "%";
+
+      const randomQuote = CELEBRATION_PHRASES[Math.floor(Math.random() * CELEBRATION_PHRASES.length)];
+      document.getElementById("celebrateQuoteText").innerText = `"${randomQuote}"`;
+
+      document.getElementById("celebrateModal").style.display = "flex";
     }
 
     renderApp();
