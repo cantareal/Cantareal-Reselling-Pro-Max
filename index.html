@@ -55,7 +55,12 @@
     .tab-btn.active { background: var(--tab-active); color: var(--tab-active-text); border-color: var(--tab-active); }
 
     .controls-card { background: var(--card-bg); padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); margin-bottom: 12px; }
-    .input-group { margin-bottom: 8px; }
+    .search-row-flex { display: flex; gap: 6px; align-items: center; margin-bottom: 8px; }
+    .search-row-flex input { flex-grow: 1; }
+    .view-toggle-btns { display: flex; gap: 4px; flex-shrink: 0; }
+    .view-btn { width: 40px; height: 40px; padding: 0; display: flex; align-items: center; justify-content: center; border-radius: 8px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-color); font-size: 1.1rem; cursor: pointer; }
+    .view-btn.active { background: var(--accent-color); color: #fff; border-color: var(--accent-color); }
+
     input, select, button { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); font-size: 0.9rem; outline: none; background: var(--input-bg); color: var(--text-color); }
     .filter-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-top: 8px; }
     .filter-row label { font-size: 0.65rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 2px; }
@@ -66,12 +71,12 @@
     .btn-sync.purple { background: #8b5cf6; }
     .btn-sync.orange { background: #d97706; }
 
+    /* LAYOUT DELLE CARD: LISTA O GRIGLIA */
     .swipe-container { position: relative; margin-bottom: 8px; border-radius: 10px; overflow: hidden; }
     .swipe-background { position: absolute; inset: 0; display: flex; justify-content: space-between; align-items: center; font-weight: 700; color: white; font-size: 0.85rem; z-index: 0; }
     .swipe-bg-left { background: var(--success-color); padding-left: 16px; display: flex; align-items: center; width: 50%; height: 100%; }
     .swipe-bg-right { background: var(--danger-color); padding-right: 16px; display: flex; justify-content: flex-end; align-items: center; width: 50%; height: 100%; }
 
-    /* CARD ANTEPRIMA EXTRA-LARGE A 84px */
     .item-card { background: var(--card-bg); padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; cursor: pointer; position: relative; z-index: 1; touch-action: pan-y; }
     .item-card.old-stock { border-left: 4px solid var(--warn-color); }
     .item-card-thumb { width: 84px; height: 84px; border-radius: 12px; object-fit: cover; flex-shrink: 0; margin-right: 12px; border: 1px solid var(--border-color); }
@@ -86,6 +91,15 @@
     .roi-pos { color: var(--success-color); font-weight: 700; }
     .roi-neg { color: var(--danger-color); font-weight: 700; }
     .days-tag { color: var(--warn-color); font-weight: 600; }
+
+    /* STILI ESCLUSIVI VISTA A GRIGLIA (2 COLONNE) */
+    #itemList.grid-mode { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    #itemList.grid-mode .swipe-container { margin-bottom: 0; }
+    #itemList.grid-mode .item-card { flex-direction: column; align-items: stretch; padding: 10px; height: 100%; }
+    #itemList.grid-mode .item-card-thumb, 
+    #itemList.grid-mode .item-card-placeholder { width: 100%; height: auto; aspect-ratio: 1 / 1; margin-right: 0; margin-bottom: 8px; font-size: 3rem; }
+    #itemList.grid-mode .item-info { padding-right: 0; }
+    #itemList.grid-mode .arrow-icon { display: none; }
 
     #chartsView { display: none; }
     .chart-container { background: var(--card-bg); padding: 14px; border-radius: 10px; border: 1px solid var(--border-color); margin-bottom: 12px; position: relative; height: 280px; width: 100%; }
@@ -104,7 +118,6 @@
     .btn-sell-modal { background: var(--success-color); color: white; border: none; font-weight: 700; cursor: pointer; margin-top: 8px; }
     .btn-danger { background: var(--danger-color); color: white; border: none; font-weight: 700; cursor: pointer; margin-top: 8px; }
 
-    /* ANTEPRIMA NEI MODALI A 84px */
     .photo-upload-box { display: flex; align-items: center; gap: 12px; margin-top: 4px; }
     .btn-upload-photo { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 10px 14px; background: var(--input-bg); border: 1px dashed var(--accent-color); color: var(--accent-color); border-radius: 8px; font-size: 0.8rem; font-weight: 700; cursor: pointer; flex-grow: 1; }
     .photo-preview-box { position: relative; width: 84px; height: 84px; flex-shrink: 0; }
@@ -311,8 +324,12 @@
 
   <div id="mainView">
     <div class="controls-card">
-      <div class="input-group">
+      <div class="search-row-flex">
         <input type="text" id="searchInput" placeholder="🔍 Cerca oggetto..." oninput="renderApp()">
+        <div class="view-toggle-btns">
+          <button class="view-btn active" id="btnListView" onclick="setViewMode('list')" title="Vista Lista">☰</button>
+          <button class="view-btn" id="btnGridView" onclick="setViewMode('grid')" title="Vista Griglia">⊞</button>
+        </div>
       </div>
       <div class="filter-row">
         <div>
@@ -612,6 +629,7 @@
     const ADJ_KEY = "reselling_pro_max_adjustments";
     const GOAL_KEY = "reselling_pro_max_goal";
     const THEME_KEY = "reselling_pro_max_theme";
+    const VIEW_MODE_KEY = "reselling_pro_max_view_mode";
 
     const userRealDataset = [
       {"id":"1793884343763","t":"Felpa Napapijri","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.15,"sp":0,"s":"stock","d":"05/11/2026","soldPlatform":"","soldDate":""},
@@ -686,6 +704,7 @@
     let currentStatusFilter = "ALL";
     let activeSheetItemId = null;
     let platformChartInst = null, monthChartInst = null, categoryChartInst = null;
+    let viewMode = localStorage.getItem(VIEW_MODE_KEY) || "list";
 
     let imageDB = null;
     const IDB_NAME = "CantarealImageDB";
@@ -831,6 +850,12 @@
     const savedGoal = localStorage.getItem(GOAL_KEY);
     if (savedGoal) document.getElementById("targetGoalInput").value = savedGoal;
 
+    function setViewMode(mode) {
+      viewMode = mode;
+      localStorage.setItem(VIEW_MODE_KEY, mode);
+      renderApp();
+    }
+
     function saveData() {
       localStorage.setItem(DB_KEY, JSON.stringify(db));
       localStorage.setItem(ADJ_KEY, JSON.stringify(adjustments));
@@ -962,6 +987,20 @@
     function renderApp() {
       if (currentStatusFilter === "STATS") return;
 
+      const listBtn = document.getElementById("btnListView");
+      const gridBtn = document.getElementById("btnGridView");
+      const listEl = document.getElementById("itemList");
+
+      if (viewMode === "grid") {
+        gridBtn.classList.add("active");
+        listBtn.classList.remove("active");
+        listEl.classList.add("grid-mode");
+      } else {
+        listBtn.classList.add("active");
+        gridBtn.classList.remove("active");
+        listEl.classList.remove("grid-mode");
+      }
+
       const search = document.getElementById("searchInput").value.toLowerCase();
       const category = document.getElementById("filterCategory").value;
       const monthFilter = document.getElementById("filterMonth").value;
@@ -1031,10 +1070,9 @@
       lastMonthProfit = monthProfit;
       updateGoalProgress(monthProfit);
 
-      const listEl = document.getElementById("itemList");
       listEl.innerHTML = "";
       if (!filtered.length) {
-        listEl.innerHTML = '<div style="text-align:center;padding:24px;color:var(--text-muted);">Nessun articolo trovato.</div>';
+        listEl.innerHTML = '<div style="text-align:center;padding:24px;color:var(--text-muted);grid-column:span 2;">Nessun articolo trovato.</div>';
         return;
       }
 
@@ -1070,7 +1108,7 @@
               ${isSold ? `<br>Vend: €${sp.toFixed(2)} (${item.soldDate||"-"}) ${roiHtml}` : ""}
             </div>
           </div>
-          <div style="color:var(--text-muted);font-size:1.2rem;">➔</div>
+          <div class="arrow-icon" style="color:var(--text-muted);font-size:1.2rem;">➔</div>
         `;
 
         getPhotoIDB(item.id).then(photoData => {
