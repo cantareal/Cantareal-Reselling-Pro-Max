@@ -120,7 +120,6 @@
     .adjust-item { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border-color); }
     .adjust-pos { color: var(--success-color); } .adjust-neg { color: var(--danger-color); }
 
-    /* MODALE CELEBRATIVA CON GLOW GOLD */
     .celebrate-modal-content {
       background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
       width: 100%;
@@ -570,6 +569,27 @@
     const ADJ_KEY = "reselling_pro_max_adjustments";
     const GOAL_KEY = "reselling_pro_max_goal";
     const THEME_KEY = "reselling_pro_max_theme";
+
+    // GESTIONE AUDIO CONTEXT PER SBLOCCO NATIVO SU MOBILE E BROWSER
+    let audioCtx = null;
+    function getAudioContext() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+    // Sblocco audio al primo tap/click sulla pagina
+    const unlockAudio = () => {
+      getAudioContext();
+      document.removeEventListener('touchstart', unlockAudio);
+      document.removeEventListener('click', unlockAudio);
+    };
+    document.addEventListener('touchstart', unlockAudio, { once: true });
+    document.addEventListener('click', unlockAudio, { once: true });
 
     const userRealDataset = [
       {"id":"1793884343763","t":"Felpa Napapijri","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.15,"sp":0,"s":"stock","d":"05/11/2026","soldPlatform":"","soldDate":""},
@@ -1184,10 +1204,10 @@
       renderApp();
     }
 
-    // SUONO "CHA-CHING" SINTETIZZATO (WEB AUDIO API)
+    // SUONO "CHA-CHING" SINTETIZZATO CON GESTIONE RESUME AUDIO CONTEXT
     function playChaChingSound() {
       try {
-        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const ctx = getAudioContext();
         const now = ctx.currentTime;
 
         // 1. "Cha" (Scatto meccanico cassetto cassa)
@@ -1195,7 +1215,7 @@
           const osc = ctx.createOscillator(), g = ctx.createGain();
           osc.type = 'triangle';
           osc.frequency.setValueAtTime(freq, now + i * 0.015);
-          g.gain.setValueAtTime(0.12, now + i * 0.015);
+          g.gain.setValueAtTime(0.15, now + i * 0.015);
           g.gain.exponentialRampToValueAtTime(0.001, now + i * 0.015 + 0.05);
           osc.connect(g); g.connect(ctx.destination);
           osc.start(now + i * 0.015);
@@ -1208,7 +1228,7 @@
           const osc = ctx.createOscillator(), g = ctx.createGain();
           osc.type = 'sine';
           osc.frequency.setValueAtTime(freq, chingTime);
-          g.gain.setValueAtTime(0.15, chingTime);
+          g.gain.setValueAtTime(0.2, chingTime);
           g.gain.exponentialRampToValueAtTime(0.0001, chingTime + 0.8);
           osc.connect(g); g.connect(ctx.destination);
           osc.start(chingTime);
@@ -1251,7 +1271,7 @@
     function showCelebrationModal(item) {
       if (!item) return;
 
-      // Riproduci l'effetto audio Cha-Ching all'apertura
+      // Suona il Cha-Ching
       playChaChingSound();
 
       const bp = parseFloat(item.bp) || 0;
