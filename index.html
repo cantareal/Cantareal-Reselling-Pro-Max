@@ -1,38 +1,38 @@
-<!DOCTYPE html>
-<html lang="it" data-theme="dark">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <meta name="theme-color" content="#0f172a">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Cantareal">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="application-name" content="Cantareal">
-  <title>Cantareal — Reselling Pro</title>
-  <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    :root {
-      --bg-color: #f4f6f9; --card-bg: #ffffff; --text-color: #333333; --text-muted: #64748b;
-      --accent-color: #2563eb; --success-color: #16a34a; --danger-color: #ef4444;
-      --border-color: #e5e7eb; --input-bg: #ffffff; --badge-stock-bg: #dbeafe; --badge-stock-text: #1e40af;
-      --badge-sold-bg: #dcfce7; --badge-sold-text: #166534; --tab-active: #2563eb; --tab-active-text: #fff;
-      --modal-overlay: rgba(0,0,0,0.5); --warn-color: #f59e0b;
-    }
-    [data-theme="dark"] {
-      --bg-color: #0f172a; --card-bg: #1e293b; --text-color: #f8fafc; --text-muted: #94a3b8;
-      --accent-color: #3b82f6; --success-color: #22c55e; --danger-color: #ef4444;
-      --border-color: #334155; --input-bg: #0f172a; --badge-stock-bg: #1e3a8a; --badge-stock-text: #93c5fd;
-      --badge-sold-bg: #14532d; --badge-sold-text: #86efac; --tab-active: #3b82f6; --tab-active-text: #fff;
-      --modal-overlay: rgba(0,0,0,0.7); --warn-color: #fbbf24;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background: var(--bg-color); color: var(--text-color); padding: 12px; padding-bottom: 90px; max-width: 600px; margin: 0 auto; }
-    .header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-    h1 { font-size: 1.25rem; }
-    .theme-toggle { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-color); padding: 6px 12px; border-radius: 20px; font-size: 0.85rem; cursor: pointer; width: auto; }
+      "Reazione rapida e chiusura perfetta: trattativa chiusa a chiave! ⚡",
+      "Chi cerca trova... e chi sa valutare incassa! 🔍",
+      "Stock alleggerito e cassa appesantita. Rotazione perfetta! 📦",
+      "Spazio in magazzino liberato: pronto per il prossimo lotto! 🧹",
+      "Vendita lampo! L'oggetto non ha fatto in tempo a prendere polvere. ⏱️",
+      "Pezzo piazzato, cliente accontentato e profitto intascato. 🚚",
+      "Il ciclo del resell continua: acquista, piazza, incassa! 🔄",
+      "Niente male davvero! Avanti così verso il prossimo obiettivo. 🔥",
+      "Colpo grosso! Questa vendita è una piccola opera d'arte. 🏆",
+      "Trasformare l'usato in valore reale: un classico che non delude mai. ✨",
+      "Un passo avanti verso il traguardo del mese. Grande lavoro! 🚀",
+      "Comprare bene, vendere meglio, sorridere alla cassa. 😎",
+      "Centro perfetto! Quando il reselling diventa una scienza esatta. 🎯",
+      "Vendita esplosiva! Un altro pezzo portato a termine. 💣"
+    ];
 
-    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
-    .stat-card { padding: 12px 10px; border-radius: 14px; text-align: left; position: relative; border: none; color: #fff; min-height: 72px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 12px rgba(0,0,0,0.25); }
-    .stat-card .label { font-size: 0.7rem; opacity: 0.9; font-weight: 600; }
+    function showCelebrationModal(item) {
+      if (!item) return;
+      const bp = parseFloat(item.bp) || 0;
+      const sp = parseFloat(item.sp) || 0;
+      const profit = sp - bp;
+      const roi = bp > 0 ? ((profit / bp) * 100).toFixed(0) : "∞";
+
+      document.getElementById("celebrateItemTitle").innerText = item.t;
+      document.getElementById("celebrateTransRow").innerHTML = `Acquisto: <span class="val-acq">€${bp.toFixed(2)}</span> ➔ Venduto a: <span class="val-vend">€${sp.toFixed(2)}</span> (${item.soldPlatform || "Di Persona"})`;
+      document.getElementById("celebrateProfitVal").innerText = (profit >= 0 ? "+€" : "-€") + Math.abs(profit).toFixed(2);
+      document.getElementById("celebrateRoiVal").innerText = (profit >= 0 ? "+" : "") + roi + "%";
+
+      const randomQuote = CELEBRATION_PHRASES[Math.floor(Math.random() * CELEBRATION_PHRASES.length)];
+      document.getElementById("celebrateQuoteText").innerText = `"${randomQuote}"`;
+
+      document.getElementById("celebrateModal").style.display = "flex";
+    }
+
+    renderApp();
+  </script>
+</body>
+</html>
