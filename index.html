@@ -31,15 +31,15 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     body { background: var(--bg-color); color: var(--text-color); padding: 12px; padding-bottom: 90px; max-width: 600px; margin: 0 auto; }
     
-    /* HEADER E AVATAR HUB */
+    /* HEADER E AVATAR HUB (IMMAGINE INGRANDITA A 48px) */
     .header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-    .header-left { display: flex; align-items: center; gap: 10px; }
-    .avatar-btn { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--warn-color); background: var(--card-bg); overflow: hidden; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 10px rgba(251, 191, 36, 0.35); flex-shrink: 0; position: relative; }
+    .header-left { display: flex; align-items: center; gap: 12px; }
+    .avatar-btn { width: 48px; height: 48px; border-radius: 50%; border: 2px solid var(--warn-color); background: var(--card-bg); overflow: hidden; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 12px rgba(251, 191, 36, 0.4); flex-shrink: 0; position: relative; }
     .avatar-btn img { width: 100%; height: 100%; object-fit: cover; }
-    .avatar-btn span { font-size: 1.15rem; }
-    h1 { font-size: 1.25rem; }
-    .header-actions { display: flex; gap: 6px; align-items: center; }
-    .theme-toggle { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-color); padding: 6px 12px; border-radius: 20px; font-size: 0.85rem; cursor: pointer; width: auto; font-weight: 600; }
+    .avatar-btn span { font-size: 1.4rem; }
+    h1 { font-size: 1.2rem; font-weight: 800; }
+    .header-actions { display: flex; gap: 8px; align-items: center; }
+    .trophy-header-btn { background: var(--card-bg); border: 1.5px solid var(--warn-color); color: var(--warn-color); padding: 7px 12px; border-radius: 20px; font-size: 0.82rem; cursor: pointer; width: auto; font-weight: 800; box-shadow: 0 2px 8px rgba(251, 191, 36, 0.2); }
 
     .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
     .stat-card { padding: 12px 10px; border-radius: 14px; text-align: left; position: relative; border: none; color: #fff; min-height: 72px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 12px rgba(0,0,0,0.25); }
@@ -70,12 +70,10 @@
     }
     @keyframes goldShift { 0% { background-position: 0% 50%; } 100% { background-position: 100% 50%; } }
 
-    /* BARRA TAB DI STATO SCORREVOLE */
-    .status-tabs { display: flex; gap: 4px; overflow-x: auto; margin-bottom: 10px; scrollbar-width: none; }
-    .status-tabs::-webkit-scrollbar { display: none; }
-    .tab-btn { flex: 1; min-width: max-content; padding: 9px 8px; font-size: 0.68rem; font-weight: 700; border-radius: 8px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-color); cursor: pointer; text-align: center; white-space: nowrap; }
+    /* BARRA TAB DI STATO PERFETTA A 5 SEZIONI */
+    .status-tabs { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; margin-bottom: 10px; }
+    .tab-btn { padding: 9px 2px; font-size: 0.68rem; font-weight: 700; border-radius: 8px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-color); cursor: pointer; text-align: center; }
     .tab-btn.active { background: var(--tab-active); color: var(--tab-active-text); border-color: var(--tab-active); }
-    .tab-btn.gold-tab.active { background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%); border-color: #fbbf24; color: #0f172a; }
 
     .controls-card { background: var(--card-bg); padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); margin-bottom: 10px; }
     
@@ -219,11 +217,11 @@
     .btn-p-ebay { background: #0064d2; } .btn-p-persona { background: #475569; }
     .btn-sheet-cancel { background: transparent; border: none; color: var(--text-muted); font-weight: 700; cursor: pointer; padding: 10px; margin-top: 4px; }
 
-    /* ELEMENTI AVATAR HUB MENU */
-    .avatar-edit-box { display: flex; flex-direction: column; align-items: center; gap: 8px; margin-bottom: 18px; text-align: center; }
-    .avatar-large { width: 76px; height: 76px; border-radius: 50%; border: 3px solid var(--warn-color); overflow: hidden; background: var(--input-bg); position: relative; cursor: pointer; box-shadow: 0 0 14px rgba(251, 191, 36, 0.3); }
+    /* ELEMENTI AVATAR HUB MENU (AVATAR INGRANDITO A 96px) */
+    .avatar-edit-box { display: flex; flex-direction: column; align-items: center; gap: 10px; margin-bottom: 18px; text-align: center; }
+    .avatar-large { width: 96px; height: 96px; border-radius: 50%; border: 3px solid var(--warn-color); overflow: hidden; background: var(--input-bg); position: relative; cursor: pointer; box-shadow: 0 0 16px rgba(251, 191, 36, 0.35); }
     .avatar-large img { width: 100%; height: 100%; object-fit: cover; }
-    .nick-input { background: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-color); padding: 8px 12px; border-radius: 8px; font-weight: 700; text-align: center; font-size: 1rem; width: 180px; }
+    .nick-input { background: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-color); padding: 8px 12px; border-radius: 8px; font-weight: 700; text-align: center; font-size: 1rem; width: 190px; }
     
     .sheet-section-title { font-size: 0.68rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin: 14px 0 8px; letter-spacing: 0.5px; }
     .snapshot-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
@@ -291,12 +289,11 @@
         <img id="headerAvatarImg" src="" style="display:none;">
         <span id="headerAvatarPlaceholder">👤</span>
       </div>
-      <h1>📦 Cantareal</h1>
+      <h1 id="headerAppTitle">Miki Resell</h1>
     </div>
     <div class="header-actions">
       <button id="installBtn" onclick="installPWA()" style="display:none;background:#d97706;color:#fff;border:none;padding:6px 10px;border-radius:20px;font-size:0.8rem;font-weight:700;cursor:pointer;width:auto;">⬇ Installa</button>
-      <button class="theme-toggle" onclick="openDataModal()">⚙️ Dati</button>
-      <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()">☀️ Chiaro</button>
+      <button class="trophy-header-btn" onclick="setStatusFilter('TROPHIES')">🏆 Trofei</button>
     </div>
   </div>
 
@@ -340,7 +337,6 @@
     <button class="tab-btn" id="tabsold" onclick="setStatusFilter('sold')">✅ Venduti (0)</button>
     <button class="tab-btn" id="tabEXPENSES" onclick="setStatusFilter('EXPENSES')">💸 Spese (0)</button>
     <button class="tab-btn" id="tabSTATS" onclick="setStatusFilter('STATS')">📊 Grafici</button>
-    <button class="tab-btn gold-tab" id="tabTROPHIES" onclick="setStatusFilter('TROPHIES')">🏆 Trofei</button>
   </div>
 
   <div id="mainView">
@@ -484,10 +480,10 @@
       <div class="avatar-edit-box">
         <div class="avatar-large" onclick="document.getElementById('avatarFileInput').click()" title="Cambia foto profilo">
           <img id="menuAvatarImg" src="" style="display:none;">
-          <span id="menuAvatarPlaceholder" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 2.2rem;">👤</span>
+          <span id="menuAvatarPlaceholder" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 2.8rem;">👤</span>
         </div>
         <input type="file" id="avatarFileInput" accept="image/*" style="display:none;" onchange="handleAvatarUpload(event)">
-        <input type="text" id="userNickname" class="nick-input" value="Miki Resell" onchange="saveUserProfile()" placeholder="Il tuo Nickname">
+        <input type="text" id="userNickname" class="nick-input" value="Miki Resell" oninput="saveUserProfile()" placeholder="Il tuo Nickname">
         <div class="level-chip-badge" onclick="closeAvatarSheet(); setStatusFilter('TROPHIES');">GURU DEL FLIP 🌟</div>
       </div>
 
@@ -1159,15 +1155,19 @@
       }).catch(() => notify("Errore caricamento avatar."));
     }
 
+    /* SALVATAGGIO & SINCRONIZZAZIONE TITOLO PROFILO (OPZIONE A) */
     function saveUserProfile() {
       const nick = document.getElementById("userNickname").value.trim() || "Miki Resell";
       localStorage.setItem(USER_NICK_KEY, nick);
+      document.getElementById("headerAppTitle").innerText = nick;
     }
 
     function loadUserProfile() {
       const nick = localStorage.getItem(USER_NICK_KEY) || "Miki Resell";
       const el = document.getElementById("userNickname");
       if (el) el.value = nick;
+      const titleEl = document.getElementById("headerAppTitle");
+      if (titleEl) titleEl.innerText = nick;
     }
 
     function compressPhotoFile(file) {
@@ -1285,7 +1285,6 @@
     const savedTheme = localStorage.getItem(THEME_KEY);
     if (savedTheme) {
       document.documentElement.setAttribute("data-theme", savedTheme);
-      document.getElementById("themeBtn").innerText = savedTheme === "dark" ? "☀️ Chiaro" : "🌙 Scuro";
     }
 
     const savedGoal = localStorage.getItem(GOAL_KEY);
@@ -1349,7 +1348,6 @@
       const next = html.getAttribute("data-theme") === "dark" ? "light" : "dark";
       html.setAttribute("data-theme", next);
       localStorage.setItem(THEME_KEY, next);
-      document.getElementById("themeBtn").innerText = next === "dark" ? "☀️ Chiaro" : "🌙 Scuro";
       if (currentStatusFilter === "STATS") renderCharts();
     }
 
@@ -1368,7 +1366,6 @@
         chartsView.style.display = "block";
         renderCharts();
       } else if (status === "TROPHIES") {
-        document.getElementById("tabTROPHIES").classList.add("active");
         mainView.style.display = "none";
         chartsView.style.display = "none";
         trophiesView.style.display = "block";
@@ -2616,6 +2613,7 @@
 
     initIndexedDB().then(() => {
       loadTrash();
+      loadUserProfile();
       renderApp();
     });
   </script>
