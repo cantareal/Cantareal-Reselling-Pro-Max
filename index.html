@@ -1929,4 +1929,273 @@
       const tid = moveToTrash("item", item, idx);
       saveData();
       closeModal("editModal");
-      notify("Oggetto eliminato", "Annulla",
+      notify("Oggetto eliminato", "Annulla", () => restoreFromTrash(tid));
+    }
+
+    function openSellSheet(id) {
+      const item = db.find(x => x.id === String(id));
+      if (!item) return;
+      activeSheetItemId = item.id;
+      document.getElementById("sheetItemTitle").innerText = item.t;
+      document.getElementById("sheetSellPrice").value = item.sp > 0 ? item.sp : "";
+      document.getElementById("sellSheet").classList.remove("hidden");
+    }
+
+    function closeSellSheet() {
+      document.getElementById("sellSheet").classList.add("hidden");
+      activeSheetItemId = null;
+    }
+
+    function confirmSheetSell(platform) {
+      const priceVal = document.getElementById("sheetSellPrice").value.replace(",", ".");
+      const price = parseFloat(priceVal);
+      if (isNaN(price) || price <= 0) return notify("Inserisci un prezzo valido.");
+      const item = db.find(x => x.id === activeSheetItemId);
+      if (item) {
+        item.s = "sold"; item.sp = price; item.soldPlatform = platform; item.soldDate = todayFormatted();
+        saveData();
+        closeSellSheet();
+        showCelebrationModal(item);
+      }
+    }
+
+    function copyData() {
+      const payload = JSON.stringify({ db, expenses, adjustments });
+      navigator.clipboard.writeText(payload).then(() => {
+        notify("Dati copiati negli appunti (senza foto).");
+      }).catch(() => {
+        prompt("Copia questo testo per l'importazione:", payload);
+      });
+    }
+
+    function esc(v) {
+      return String(v == null ? "" : v).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+    }
+
+    function safeId(v, fallback) {
+      const id = String(v == null ? "" : v).replace(/[^\w-]/g, "");
+      return id || fallback;
+    }
+
+    function sanitizeItems(arr) {
+      return arr.filter(x => x && typeof x === "object").map((x, i) => ({
+        id: safeId(x.id, String(Date.now()) + "-" + i),
+        t: String(x.t || "Senza nome"),
+        c: String(x.c || "Altro"),
+        src: String(x.src || ""),
+        bp: parseFloat(x.bp) || 0,
+        sp: parseFloat(x.sp) || 0,
+        s: x.s === "sold" ? "sold" : "stock",
+        d: String(x.d || todayFormatted()),
+        soldPlatform: String(x.soldPlatform || ""),
+        soldDate: String(x.soldDate || "")
+      }));
+    }
+
+    function sanitizeExpenses(arr) {
+      return arr.filter(x => x && typeof x === "object").map((x, i) => ({
+        id: safeId(x.id, String(Date.now()) + "-e" + i),
+        amount: parseFloat(x.amount) || 0,
+        category: String(x.category || "Altro"),
+        note: String(x.note || "Spesa generica"),
+        date: String(x.date || todayFormatted())
+      }));
+    }
+
+    function sanitizeAdjustments(arr) {
+      return arr.filter(x => x && typeof x === "object" && !isNaN(parseFloat(x.amount))).map((x, i) => ({
+        id: x.id != null ? x.id : Date.now() + i,
+        amount: parseFloat(x.amount),
+        reason: String(x.reason || "Aggiustamento"),
+        date: String(x.date || todayFormatted())
+      }));
+    }
+
+    function getAllPhotosIDB() {
+      return new Promise((resolve) => {
+        if (!imageDB) return resolve({});
+        const req = imageDB.transaction([IDB_STORE], "readonly").objectStore(IDB_STORE).getAll();
+        req.onsuccess = () => {
+          const out = {};
+          (req.result || []).forEach(r => { if (r && r.id && r.data) out[r.id] = r.data; });
+          resolve(out);
+        };
+        req.onerror = () => resolve({});
+      });
+    }
+
+    function replacePhotosIDB(photos) {
+      return new Promise((resolve) => {
+        if (!imageDB) return resolve();
+        const tx = imageDB.transaction([IDB_STORE], "readwrite");
+        const store = tx.objectStore(IDB_STORE);
+        store.clear();
+        Object.keys(photos).forEach(k => {
+          const data = photos[k];
+          if (typeof data === "string" && data.indexOf("data:image/") === 0) {
+            store.put({ id: safeId(k, k), data: data });
+          }
+        });
+        tx.oncomplete = () => resolve();
+        tx.onerror = () => resolve();
+      });
+    }
+
+    async function applyImport(parsed) {
+      let newDb, newExp = expenses, newAdj = adjustments, photos = null;
+      if (Array.isArray(parsed)) {
+        newDb = sanitizeItems(parsed);
+      } else if (parsed && Array.isArray(parsed.db)) {
+        newDb = sanitizeItems(parsed.db);
+        if (Array.isArray(parsed.expenses)) newExp = sanitizeExpenses(parsed.expenses);
+        if (Array.isArray(parsed.adjustments)) newAdj = sanitizeAdjustments(parsed.adjustments);
+        if (parsed.photos && typeof parsed.photos === "object") photos = parsed.photos;
+      } else {
+        return notify("Formato non valido. Serve un backup creato da questa app.");
+      }
+      const nPhotos = photos ? Object.keys(photos).length : 0;
+      const msg = "Sostituire i dati attuali (" + db.length + " oggetti, " + expenses.length + " spese) con quelli del backup (" +
+        newDb.length + " oggetti, " + newExp.length + " spese" + (photos ? ", " + nPhotos + " foto" : "") +
+        ")?\n\nPrima viene scaricata una copia di sicurezza dei dati attuali.";
+      if (!confirm(msg)) return;
+      await downloadBackup(true);
+      db = newDb; expenses = newExp; adjustments = newAdj;
+      trash = []; saveTrash();
+      if (photos) await replacePhotosIDB(photos);
+      saveData();
+      notify("Dati importati. Oggetti: " + db.length + " | Spese: " + expenses.length + (photos ? " | Foto: " + nPhotos : ""));
+    }
+
+    function importData() {
+      const input = prompt("Incolla qui il JSON di backup:");
+      if (!input || !input.trim()) return;
+      let text = input.trim();
+      if (text.charCodeAt(0) === 0xFEFF) text = text.slice(1);
+      let parsed;
+      try { parsed = JSON.parse(text); }
+      catch (e) { return notify("Errore nella lettura del JSON. Controlla di aver copiato il testo completo."); }
+      applyImport(parsed);
+    }
+
+    async function importFromFile(event) {
+      const input = event.target;
+      const file = input.files && input.files[0];
+      input.value = "";
+      if (!file) return;
+      closeModal("dataModal");
+      let parsed;
+      try {
+        let text = await file.text();
+        if (text.charCodeAt(0) === 0xFEFF) text = text.slice(1);
+        parsed = JSON.parse(text);
+      } catch (e) {
+        return notify("Il file non è un backup valido.");
+      }
+      applyImport(parsed);
+    }
+
+    function downloadCSV() {
+      const q = v => {
+        let t = String(v == null ? "" : v);
+        if (/^[=+\-@\t\r]/.test(t)) t = "'" + t;
+        return '"' + t.replace(/"/g, '""') + '"';
+      };
+      const n = v => (typeof v === "number" && !isNaN(v)) ? v.toFixed(2).replace(".", ",") : "";
+      const lines = [];
+      lines.push("OGGETTI");
+      lines.push(["ID","Titolo","Categoria","Fonte","Stato","PrezzoAcq","PrezzoVend","Profitto","ROI%","DataAcq","DataVend","Piattaforma"].join(";"));
+      db.forEach(i => {
+        const bp = parseFloat(i.bp) || 0, sp = parseFloat(i.sp) || 0;
+        const sold = i.s === "sold";
+        const profit = sold ? n(sp - bp) : "";
+        const roi = sold && bp > 0 ? (((sp - bp) / bp) * 100).toFixed(1).replace(".", ",") : "";
+        lines.push([q(i.id), q(i.t), q(i.c), q(i.src), q(sold ? "Venduto" : "In stock"), n(bp), sold ? n(sp) : "", profit, roi, q(i.d), q(i.soldDate || ""), q(i.soldPlatform || "")].join(";"));
+      });
+      lines.push("");
+      lines.push("SPESE");
+      lines.push(["ID","Nota","Categoria","Importo","Data"].join(";"));
+      expenses.forEach(e => {
+        lines.push([q(e.id), q(e.note), q(e.category), n(parseFloat(e.amount) || 0), q(e.date)].join(";"));
+      });
+      const blob = new Blob(["\uFEFF" + lines.join("\r\n")], { type: "text/csv;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `reselling_export_${new Date().toISOString().slice(0,10)}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 10000);
+    }
+
+    async function downloadBackup(withPhotos) {
+      const payload = { version: 2, db, expenses, adjustments };
+      if (withPhotos) payload.photos = await getAllPhotosIDB();
+      const blob = new Blob([JSON.stringify(payload)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `reselling_backup_${withPhotos ? "con_foto_" : ""}${new Date().toISOString().slice(0,10)}.json`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 10000);
+    }
+
+    const CELEBRATION_PHRASES = [
+      "Un altro affare andato a segno! Il saldo cassa ringrazia. 🚀",
+      "Margine incassato e liquidità subito pronta per il prossimo acquisto! 💶",
+      "Capitale sbloccato e profitto netto in tasca. Lavoro pulito! 💰",
+      "ROI da incorniciare! Questo è reselling di alto livello. 📈",
+      "Altro margine messo al sicuro. Saldo in costante crescita! 🏦",
+      "Incasso confermato: il capitale gira che è una bellezza! 💸",
+      "Trasformare oggetti in liquidità pura è il tuo superpotere. 🪙",
+      "Fiuto imbattibile! Hai fiutato l'affare e l'hai portato a casa. 🎯",
+      "Trattativa da manuale: comprato al prezzo giusto, venduto al top! 🤝",
+      "Visione strategica al 100%. Questo flip era scritto nelle stelle. 🧠",
+      "Occhio di falco per il margine! Un altro colpo magistrale. 🦅",
+      "Reazione rapida e chiusura perfetta: trattativa chiusa a chiave! ⚡",
+      "Chi cerca trova... e chi sa valutare incassa! 🔍",
+      "Stock alleggerito e cassa appesantita. Rotazione perfetta! 📦",
+      "Spazio in magazzino liberato: pronto per il prossimo lotto! 🧹",
+      "Vendita lampo! L'oggetto non ha fatto in tempo a prendere polvere. ⏱️",
+      "Pezzo piazzato, cliente accontentato e profitto intascato. 🚚",
+      "Il ciclo del resell continua: acquista, piazza, incassa! 🔄",
+      "Niente male davvero! Avanti così verso il prossimo obiettivo. 🔥",
+      "Colpo grosso! Questa vendita è una piccola opera d'arte. 🏆",
+      "Trasformare l'usato in valore reale: un classico che non delude mai. ✨",
+      "Un passo avanti verso il traguardo del mese. Grande lavoro! 🚀",
+      "Comprare bene, vendere meglio, sorridere alla cassa. 😎",
+      "Centro perfetto! Quando il reselling diventa una scienza esatta. 🎯",
+      "Vendita esplosiva! Un altro pezzo portato a termine. 💣"
+    ];
+
+    function showCelebrationModal(item) {
+      if (!item) return;
+      const bp = parseFloat(item.bp) || 0;
+      const sp = parseFloat(item.sp) || 0;
+      const profit = sp - bp;
+      const roi = bp > 0 ? ((profit / bp) * 100).toFixed(0) : "∞";
+
+      document.getElementById("celebrateItemTitle").innerText = item.t;
+      document.getElementById("celebrateTransRow").innerHTML = `Acquisto: <span class="val-acq">€${bp.toFixed(2)}</span> ➔ Venduto a: <span class="val-vend">€${sp.toFixed(2)}</span> (${esc(item.soldPlatform || "Di Persona")})`;
+      document.getElementById("celebrateProfitVal").innerText = (profit >= 0 ? "+€" : "-€") + Math.abs(profit).toFixed(2);
+      document.getElementById("celebrateRoiVal").innerText = (profit >= 0 ? "+" : "") + roi + "%";
+
+      const randomQuote = CELEBRATION_PHRASES[Math.floor(Math.random() * CELEBRATION_PHRASES.length)];
+      document.getElementById("celebrateQuoteText").innerText = `"${randomQuote}"`;
+
+      document.getElementById("celebrateModal").style.display = "flex";
+    }
+
+    if (navigator.storage && navigator.storage.persist) {
+      navigator.storage.persist().catch(() => {});
+    }
+
+    initIndexedDB().then(() => {
+      loadTrash();
+      renderApp();
+    });
+  </script>
+</body>
+</html>
