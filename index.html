@@ -142,6 +142,19 @@
     .btn-p-ebay { background: #0064d2; } .btn-p-persona { background: #475569; }
     .btn-sheet-cancel { background: transparent; border: none; color: var(--text-muted); font-weight: 700; cursor: pointer; padding: 10px; margin-top: 4px; }
 
+    /* BOTTONI SELEZIONE BOTTOM SHEET FAB */
+    .choice-btn {
+      display: flex; align-items: center; gap: 14px; padding: 14px;
+      border-radius: 12px; border: 1px solid var(--border-color);
+      background: var(--input-bg); color: var(--text-color);
+      cursor: pointer; text-align: left; width: 100%; transition: background 0.15s;
+    }
+    .choice-btn:active { background: var(--border-color); }
+    .choice-icon { font-size: 1.8rem; flex-shrink: 0; }
+    .choice-text { display: flex; flex-direction: column; gap: 2px; }
+    .choice-title { font-weight: 700; font-size: 0.95rem; }
+    .choice-desc { font-size: 0.75rem; color: var(--text-muted); }
+
     .adjust-list { max-height: 160px; overflow-y: auto; margin-top: 12px; font-size: 0.8rem; }
     .adjust-item { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border-color); }
     .adjust-pos { color: var(--success-color); } .adjust-neg { color: var(--danger-color); }
@@ -394,6 +407,39 @@
 
   <button class="fab-btn" onclick="handleFabClick()">+</button>
 
+  <!-- BOTTOM SHEET SCELTA AGGIUNTA TAB -->
+  <div id="addChoiceSheet" class="bottom-sheet-overlay hidden" onclick="closeAddChoiceSheet(event)">
+    <div class="bottom-sheet-content" onclick="event.stopPropagation()">
+      <div class="sheet-handle"></div>
+      <div class="sheet-title">➕ Cosa vuoi aggiungere?</div>
+      <div class="sheet-subtitle">Seleziona la modalità di inserimento</div>
+      <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:12px;">
+        <button type="button" class="choice-btn" onclick="openAddModalFromChoice()">
+          <span class="choice-icon">📦</span>
+          <div class="choice-text">
+            <div class="choice-title">Singolo Oggetto</div>
+            <div class="choice-desc">Aggiungi un singolo pezzo all'inventario</div>
+          </div>
+        </button>
+        <button type="button" class="choice-btn" onclick="openLotModalFromChoice()">
+          <span class="choice-icon">📦📦</span>
+          <div class="choice-text">
+            <div class="choice-title">Lotto / Acquisto in Blocco</div>
+            <div class="choice-desc">Calcola il costo unitario e inserisci più pezzi insieme</div>
+          </div>
+        </button>
+        <button type="button" class="choice-btn" onclick="openAddExpenseModalFromChoice()">
+          <span class="choice-icon">💸</span>
+          <div class="choice-text">
+            <div class="choice-title">Spesa Extra</div>
+            <div class="choice-desc">Registra costi di gestione (nastro, vetrine, benzina)</div>
+          </div>
+        </button>
+      </div>
+      <button type="button" class="btn-sheet-cancel" onclick="closeAddChoiceSheet()">Annulla</button>
+    </div>
+  </div>
+
   <!-- MODALE GESTIONE DATI -->
   <div class="modal-overlay" id="dataModal">
     <div class="modal-content">
@@ -417,7 +463,7 @@
     </div>
   </div>
 
-  <!-- MODALE AGGIUNGI OGGETTO -->
+  <!-- MODALE AGGIUNGI OGGETTO SINGOLO -->
   <div class="modal-overlay" id="addModal">
     <div class="modal-content">
       <div class="modal-header">
@@ -475,6 +521,60 @@
 
         <div class="full-width">
           <button class="btn-main" onclick="addItem()">Salva nell'Inventario</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODALE AGGIUNGI LOTTO / BLOCCO -->
+  <div class="modal-overlay" id="lotModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="modal-title">📦📦 Nuovo Acquisto in Lotto</span>
+        <button class="close-modal" onclick="closeModal('lotModal')">✕</button>
+      </div>
+      <div class="form-grid">
+        <div>
+          <label style="font-size:0.75rem;font-weight:700;">COSTO TOTALE LOTTO (€)</label>
+          <input type="number" id="lotTotalCost" step="0.01" placeholder="es. 40.00" oninput="updateLotCalc()">
+        </div>
+        <div>
+          <label style="font-size:0.75rem;font-weight:700;">NUMERO PEZZI</label>
+          <input type="number" id="lotQuantity" min="2" max="50" value="5" oninput="renderLotRows()">
+        </div>
+        <div class="full-width" id="lotCalcBadge" style="background:rgba(59,130,246,0.15); border:1px solid var(--accent-color); padding:8px 12px; border-radius:8px; font-size:0.8rem; font-weight:700; color:var(--accent-color); text-align:center;">
+          🎯 CALCOLO: €0.00 per oggetto
+        </div>
+        <div>
+          <label style="font-size:0.75rem;font-weight:700;">CATEGORIA PREDEFINITA</label>
+          <select id="lotCategory">
+            <option value="Gaming / Videogiochi">Gaming / Videogiochi</option>
+            <option value="Abbigliamento">Abbigliamento</option>
+            <option value="Elettronica">Elettronica</option>
+            <option value="Libri">Libri</option>
+            <option value="Altro">Altro</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size:0.75rem;font-weight:700;">FONTE</label>
+          <select id="lotSource">
+            <option value="Mercatino / Di Persona">Mercatino / Di Persona</option>
+            <option value="Vinted">Vinted</option>
+            <option value="Wallapop">Wallapop</option>
+            <option value="Subito">Subito</option>
+            <option value="eBay">eBay</option>
+          </select>
+        </div>
+        <div class="full-width">
+          <label style="font-size:0.75rem;font-weight:700;">DATA ACQUISTO</label>
+          <input type="date" id="lotDate">
+        </div>
+        <div class="full-width" style="border-top:1px solid var(--border-color); margin-top:4px; padding-top:8px;">
+          <label style="font-size:0.75rem;font-weight:700;display:block;margin-bottom:6px;">NOMI DEI SINGOLI OGGETTI</label>
+          <div id="lotItemsContainer" style="display:flex; flex-direction:column; gap:8px; max-height:180px; overflow-y:auto; padding-right:4px;"></div>
+        </div>
+        <div class="full-width">
+          <button class="btn-main" onclick="saveLotItems()">Salva tutti gli oggetti nell'inventario</button>
         </div>
       </div>
     </div>
@@ -1014,12 +1114,106 @@
       setStatusFilter("sold");
     }
 
+    // GESTIONE TAP SU TASTO FAB (+)
     function handleFabClick() {
-      if (currentStatusFilter === "EXPENSES") {
-        openAddExpenseModal();
-      } else {
-        openAddModal();
+      openAddChoiceSheet();
+    }
+
+    function openAddChoiceSheet() {
+      document.getElementById("addChoiceSheet").classList.remove("hidden");
+    }
+
+    function closeAddChoiceSheet(e) {
+      if (!e || e.target.id === "addChoiceSheet" || e.target.classList.contains("btn-sheet-cancel") || e.currentTarget.id === "addChoiceSheet") {
+        document.getElementById("addChoiceSheet").classList.add("hidden");
       }
+    }
+
+    function openAddModalFromChoice() {
+      closeAddChoiceSheet();
+      openAddModal();
+    }
+
+    function openLotModalFromChoice() {
+      closeAddChoiceSheet();
+      openLotModal();
+    }
+
+    function openAddExpenseModalFromChoice() {
+      closeAddChoiceSheet();
+      openAddExpenseModal();
+    }
+
+    // LOGICA MODALE AGGIUNTA IN LOTTO / BLOCCO
+    function openLotModal() {
+      document.getElementById("lotDate").valueAsDate = new Date();
+      document.getElementById("lotTotalCost").value = "";
+      document.getElementById("lotQuantity").value = 5;
+      renderLotRows();
+      document.getElementById("lotModal").style.display = "flex";
+    }
+
+    function updateLotCalc() {
+      const total = parseFloat(document.getElementById("lotTotalCost").value.replace(",", ".")) || 0;
+      const qty = parseInt(document.getElementById("lotQuantity").value, 10) || 1;
+      const unit = qty > 0 ? (total / qty) : 0;
+      document.getElementById("lotCalcBadge").innerText = `🎯 CALCOLO: €${unit.toFixed(2)} per oggetto`;
+    }
+
+    function renderLotRows() {
+      const qty = Math.max(1, Math.min(50, parseInt(document.getElementById("lotQuantity").value, 10) || 1));
+      const container = document.getElementById("lotItemsContainer");
+      let html = "";
+      for (let i = 1; i <= qty; i++) {
+        html += `<div style="display:flex; align-items:center; gap:6px;">
+          <span style="font-size:0.75rem; font-weight:700; width:22px; flex-shrink:0; text-align:right;">${i}.</span>
+          <input type="text" class="lot-item-input" placeholder="Nome oggetto ${i}" style="padding:8px; font-size:0.85rem;">
+        </div>`;
+      }
+      container.innerHTML = html;
+      updateLotCalc();
+    }
+
+    function saveLotItems() {
+      const totalCost = parseFloat(document.getElementById("lotTotalCost").value.replace(",", "."));
+      const qty = parseInt(document.getElementById("lotQuantity").value, 10) || 0;
+      if (isNaN(totalCost) || totalCost < 0) return alert("Inserisci un costo totale valido per il lotto.");
+      if (qty < 1) return alert("Inserisci un numero valido di pezzi.");
+
+      const unitCost = totalCost / qty;
+      const cat = document.getElementById("lotCategory").value;
+      const src = document.getElementById("lotSource").value;
+      const dateInput = document.getElementById("lotDate").value;
+      let d = todayFormatted();
+      if (dateInput) {
+        const p = dateInput.split("-");
+        d = p[2] + "/" + p[1] + "/" + p[0];
+      }
+
+      const inputs = document.querySelectorAll(".lot-item-input");
+      const newItems = [];
+      const baseTimestamp = Date.now();
+      inputs.forEach((input, index) => {
+        const title = input.value.trim() || `Oggetto #${index + 1} (Lotto)`;
+        newItems.push({
+          id: String(baseTimestamp + index),
+          t: title,
+          c: cat,
+          src: src,
+          bp: unitCost,
+          sp: 0,
+          s: "stock",
+          d: d,
+          soldPlatform: "",
+          soldDate: ""
+        });
+      });
+
+      newItems.reverse().forEach(item => db.unshift(item));
+
+      saveData();
+      closeModal("lotModal");
+      alert(`Registrati con successo ${newItems.length} oggetti a €${unitCost.toFixed(2)} ciascuno!`);
     }
 
     function openAddExpenseModal() {
