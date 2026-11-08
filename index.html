@@ -30,7 +30,13 @@
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     body { background: var(--bg-color); color: var(--text-color); padding: 12px; padding-bottom: 90px; max-width: 600px; margin: 0 auto; }
+    
+    /* HEADER E AVATAR HUB */
     .header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .header-left { display: flex; align-items: center; gap: 10px; }
+    .avatar-btn { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--warn-color); background: var(--card-bg); overflow: hidden; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 10px rgba(251, 191, 36, 0.35); flex-shrink: 0; position: relative; }
+    .avatar-btn img { width: 100%; height: 100%; object-fit: cover; }
+    .avatar-btn span { font-size: 1.15rem; }
     h1 { font-size: 1.25rem; }
     .header-actions { display: flex; gap: 6px; align-items: center; }
     .theme-toggle { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-color); padding: 6px 12px; border-radius: 20px; font-size: 0.85rem; cursor: pointer; width: auto; font-weight: 600; }
@@ -64,9 +70,12 @@
     }
     @keyframes goldShift { 0% { background-position: 0% 50%; } 100% { background-position: 100% 50%; } }
 
-    .status-tabs { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; margin-bottom: 10px; }
-    .tab-btn { padding: 9px 2px; font-size: 0.68rem; font-weight: 700; border-radius: 8px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-color); cursor: pointer; text-align: center; }
+    /* BARRA TAB DI STATO SCORREVOLE */
+    .status-tabs { display: flex; gap: 4px; overflow-x: auto; margin-bottom: 10px; scrollbar-width: none; }
+    .status-tabs::-webkit-scrollbar { display: none; }
+    .tab-btn { flex: 1; min-width: max-content; padding: 9px 8px; font-size: 0.68rem; font-weight: 700; border-radius: 8px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-color); cursor: pointer; text-align: center; white-space: nowrap; }
     .tab-btn.active { background: var(--tab-active); color: var(--tab-active-text); border-color: var(--tab-active); }
+    .tab-btn.gold-tab.active { background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%); border-color: #fbbf24; color: #0f172a; }
 
     .controls-card { background: var(--card-bg); padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); margin-bottom: 10px; }
     
@@ -140,11 +149,43 @@
     .chart-container { background: var(--card-bg); padding: 14px; border-radius: 10px; border: 1px solid var(--border-color); margin-bottom: 12px; position: relative; height: 280px; width: 100%; }
     .chart-container h3 { font-size: 0.9rem; margin-bottom: 10px; text-align: center; }
 
+    /* VISTA TROFEI & BACHECA (SCHELETRO) */
+    #trophiesView { display: none; }
+    .trophy-hero {
+      background: linear-gradient(135deg, rgba(251, 191, 36, 0.15) 0%, var(--card-bg) 100%);
+      border: 1px solid var(--warn-color);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 16px;
+      text-align: center;
+      box-shadow: 0 4px 16px rgba(251, 191, 36, 0.12);
+    }
+    .trophy-hero h2 { font-size: 1.1rem; color: var(--warn-color); font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
+    .level-chip-badge { font-size: 0.8rem; font-weight: 800; color: #f8fafc; margin-top: 6px; display: inline-block; background: rgba(0,0,0,0.35); padding: 4px 12px; border-radius: 20px; border: 1px solid rgba(251,191,36,0.3); }
+    .section-title-gold { font-size: 0.75rem; font-weight: 800; color: var(--warn-color); text-transform: uppercase; margin: 16px 0 10px 2px; display: flex; align-items: center; gap: 6px; }
+
+    .records-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+    .record-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; }
+    .record-card.gold-border { border-color: var(--warn-color); box-shadow: 0 2px 10px rgba(251, 191, 36, 0.1); }
+    .record-icon { font-size: 1.3rem; margin-bottom: 4px; }
+    .record-label { font-size: 0.68rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; }
+    .record-val { font-size: 1.1rem; font-weight: 900; color: var(--success-color); margin-top: 2px; }
+
+    .trophy-placeholder-box {
+      background: var(--card-bg);
+      border: 2px dashed var(--border-color);
+      border-radius: 14px;
+      padding: 30px 20px;
+      text-align: center;
+      color: var(--text-muted);
+      margin-top: 10px;
+    }
+
+    /* BOTTONI FLUTTUANTI */
     .fab-btn { position: fixed; bottom: 20px; right: 20px; width: 56px; height: 56px; border-radius: 28px; background: var(--accent-color); color: white; border: none; font-size: 1.8rem; font-weight: 700; display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 14px rgba(0,0,0,0.4); cursor: pointer; z-index: 99; }
-    
-    /* PULSANTE TORNA IN ALTO */
     .scroll-top-btn { position: fixed; bottom: 20px; left: 20px; width: 44px; height: 44px; border-radius: 22px; background: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); font-size: 1.2rem; font-weight: 700; display: none; justify-content: center; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.3); cursor: pointer; z-index: 98; }
 
+    /* MODALI E BOTTOM SHEETS */
     .modal-overlay { position: fixed; inset: 0; background: var(--modal-overlay); display: none; justify-content: center; align-items: center; z-index: 100; padding: 16px; }
     .modal-content { background: var(--card-bg); width: 100%; max-width: 500px; border-radius: 14px; padding: 16px; max-height: 90vh; overflow-y: auto; border: 1px solid var(--border-color); }
     .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
@@ -164,7 +205,7 @@
 
     .bottom-sheet-overlay { position: fixed; inset: 0; background: var(--modal-overlay); z-index: 200; display: flex; align-items: flex-end; justify-content: center; }
     .bottom-sheet-overlay.hidden { display: none; }
-    .bottom-sheet-content { background: var(--card-bg); width: 100%; max-width: 600px; border-radius: 20px 20px 0 0; padding: 16px 20px 28px; border: 1px solid var(--border-color); }
+    .bottom-sheet-content { background: var(--card-bg); width: 100%; max-width: 600px; border-radius: 20px 20px 0 0; padding: 16px 20px 28px; border: 1px solid var(--border-color); max-height: 85vh; overflow-y: auto; }
     .sheet-handle { width: 36px; height: 4px; background: var(--border-color); border-radius: 2px; margin: 0 auto 12px; }
     .sheet-title { font-size: 1.1rem; font-weight: 700; text-align: center; }
     .sheet-subtitle { font-size: 0.8rem; color: var(--text-muted); text-align: center; margin-bottom: 16px; }
@@ -177,6 +218,21 @@
     .btn-p-vinted { background: #007782; } .btn-p-wallapop { background: #13c1a3; } .btn-p-subito { background: #ff4d4d; }
     .btn-p-ebay { background: #0064d2; } .btn-p-persona { background: #475569; }
     .btn-sheet-cancel { background: transparent; border: none; color: var(--text-muted); font-weight: 700; cursor: pointer; padding: 10px; margin-top: 4px; }
+
+    /* ELEMENTI AVATAR HUB MENU */
+    .avatar-edit-box { display: flex; flex-direction: column; align-items: center; gap: 8px; margin-bottom: 18px; text-align: center; }
+    .avatar-large { width: 76px; height: 76px; border-radius: 50%; border: 3px solid var(--warn-color); overflow: hidden; background: var(--input-bg); position: relative; cursor: pointer; box-shadow: 0 0 14px rgba(251, 191, 36, 0.3); }
+    .avatar-large img { width: 100%; height: 100%; object-fit: cover; }
+    .nick-input { background: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-color); padding: 8px 12px; border-radius: 8px; font-weight: 700; text-align: center; font-size: 1rem; width: 180px; }
+    
+    .sheet-section-title { font-size: 0.68rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin: 14px 0 8px; letter-spacing: 0.5px; }
+    .snapshot-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+    .snap-card { background: var(--input-bg); border: 1px solid var(--border-color); padding: 10px; border-radius: 10px; text-align: center; }
+    .snap-val { font-size: 1.05rem; font-weight: 900; color: var(--warn-color); }
+    .snap-lbl { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin-top: 2px; }
+
+    .menu-list-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
+    .menu-list-item { display: flex; align-items: center; justify-content: space-between; padding: 11px 14px; background: var(--input-bg); border: 1px solid var(--border-color); border-radius: 10px; cursor: pointer; font-size: 0.88rem; font-weight: 700; }
 
     .choice-btn { display: flex; align-items: center; gap: 14px; padding: 14px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-color); cursor: pointer; text-align: left; width: 100%; transition: background 0.15s; }
     .choice-btn:active { background: var(--border-color); }
@@ -230,7 +286,13 @@
 </head>
 <body>
   <div class="header-row">
-    <h1>📦 Cantareal</h1>
+    <div class="header-left">
+      <div class="avatar-btn" onclick="openAvatarMenu()" title="Hub del Reseller">
+        <img id="headerAvatarImg" src="" style="display:none;">
+        <span id="headerAvatarPlaceholder">👤</span>
+      </div>
+      <h1>📦 Cantareal</h1>
+    </div>
     <div class="header-actions">
       <button id="installBtn" onclick="installPWA()" style="display:none;background:#d97706;color:#fff;border:none;padding:6px 10px;border-radius:20px;font-size:0.8rem;font-weight:700;cursor:pointer;width:auto;">⬇ Installa</button>
       <button class="theme-toggle" onclick="openDataModal()">⚙️ Dati</button>
@@ -278,6 +340,7 @@
     <button class="tab-btn" id="tabsold" onclick="setStatusFilter('sold')">✅ Venduti (0)</button>
     <button class="tab-btn" id="tabEXPENSES" onclick="setStatusFilter('EXPENSES')">💸 Spese (0)</button>
     <button class="tab-btn" id="tabSTATS" onclick="setStatusFilter('STATS')">📊 Grafici</button>
+    <button class="tab-btn gold-tab" id="tabTROPHIES" onclick="setStatusFilter('TROPHIES')">🏆 Trofei</button>
   </div>
 
   <div id="mainView">
@@ -353,6 +416,53 @@
     </div>
   </div>
 
+  <!-- VISTA TROFEI (SCHELETRO PRONTO PER PROSSIMA FASE) -->
+  <div id="trophiesView">
+    <div class="trophy-hero">
+      <h2>🏆 Hall of Fame & Trofei</h2>
+      <div class="level-chip-badge" id="userLevelTitle">GURU DEL FLIP 🌟</div>
+      <div class="progress-bar-bg" style="margin-top: 10px; height: 8px;">
+        <div class="progress-bar-fill goal-complete" id="trophyOverallProgress" style="width: 58%;"></div>
+      </div>
+      <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700; margin-top: 4px;" id="trophyProgressText">7 su 12 Trofei Sbloccati</div>
+    </div>
+
+    <div class="section-title-gold">👑 Record Personali Assoluti</div>
+    <div class="records-grid">
+      <div class="record-card gold-border">
+        <div class="record-icon">👑</div>
+        <div class="record-label">Colpo Grosso</div>
+        <div style="font-weight: 700; font-size: 0.85rem;" id="recBestProfitName">PS4 Slim</div>
+        <div class="record-val" id="recBestProfitVal">+€85.00</div>
+      </div>
+      <div class="record-card gold-border">
+        <div class="record-icon">🚀</div>
+        <div class="record-label">Miglior ROI %</div>
+        <div style="font-weight: 700; font-size: 0.85rem;" id="recBestRoiName">Libro "Edda"</div>
+        <div class="record-val" style="color: var(--warn-color);" id="recBestRoiVal">+100%</div>
+      </div>
+      <div class="record-card">
+        <div class="record-icon">⚡</div>
+        <div class="record-label">Flip Più Veloce</div>
+        <div style="font-weight: 700; font-size: 0.85rem;" id="recFastestName">Maglia DHL</div>
+        <div class="record-val" style="color: var(--accent-color);" id="recFastestVal">0 Giorni</div>
+      </div>
+      <div class="record-card">
+        <div class="record-icon">📦</div>
+        <div class="record-label">Lotto Top</div>
+        <div style="font-weight: 700; font-size: 0.85rem;" id="recBestLotName">Lotto PS4 (8p)</div>
+        <div class="record-val" id="recBestLotVal">+€140.00</div>
+      </div>
+    </div>
+
+    <div class="section-title-gold">🎖️ Bacheca Traguardi</div>
+    <div class="trophy-placeholder-box">
+      <div style="font-size: 2rem; margin-bottom: 8px;">🎯</div>
+      <div style="font-weight: 800; color: var(--text-color); margin-bottom: 4px;">Spazio Traguardi Sbloccabile</div>
+      <div style="font-size: 0.8rem;">La struttura è pronta. I 100 obiettivi evolutivi e i 10 livelli verranno inseriti qui nella prossima fase!</div>
+    </div>
+  </div>
+
   <div id="toastWrap"></div>
   
   <!-- BOTTONI FLUTTUANTI -->
@@ -363,6 +473,109 @@
   <div id="lightboxModal" class="lightbox-modal" onclick="closeLightbox()">
     <button class="lightbox-close" onclick="closeLightbox()">✕</button>
     <img id="lightboxImg" class="lightbox-img" src="" alt="Ingrandimento Foto">
+  </div>
+
+  <!-- BOTTOM SHEET: AVATAR HUB -->
+  <div id="avatarSheet" class="bottom-sheet-overlay hidden" onclick="closeAvatarSheet(event)">
+    <div class="bottom-sheet-content" onclick="event.stopPropagation()">
+      <div class="sheet-handle"></div>
+      <div class="sheet-title">Hub del Reseller</div>
+      
+      <div class="avatar-edit-box">
+        <div class="avatar-large" onclick="document.getElementById('avatarFileInput').click()" title="Cambia foto profilo">
+          <img id="menuAvatarImg" src="" style="display:none;">
+          <span id="menuAvatarPlaceholder" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 2.2rem;">👤</span>
+        </div>
+        <input type="file" id="avatarFileInput" accept="image/*" style="display:none;" onchange="handleAvatarUpload(event)">
+        <input type="text" id="userNickname" class="nick-input" value="Miki Resell" onchange="saveUserProfile()" placeholder="Il tuo Nickname">
+        <div class="level-chip-badge" onclick="closeAvatarSheet(); setStatusFilter('TROPHIES');">GURU DEL FLIP 🌟</div>
+      </div>
+
+      <!-- CARRIERA SNAPSHOT -->
+      <div class="sheet-section-title">Carriera (Snapshot)</div>
+      <div class="snapshot-grid">
+        <div class="snap-card">
+          <div class="snap-val" id="snapNetProfit">+€0.00</div>
+          <div class="snap-lbl">Profitto Netto</div>
+        </div>
+        <div class="snap-card">
+          <div class="snap-val" id="snapTrophies">7 / 12</div>
+          <div class="snap-lbl">Trofei Sbloccati</div>
+        </div>
+        <div class="snap-card">
+          <div class="snap-val" id="snapItemsCount">0</div>
+          <div class="snap-lbl">Oggetti Gestiti</div>
+        </div>
+        <div class="snap-card">
+          <div class="snap-val" id="snapAvgRoi">0%</div>
+          <div class="snap-lbl">ROI Medio</div>
+        </div>
+      </div>
+
+      <!-- CONTROLLO DATI & SISTEMA -->
+      <div class="sheet-section-title">Controllo Dati & Sistema</div>
+      <div class="menu-list-group">
+        <div class="menu-list-item" onclick="closeAvatarSheet(); openDataModal();">
+          <span>⚙️ Gestione Dati & Backup</span>
+          <span>➔</span>
+        </div>
+        <div class="menu-list-item" onclick="closeAvatarSheet(); downloadCSV();">
+          <span>📊 Esporta Registro (.CSV)</span>
+          <span>➔</span>
+        </div>
+        <div class="menu-list-item" onclick="closeAvatarSheet(); openTrashModal();">
+          <span>🗑️ Cestino</span>
+          <span>➔</span>
+        </div>
+        <div class="menu-list-item" onclick="toggleTheme()">
+          <span>🌙 / ☀️ Switch Tema</span>
+          <span>🎨</span>
+        </div>
+      </div>
+
+      <!-- UTILITY RAPIDE -->
+      <div class="sheet-section-title">Utility Rapide</div>
+      <div class="menu-list-group">
+        <div class="menu-list-item" onclick="closeAvatarSheet(); openCalculator();">
+          <span>🧮 Calcolatore Compra / Salta</span>
+          <span>⚡</span>
+        </div>
+      </div>
+
+      <button type="button" class="btn-sheet-cancel" onclick="closeAvatarSheet()">Chiudi</button>
+    </div>
+  </div>
+
+  <!-- BOTTOM SHEET: CALCOLATORE COMPRA / SALTA -->
+  <div id="calculatorSheet" class="bottom-sheet-overlay hidden" onclick="closeCalculatorSheet(event)">
+    <div class="bottom-sheet-content" onclick="event.stopPropagation()">
+      <div class="sheet-handle"></div>
+      <div class="sheet-title">🧮 Calcolatore Compra / Salta</div>
+      <div class="sheet-subtitle">Valutazione rapida dell'affare ai mercatini</div>
+      
+      <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px;">
+        <div>
+          <label style="font-size: 0.72rem; font-weight: 700; color: var(--text-muted);">PREZZO ACQUISTO (€)</label>
+          <input type="number" id="calcBuy" step="0.50" placeholder="0.00" oninput="runCalculator()" style="font-size: 1.1rem; font-weight: 700;">
+        </div>
+        <div>
+          <label style="font-size: 0.72rem; font-weight: 700; color: var(--text-muted);">PREZZO VENDITA STIMATO (€)</label>
+          <input type="number" id="calcSell" step="0.50" placeholder="0.00" oninput="runCalculator()" style="font-size: 1.1rem; font-weight: 700;">
+        </div>
+        <div>
+          <label style="font-size: 0.72rem; font-weight: 700; color: var(--text-muted);">SPESE SPEDIZIONE / COMMISSIONI (€)</label>
+          <input type="number" id="calcFee" step="0.50" placeholder="0.00" oninput="runCalculator()" style="font-size: 1.1rem; font-weight: 700;">
+        </div>
+
+        <div id="calcResultBox" style="background: var(--input-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 14px; text-align: center; margin-top: 6px; display: none;">
+          <div id="calcVerdict" style="font-size: 1.4rem; font-weight: 900; margin-bottom: 4px;">-</div>
+          <div style="font-size: 0.88rem; font-weight: 700;">Profitto Netto: <span id="calcNetVal" style="color: var(--success-color);">+€0.00</span></div>
+          <div style="font-size: 0.88rem; font-weight: 700;">ROI Resa: <span id="calcRoiVal" style="color: var(--warn-color);">0%</span></div>
+        </div>
+      </div>
+
+      <button type="button" class="btn-sheet-cancel" onclick="closeCalculatorSheet()">Chiudi</button>
+    </div>
   </div>
 
   <!-- BOTTOM SHEET SCELTA AGGIUNTA TAB -->
@@ -755,6 +968,7 @@
     const GOAL_KEY = "reselling_pro_max_goal";
     const THEME_KEY = "reselling_pro_max_theme";
     const VIEW_MODE_KEY = "reselling_pro_max_view_mode";
+    const USER_NICK_KEY = "reselling_pro_user_nick";
 
     const userRealDataset = [
       {"id":"1793884343763","t":"Felpa Napapijri","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.15,"sp":0,"s":"stock","d":"05/11/2026","soldPlatform":"","soldDate":""},
@@ -835,18 +1049,23 @@
     let imageDB = null;
     const IDB_NAME = "CantarealImageDB";
     const IDB_STORE = "photos";
+    const IDB_AVATAR_STORE = "avatars";
 
     function initIndexedDB() {
       return new Promise((resolve) => {
-        const req = indexedDB.open(IDB_NAME, 1);
+        const req = indexedDB.open(IDB_NAME, 2);
         req.onupgradeneeded = (e) => {
           const database = e.target.result;
           if (!database.objectStoreNames.contains(IDB_STORE)) {
             database.createObjectStore(IDB_STORE, { keyPath: "id" });
           }
+          if (!database.objectStoreNames.contains(IDB_AVATAR_STORE)) {
+            database.createObjectStore(IDB_AVATAR_STORE);
+          }
         };
         req.onsuccess = (e) => {
           imageDB = e.target.result;
+          loadSavedAvatar();
           resolve(imageDB);
         };
         req.onerror = () => {
@@ -888,6 +1107,67 @@
         tx.oncomplete = () => resolve();
         tx.onerror = () => resolve();
       });
+    }
+
+    /* GESTIONE AVATAR PROFILO INDEXEDDB */
+    function saveAvatarToIDB(base64Data) {
+      if (!imageDB) return Promise.resolve();
+      return new Promise((resolve) => {
+        const tx = imageDB.transaction([IDB_AVATAR_STORE], "readwrite");
+        const store = tx.objectStore(IDB_AVATAR_STORE);
+        store.put(base64Data, "userAvatar");
+        tx.oncomplete = () => resolve();
+        tx.onerror = () => resolve();
+      });
+    }
+
+    function loadSavedAvatar() {
+      if (!imageDB) return;
+      const tx = imageDB.transaction([IDB_AVATAR_STORE], "readonly");
+      const store = tx.objectStore(IDB_AVATAR_STORE);
+      const req = store.get("userAvatar");
+      req.onsuccess = () => {
+        if (req.result) applyAvatarImage(req.result);
+      };
+    }
+
+    function applyAvatarImage(src) {
+      const hImg = document.getElementById("headerAvatarImg");
+      const hPh = document.getElementById("headerAvatarPlaceholder");
+      const mImg = document.getElementById("menuAvatarImg");
+      const mPh = document.getElementById("menuAvatarPlaceholder");
+
+      if (hImg && hPh) {
+        hImg.src = src;
+        hImg.style.display = "block";
+        hPh.style.display = "none";
+      }
+      if (mImg && mPh) {
+        mImg.src = src;
+        mImg.style.display = "block";
+        mPh.style.display = "none";
+      }
+    }
+
+    function handleAvatarUpload(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+      compressPhotoFile(file).then(compressed => {
+        saveAvatarToIDB(compressed);
+        applyAvatarImage(compressed);
+        notify("Foto avatar aggiornata!");
+      }).catch(() => notify("Errore caricamento avatar."));
+    }
+
+    function saveUserProfile() {
+      const nick = document.getElementById("userNickname").value.trim() || "Miki Resell";
+      localStorage.setItem(USER_NICK_KEY, nick);
+    }
+
+    function loadUserProfile() {
+      const nick = localStorage.getItem(USER_NICK_KEY) || "Miki Resell";
+      const el = document.getElementById("userNickname");
+      if (el) el.value = nick;
     }
 
     function compressPhotoFile(file) {
@@ -1022,6 +1302,7 @@
       localStorage.setItem(EXP_KEY, JSON.stringify(expenses));
       localStorage.setItem(ADJ_KEY, JSON.stringify(adjustments));
       if (currentStatusFilter === "STATS") renderCharts();
+      else if (currentStatusFilter === "TROPHIES") computeTrophies();
       else renderApp();
     }
     function manualSave() { saveData(); notify("Dati salvati con successo!"); }
@@ -1075,16 +1356,29 @@
     function setStatusFilter(status) {
       currentStatusFilter = status;
       document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+      
+      const mainView = document.getElementById("mainView");
+      const chartsView = document.getElementById("chartsView");
+      const trophiesView = document.getElementById("trophiesView");
+
       if (status === "STATS") {
         document.getElementById("tabSTATS").classList.add("active");
-        document.getElementById("mainView").style.display = "none";
-        document.getElementById("chartsView").style.display = "block";
+        mainView.style.display = "none";
+        trophiesView.style.display = "none";
+        chartsView.style.display = "block";
         renderCharts();
+      } else if (status === "TROPHIES") {
+        document.getElementById("tabTROPHIES").classList.add("active");
+        mainView.style.display = "none";
+        chartsView.style.display = "none";
+        trophiesView.style.display = "block";
+        computeTrophies();
       } else {
         const el = document.getElementById("tab" + status);
         if (el) el.classList.add("active");
-        document.getElementById("mainView").style.display = "block";
-        document.getElementById("chartsView").style.display = "none";
+        mainView.style.display = "block";
+        chartsView.style.display = "none";
+        trophiesView.style.display = "none";
         renderApp();
       }
     }
@@ -1092,6 +1386,144 @@
     function filterThisMonth() {
       document.getElementById("filterMonth").value = "CURR_MONTH";
       setStatusFilter("sold");
+    }
+
+    /* AVATAR MENU & CALCOLATORE COMPRA/SALTA */
+    function openAvatarMenu() {
+      updateAvatarSnapshot();
+      loadUserProfile();
+      document.getElementById("avatarSheet").classList.remove("hidden");
+    }
+
+    function closeAvatarSheet(e) {
+      if (!e || e.target.id === "avatarSheet" || e.target.classList.contains("btn-sheet-cancel") || e.currentTarget.id === "avatarSheet") {
+        document.getElementById("avatarSheet").classList.add("hidden");
+      }
+    }
+
+    function updateAvatarSnapshot() {
+      const soldItems = db.filter(i => i.s === "sold");
+      const totalProfit = soldItems.reduce((acc, i) => acc + ((parseFloat(i.sp)||0) - (parseFloat(i.bp)||0)), 0) - getTotalExpensesSum();
+      
+      let totalRoiSum = 0;
+      let countWithBp = 0;
+      soldItems.forEach(i => {
+        const bp = parseFloat(i.bp) || 0;
+        const sp = parseFloat(i.sp) || 0;
+        if (bp > 0) {
+          totalRoiSum += ((sp - bp) / bp) * 100;
+          countWithBp++;
+        }
+      });
+      const avgRoi = countWithBp > 0 ? (totalRoiSum / countWithBp).toFixed(0) : "0";
+
+      document.getElementById("snapNetProfit").innerText = (totalProfit >= 0 ? "+€" : "-€") + Math.abs(totalProfit).toFixed(2);
+      document.getElementById("snapItemsCount").innerText = db.length;
+      document.getElementById("snapAvgRoi").innerText = avgRoi + "%";
+    }
+
+    function openCalculator() {
+      document.getElementById("calcBuy").value = "";
+      document.getElementById("calcSell").value = "";
+      document.getElementById("calcFee").value = "";
+      document.getElementById("calcResultBox").style.display = "none";
+      document.getElementById("calculatorSheet").classList.remove("hidden");
+    }
+
+    function closeCalculatorSheet(e) {
+      if (!e || e.target.id === "calculatorSheet" || e.target.classList.contains("btn-sheet-cancel") || e.currentTarget.id === "calculatorSheet") {
+        document.getElementById("calculatorSheet").classList.add("hidden");
+      }
+    }
+
+    function runCalculator() {
+      const buy = parseFloat(document.getElementById("calcBuy").value) || 0;
+      const sell = parseFloat(document.getElementById("calcSell").value) || 0;
+      const fee = parseFloat(document.getElementById("calcFee").value) || 0;
+
+      const box = document.getElementById("calcResultBox");
+      if (buy <= 0 || sell <= 0) {
+        box.style.display = "none";
+        return;
+      }
+
+      const net = sell - buy - fee;
+      const roi = (net / buy) * 100;
+
+      box.style.display = "block";
+      document.getElementById("calcNetVal").innerText = (net >= 0 ? "+€" : "-€") + Math.abs(net).toFixed(2);
+      document.getElementById("calcNetVal").style.color = net >= 0 ? "var(--success-color)" : "var(--danger-color)";
+      document.getElementById("calcRoiVal").innerText = roi.toFixed(0) + "%";
+
+      const verdictEl = document.getElementById("calcVerdict");
+      if (net > 0 && roi >= 30) {
+        verdictEl.innerText = "✅ ACQUISTA";
+        verdictEl.style.color = "var(--success-color)";
+      } else if (net > 0) {
+        verdictEl.innerText = "⚠️ MARGINE BASSO";
+        verdictEl.style.color = "var(--warn-color)";
+      } else {
+        verdictEl.innerText = "❌ SALTA";
+        verdictEl.style.color = "var(--danger-color)";
+      }
+    }
+
+    /* CALCOLO RECORD PERSONALI TROFEI */
+    function computeTrophies() {
+      const soldItems = db.filter(i => i.s === "sold");
+      if (!soldItems.length) return;
+
+      let maxProfitItem = null;
+      let maxProfit = -Infinity;
+
+      let maxRoiItem = null;
+      let maxRoi = -Infinity;
+
+      let fastestItem = null;
+      let minDays = Infinity;
+
+      soldItems.forEach(item => {
+        const bp = parseFloat(item.bp) || 0;
+        const sp = parseFloat(item.sp) || 0;
+        const profit = sp - bp;
+
+        if (profit > maxProfit) {
+          maxProfit = profit;
+          maxProfitItem = item;
+        }
+
+        const roi = bp > 0 ? (profit / bp) * 100 : (sp > 0 ? 9999 : 0);
+        if (roi > maxRoi) {
+          maxRoi = roi;
+          maxRoiItem = item;
+        }
+
+        const dAcq = parseDate(item.d);
+        const dSold = parseDate(item.soldDate || item.d);
+        if (dAcq && dSold) {
+          const diffDays = Math.max(0, Math.floor((dSold.getTime() - dAcq.getTime()) / 86400000));
+          if (diffDays < minDays) {
+            minDays = diffDays;
+            fastestItem = item;
+          }
+        }
+      });
+
+      if (maxProfitItem) {
+        document.getElementById("recBestProfitName").innerText = maxProfitItem.t;
+        document.getElementById("recBestProfitVal").innerText = "+€" + maxProfit.toFixed(2);
+      }
+
+      if (maxRoiItem) {
+        document.getElementById("recBestRoiName").innerText = maxRoiItem.t;
+        const roiTxt = parseFloat(maxRoiItem.bp) === 0 ? "+100% (Gratis)" : "+" + maxRoi.toFixed(0) + "%";
+        document.getElementById("recBestRoiVal").innerText = roiTxt;
+      }
+
+      if (fastestItem) {
+        document.getElementById("recFastestName").innerText = fastestItem.t;
+        document.getElementById("recFastestVal").innerText = minDays === 0 ? "0 Giorni" : minDays + " Giorni";
+      }
     }
 
     function handleFabClick() { openAddChoiceSheet(); }
@@ -1307,7 +1739,7 @@
       document.getElementById("tabEXPENSES").innerText = `💸 Spese (${expenses.length})`;
       document.getElementById("statMonthCount").innerText = `${monthSoldCount} vendit${monthSoldCount === 1 ? 'a' : 'e'}`;
 
-      if (currentStatusFilter === "STATS") return;
+      if (currentStatusFilter === "STATS" || currentStatusFilter === "TROPHIES") return;
 
       const listBtn = document.getElementById("btnListView");
       const gridBtn = document.getElementById("btnGridView");
