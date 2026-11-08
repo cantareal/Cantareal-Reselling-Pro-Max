@@ -406,10 +406,13 @@
       </p>
       <div style="display:flex;flex-direction:column;gap:10px;">
         <button class="btn-sync green" onclick="manualSave(); closeModal('dataModal');">💾 Salva Modifiche Locale</button>
-        <button class="btn-sync purple" onclick="downloadBackup(); closeModal('dataModal');">📂 Scarica Backup (.JSON)</button>
+        <button class="btn-sync purple" onclick="downloadBackup(true); closeModal('dataModal');">📂 Backup completo con foto (.JSON)</button>
+        <button class="btn-sync purple" onclick="downloadBackup(false); closeModal('dataModal');">📄 Backup leggero senza foto</button>
         <button class="btn-sync orange" onclick="downloadCSV(); closeModal('dataModal');">📊 Esporta Registro (.CSV)</button>
-        <button class="btn-sync" onclick="copyData(); closeModal('dataModal');">📋 Copia Dati Negli Appunti</button>
-        <button class="btn-sync" onclick="importData(); closeModal('dataModal');">📥 Importa Backup JSON</button>
+        <button class="btn-sync" onclick="copyData(); closeModal('dataModal');">📋 Copia dati (senza foto)</button>
+        <button class="btn-sync" onclick="document.getElementById('importFileInput').click();">📥 Importa backup da file</button>
+        <button class="btn-sync" onclick="importData(); closeModal('dataModal');">📋 Importa incollando il testo</button>
+        <input type="file" id="importFileInput" accept=".json,application/json" style="display:none" onchange="importFromFile(event)">
       </div>
     </div>
   </div>
@@ -1074,7 +1077,7 @@
         adjustments.slice().reverse().map(a => {
           const cls = a.amount >= 0 ? "adjust-pos" : "adjust-neg";
           const sign = a.amount >= 0 ? "+" : "";
-          return `<div class="adjust-item"><span>${a.date} — ${a.reason || "Senza motivo"}</span><span class="${cls}">${sign}€${a.amount.toFixed(2)}</span></div>`;
+          return `<div class="adjust-item"><span>${esc(a.date)} — ${esc(a.reason || "Senza motivo")}</span><span class="${cls}">${sign}€${a.amount.toFixed(2)}</span></div>`;
         }).join("");
     }
 
@@ -1180,7 +1183,7 @@
       // VISTA DEDICATA SPESE EXTRA
       if (currentStatusFilter === "EXPENSES") {
         const search = document.getElementById("searchInput").value.toLowerCase();
-        let filteredExp = expenses.filter(e => e.note.toLowerCase().includes(search) || e.category.toLowerCase().includes(search));
+        let filteredExp = expenses.filter(e => String(e.note || "").toLowerCase().includes(search) || String(e.category || "").toLowerCase().includes(search));
 
         if (!filteredExp.length) {
           listEl.innerHTML = '<div style="text-align:center;padding:24px;color:var(--text-muted);grid-column:span 2;">Nessuna spesa extra registrata. Tocca + per aggiungerne una!</div>';
@@ -1194,9 +1197,9 @@
           card.innerHTML = `
             <div class="item-card-placeholder" style="font-size:1.8rem;">💸</div>
             <div class="item-info">
-              <div class="item-title">${e.note}</div>
+              <div class="item-title">${esc(e.note)}</div>
               <div class="item-meta">
-                <span class="badge badge-expense">${e.category}</span> Data: ${e.date}
+                <span class="badge badge-expense">${esc(e.category)}</span> Data: ${esc(e.date)}
               </div>
             </div>
             <div style="text-align:right;">
@@ -1216,7 +1219,7 @@
       const sortBy = document.getElementById("sortBy").value;
 
       let filtered = db.filter(item => {
-        const matchSearch = item.t.toLowerCase().includes(search);
+        const matchSearch = String(item.t || "").toLowerCase().includes(search);
         const matchCat = category === "ALL" || item.c === category;
         const matchStatus = currentStatusFilter === "ALL" || item.s === currentStatusFilter;
         let matchMonth = true;
@@ -1280,12 +1283,12 @@
         card.innerHTML = `
           <div class="item-card-placeholder" id="thumb-${item.id}">${getCategoryEmoji(item.c)}</div>
           <div class="item-info">
-            <div class="item-title">${item.t}</div>
+            <div class="item-title">${esc(item.t)}</div>
             <div class="item-meta">
               <span class="badge ${isSold ? "badge-sold" : "badge-stock"}">${isSold ? "✅ Venduto" : "STOCK"}</span>
-              ${item.c} • Acq: €${bp.toFixed(2)} (${item.d})
+              ${esc(item.c)} • Acq: €${bp.toFixed(2)} (${esc(item.d)})
               ${!isSold && days > 0 ? `<br><span class="days-tag">In stock da ${days} giorni</span>` : ""}
-              ${isSold ? `<br>Vend: €${sp.toFixed(2)} (${item.soldDate||"-"}) ${roiHtml}` : ""}
+              ${isSold ? `<br>Vend: €${sp.toFixed(2)} (${esc(item.soldDate||"-")}) ${roiHtml}` : ""}
             </div>
           </div>
           <div class="arrow-icon" style="color:var(--text-muted);font-size:1.2rem;">➔</div>
@@ -1295,7 +1298,7 @@
           if (photoData) {
             const thumbEl = document.getElementById(`thumb-${item.id}`);
             if (thumbEl) {
-              thumbEl.outerHTML = `<img src="${photoData}" class="item-card-thumb" id="thumb-${item.id}" alt="${item.t}">`;
+              thumbEl.outerHTML = `<img src="${photoData}" class="item-card-thumb" id="thumb-${item.id}" alt="${esc(item.t)}">`;
             }
           }
         });
@@ -1553,41 +1556,135 @@
     function copyData() {
       const payload = JSON.stringify({ db, expenses, adjustments });
       navigator.clipboard.writeText(payload).then(() => {
-        alert("Dati copiati negli appunti con successo!");
+        alert("Dati copiati negli appunti (senza foto).");
       }).catch(() => {
         prompt("Copia questo testo per l'importazione:", payload);
       });
     }
 
+    function esc(v) {
+      return String(v == null ? "" : v).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+    }
+
+    function safeId(v, fallback) {
+      const id = String(v == null ? "" : v).replace(/[^\w-]/g, "");
+      return id || fallback;
+    }
+
+    function sanitizeItems(arr) {
+      return arr.filter(x => x && typeof x === "object").map((x, i) => ({
+        id: safeId(x.id, String(Date.now()) + "-" + i),
+        t: String(x.t || "Senza nome"),
+        c: String(x.c || "Altro"),
+        src: String(x.src || ""),
+        bp: parseFloat(x.bp) || 0,
+        sp: parseFloat(x.sp) || 0,
+        s: x.s === "sold" ? "sold" : "stock",
+        d: String(x.d || todayFormatted()),
+        soldPlatform: String(x.soldPlatform || ""),
+        soldDate: String(x.soldDate || "")
+      }));
+    }
+
+    function sanitizeExpenses(arr) {
+      return arr.filter(x => x && typeof x === "object").map((x, i) => ({
+        id: safeId(x.id, String(Date.now()) + "-e" + i),
+        amount: parseFloat(x.amount) || 0,
+        category: String(x.category || "Altro"),
+        note: String(x.note || "Spesa generica"),
+        date: String(x.date || todayFormatted())
+      }));
+    }
+
+    function sanitizeAdjustments(arr) {
+      return arr.filter(x => x && typeof x === "object" && !isNaN(parseFloat(x.amount))).map((x, i) => ({
+        id: x.id != null ? x.id : Date.now() + i,
+        amount: parseFloat(x.amount),
+        reason: String(x.reason || "Aggiustamento"),
+        date: String(x.date || todayFormatted())
+      }));
+    }
+
+    function getAllPhotosIDB() {
+      return new Promise((resolve) => {
+        if (!imageDB) return resolve({});
+        const req = imageDB.transaction([IDB_STORE], "readonly").objectStore(IDB_STORE).getAll();
+        req.onsuccess = () => {
+          const out = {};
+          (req.result || []).forEach(r => { if (r && r.id && r.data) out[r.id] = r.data; });
+          resolve(out);
+        };
+        req.onerror = () => resolve({});
+      });
+    }
+
+    function replacePhotosIDB(photos) {
+      return new Promise((resolve) => {
+        if (!imageDB) return resolve();
+        const tx = imageDB.transaction([IDB_STORE], "readwrite");
+        const store = tx.objectStore(IDB_STORE);
+        store.clear();
+        Object.keys(photos).forEach(k => {
+          const data = photos[k];
+          if (typeof data === "string" && data.indexOf("data:image/") === 0) {
+            store.put({ id: safeId(k, k), data: data });
+          }
+        });
+        tx.oncomplete = () => resolve();
+        tx.onerror = () => resolve();
+      });
+    }
+
+    async function applyImport(parsed) {
+      let newDb, newExp = expenses, newAdj = adjustments, photos = null;
+      if (Array.isArray(parsed)) {
+        newDb = sanitizeItems(parsed);
+      } else if (parsed && Array.isArray(parsed.db)) {
+        newDb = sanitizeItems(parsed.db);
+        if (Array.isArray(parsed.expenses)) newExp = sanitizeExpenses(parsed.expenses);
+        if (Array.isArray(parsed.adjustments)) newAdj = sanitizeAdjustments(parsed.adjustments);
+        if (parsed.photos && typeof parsed.photos === "object") photos = parsed.photos;
+      } else {
+        return alert("Formato non valido. Serve un backup creato da questa app.");
+      }
+      const nPhotos = photos ? Object.keys(photos).length : 0;
+      const msg = "Sostituire i dati attuali (" + db.length + " oggetti, " + expenses.length + " spese) con quelli del backup (" +
+        newDb.length + " oggetti, " + newExp.length + " spese" + (photos ? ", " + nPhotos + " foto" : "") +
+        ")?\n\nPrima viene scaricata una copia di sicurezza dei dati attuali.";
+      if (!confirm(msg)) return;
+      await downloadBackup(true);
+      db = newDb; expenses = newExp; adjustments = newAdj;
+      if (photos) await replacePhotosIDB(photos);
+      saveData();
+      alert("Dati importati. Oggetti: " + db.length + " | Spese: " + expenses.length + (photos ? " | Foto: " + nPhotos : ""));
+    }
+
     function importData() {
       const input = prompt("Incolla qui il JSON di backup:");
       if (!input || !input.trim()) return;
-
       let text = input.trim();
       if (text.charCodeAt(0) === 0xFEFF) text = text.slice(1);
+      let parsed;
+      try { parsed = JSON.parse(text); }
+      catch (e) { return alert("Errore nella lettura del JSON. Controlla di aver copiato il testo completo."); }
+      applyImport(parsed);
+    }
 
+    async function importFromFile(event) {
+      const input = event.target;
+      const file = input.files && input.files[0];
+      input.value = "";
+      if (!file) return;
+      closeModal("dataModal");
+      let parsed;
       try {
-        const parsed = JSON.parse(text);
-
-        if (Array.isArray(parsed)) {
-          db = parsed;
-        } else if (parsed && Array.isArray(parsed.db)) {
-          db = parsed.db;
-          if (Array.isArray(parsed.expenses)) expenses = parsed.expenses;
-          if (Array.isArray(parsed.adjustments)) adjustments = parsed.adjustments;
-        } else {
-          return alert("Formato non valido. Deve essere un array di oggetti o una struttura di backup valida.");
-        }
-
-        localStorage.setItem(DB_KEY, JSON.stringify(db));
-        localStorage.setItem(EXP_KEY, JSON.stringify(expenses));
-        localStorage.setItem(ADJ_KEY, JSON.stringify(adjustments));
-        renderApp();
-        alert("Dati importati con successo! Oggetti: " + db.length + " | Spese: " + expenses.length);
+        let text = await file.text();
+        if (text.charCodeAt(0) === 0xFEFF) text = text.slice(1);
+        parsed = JSON.parse(text);
       } catch (e) {
-        alert("Errore durante la lettura del JSON. Verificare di aver copiato il testo completo.");
-        console.error(e);
+        return alert("Il file non è un backup valido.");
       }
+      applyImport(parsed);
     }
 
     function downloadCSV() {
@@ -1605,12 +1702,18 @@
       a.click();
     }
 
-    function downloadBackup() {
-      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ db, expenses, adjustments }, null, 2));
+    async function downloadBackup(withPhotos) {
+      const payload = { version: 2, db, expenses, adjustments };
+      if (withPhotos) payload.photos = await getAllPhotosIDB();
+      const blob = new Blob([JSON.stringify(payload)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
-      a.href = dataStr;
-      a.download = `reselling_backup_${new Date().toISOString().slice(0,10)}.json`;
+      a.href = url;
+      a.download = `reselling_backup_${withPhotos ? "con_foto_" : ""}${new Date().toISOString().slice(0,10)}.json`;
+      document.body.appendChild(a);
       a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 10000);
     }
 
     const CELEBRATION_PHRASES = [
@@ -1649,7 +1752,7 @@
       const roi = bp > 0 ? ((profit / bp) * 100).toFixed(0) : "∞";
 
       document.getElementById("celebrateItemTitle").innerText = item.t;
-      document.getElementById("celebrateTransRow").innerHTML = `Acquisto: <span class="val-acq">€${bp.toFixed(2)}</span> ➔ Venduto a: <span class="val-vend">€${sp.toFixed(2)}</span> (${item.soldPlatform || "Di Persona"})`;
+      document.getElementById("celebrateTransRow").innerHTML = `Acquisto: <span class="val-acq">€${bp.toFixed(2)}</span> ➔ Venduto a: <span class="val-vend">€${sp.toFixed(2)}</span> (${esc(item.soldPlatform || "Di Persona")})`;
       document.getElementById("celebrateProfitVal").innerText = (profit >= 0 ? "+€" : "-€") + Math.abs(profit).toFixed(2);
       document.getElementById("celebrateRoiVal").innerText = (profit >= 0 ? "+" : "") + roi + "%";
 
@@ -1657,6 +1760,10 @@
       document.getElementById("celebrateQuoteText").innerText = `"${randomQuote}"`;
 
       document.getElementById("celebrateModal").style.display = "flex";
+    }
+
+    if (navigator.storage && navigator.storage.persist) {
+      navigator.storage.persist().catch(() => {});
     }
 
     initIndexedDB().then(() => {
