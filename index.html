@@ -37,7 +37,8 @@
     .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
     .stat-card { padding: 12px 10px; border-radius: 14px; text-align: left; position: relative; border: none; color: #fff; min-height: 72px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 12px rgba(0,0,0,0.25); }
     .stat-card .label { font-size: 0.7rem; opacity: 0.9; font-weight: 600; }
-    .stat-card .val { font-size: 1.2rem; font-weight: 800; margin-top: 4px; color: #fff !important; }
+    .stat-card .val { font-size: 1.2rem; font-weight: 800; margin-top: 2px; color: #fff !important; }
+    .stat-card .subtext { font-size: 0.68rem; opacity: 0.88; font-weight: 600; margin-top: 2px; }
     .stat-card .stat-icon { position: absolute; top: 10px; right: 10px; font-size: 1.3rem; opacity: 0.85; }
     .stat-card.stock { background: linear-gradient(135deg, #2563eb, #1d4ed8); }
     .stat-card.cash { background: linear-gradient(135deg, #0d9488, #0f766e); }
@@ -299,10 +300,13 @@
       <div class="label">Profitto Totale</div>
       <div class="val" id="statProfit">€0.00</div>
     </div>
-    <div class="stat-card month" onclick="filterThisMonth()" style="cursor:pointer;" title="Filtra questo mese">
+    <div class="stat-card month" onclick="filterThisMonth()" style="cursor:pointer;" title="Mostra vendite questo mese">
       <span class="stat-icon">📅</span>
-      <div class="label">Profitto Mese</div>
-      <div class="val" id="statMonthProfit">€0.00</div>
+      <div>
+        <div class="label">Profitto Mese</div>
+        <div class="val" id="statMonthProfit">€0.00</div>
+      </div>
+      <div class="subtext" id="statMonthCount">0 vendite</div>
     </div>
   </div>
 
@@ -950,6 +954,11 @@
       }
     }
 
+    function filterThisMonth() {
+      document.getElementById("filterMonth").value = "CURR_MONTH";
+      setStatusFilter("sold");
+    }
+
     function openCashAdjust() {
       document.getElementById("cashAmount").value = "";
       document.getElementById("cashReason").value = "";
@@ -1000,7 +1009,7 @@
 
     function renderApp() {
       let stockVal = 0, totalProfit = 0, monthProfit = 0, currentInvested = 0, currentSalesRevenue = 0;
-      let stockCount = 0, soldCount = 0;
+      let stockCount = 0, soldCount = 0, monthSoldCount = 0;
       const now = new Date();
       const currentMMYYYY = String(now.getMonth()+1).padStart(2,"0") + "/" + now.getFullYear();
 
@@ -1016,14 +1025,18 @@
           currentSalesRevenue += sp;
           soldCount++;
           const sd = item.soldDate || item.d;
-          if (sd && sd.endsWith(currentMMYYYY)) monthProfit += profit;
+          if (sd && sd.endsWith(currentMMYYYY)) {
+            monthProfit += profit;
+            monthSoldCount++;
+          }
         }
       });
 
-      // Aggiornamento contatori dinamici nei tasti filtri
+      // Aggiornamento contatori dinamici nei tasti filtri e nella card
       document.getElementById("tabALL").innerText = `Tutti (${db.length})`;
       document.getElementById("tabstock").innerText = `📦 Stock (${stockCount})`;
       document.getElementById("tabsold").innerText = `✅ Venduti (${soldCount})`;
+      document.getElementById("statMonthCount").innerText = `${monthSoldCount} vendit${monthSoldCount === 1 ? 'a' : 'e'}`;
 
       if (currentStatusFilter === "STATS") return;
 
@@ -1454,12 +1467,6 @@
       a.href = dataStr;
       a.download = `reselling_backup_${new Date().toISOString().slice(0,10)}.json`;
       a.click();
-    }
-
-    function filterThisMonth() {
-      document.getElementById("filterMonth").value = "CURR_MONTH";
-      setStatusFilter("ALL");
-      renderApp();
     }
 
     const CELEBRATION_PHRASES = [
