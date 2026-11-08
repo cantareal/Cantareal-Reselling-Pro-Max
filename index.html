@@ -10,6 +10,7 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="application-name" content="Cantareal">
   <title>Cantareal — Reselling Pro</title>
+  <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
@@ -46,19 +47,35 @@
     .stat-card.month { background: linear-gradient(135deg, #d97706, #b45309); }
     .cash-adjust-btn { position: absolute; top: 8px; right: 8px; background: rgba(255,255,255,0.2); border: none; color: #fff; font-size: 0.85rem; cursor: pointer; width: auto; padding: 3px 7px; border-radius: 6px; }
 
+    /* ANIMAZIONE OBIETTIVO >100% */
     .goal-card { background: var(--card-bg); padding: 10px; border-radius: 10px; border: 1px solid var(--border-color); margin-bottom: 12px; }
     .goal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 0.8rem; font-weight: 700; }
     .goal-input { width: 70px; padding: 2px 4px; font-size: 0.8rem; text-align: right; background: var(--input-bg); color: var(--text-color); border: 1px solid var(--border-color); border-radius: 4px; }
     .progress-bar-bg { background: var(--border-color); border-radius: 6px; height: 10px; overflow: hidden; }
     .progress-bar-fill { background: var(--success-color); height: 100%; width: 0%; transition: width 0.3s; }
+    .progress-bar-fill.goal-complete {
+      background: linear-gradient(90deg, #f59e0b, #fbbf24, #f59e0b);
+      background-size: 200% 200%;
+      animation: goldGlow 1.8s infinite alternate, goldShift 3s infinite linear;
+    }
+    @keyframes goldGlow {
+      0% { box-shadow: 0 0 4px #f59e0b; }
+      100% { box-shadow: 0 0 12px #fbbf24; }
+    }
+    @keyframes goldShift { 0% { background-position: 0% 50%; } 100% { background-position: 100% 50%; } }
 
     .status-tabs { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; margin-bottom: 10px; }
     .tab-btn { padding: 9px 2px; font-size: 0.68rem; font-weight: 700; border-radius: 8px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-color); cursor: pointer; text-align: center; }
     .tab-btn.active { background: var(--tab-active); color: var(--tab-active-text); border-color: var(--tab-active); }
 
-    .controls-card { background: var(--card-bg); padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); margin-bottom: 12px; }
+    .controls-card { background: var(--card-bg); padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); margin-bottom: 10px; }
+    
+    /* RESET RICERCA INLINE */
+    .search-wrapper { position: relative; flex-grow: 1; display: flex; align-items: center; }
+    .search-wrapper input { width: 100%; padding-right: 30px; }
+    .search-reset-btn { position: absolute; right: 8px; background: none; border: none; font-size: 0.95rem; color: var(--text-muted); cursor: pointer; display: none; width: auto; padding: 2px 4px; }
+
     .search-row-flex { display: flex; gap: 6px; align-items: center; margin-bottom: 8px; }
-    .search-row-flex input { flex-grow: 1; }
     .view-toggle-btns { display: flex; gap: 4px; flex-shrink: 0; }
     .view-btn { width: 40px; height: 40px; padding: 0; display: flex; align-items: center; justify-content: center; border-radius: 8px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-color); font-size: 1.1rem; cursor: pointer; }
     .view-btn.active { background: var(--accent-color); color: #fff; border-color: var(--accent-color); }
@@ -66,6 +83,10 @@
     input, select, button { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); font-size: 0.9rem; outline: none; background: var(--input-bg); color: var(--text-color); }
     .filter-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-top: 8px; }
     .filter-row label { font-size: 0.65rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 2px; }
+
+    /* SOMMATORIA FILTRO E MINI BANNER CATEGORIA */
+    .filter-summary-bar { font-size: 0.73rem; font-weight: 700; color: var(--text-muted); background: var(--card-bg); padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+    .cat-banner { background: rgba(59, 130, 246, 0.12); border: 1px solid var(--accent-color); border-radius: 8px; padding: 8px 12px; margin-bottom: 8px; font-size: 0.78rem; font-weight: 700; color: var(--accent-color); }
 
     .btn-sync { background: #475569; color: white; border: none; font-weight: 700; font-size: 0.85rem; padding: 12px; cursor: pointer; border-radius: 8px; text-align: center; }
     .btn-sync.green { background: var(--success-color); }
@@ -77,23 +98,35 @@
     .swipe-bg-left { background: var(--success-color); padding-left: 16px; display: flex; align-items: center; width: 50%; height: 100%; }
     .swipe-bg-right { background: var(--danger-color); padding-right: 16px; display: flex; justify-content: flex-end; align-items: center; width: 50%; height: 100%; }
 
+    /* INDICATORE STOCK 3 LIVELLI (Fresco / Stazionario / Critico) */
     .item-card { background: var(--card-bg); padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; cursor: pointer; position: relative; z-index: 1; touch-action: pan-y; }
-    .item-card.old-stock { border-left: 4px solid var(--warn-color); }
-    .item-card-thumb { width: 84px; height: 84px; border-radius: 12px; object-fit: cover; flex-shrink: 0; margin-right: 12px; border: 1px solid var(--border-color); }
+    .item-card.stock-fresh { border-left: 4px solid var(--success-color); }
+    .item-card.stock-warning { border-left: 4px solid var(--warn-color); }
+    .item-card.stock-critical { border-left: 4px solid var(--danger-color); }
+    .item-card-thumb { width: 84px; height: 84px; border-radius: 12px; object-fit: cover; flex-shrink: 0; margin-right: 12px; border: 1px solid var(--border-color); cursor: zoom-in; }
     .item-card-placeholder { width: 84px; height: 84px; border-radius: 12px; background: var(--input-bg); display: flex; align-items: center; justify-content: center; font-size: 2.2rem; flex-shrink: 0; margin-right: 12px; border: 1px solid var(--border-color); }
 
     .item-info { flex-grow: 1; padding-right: 8px; pointer-events: none; }
     .item-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 3px; }
     .item-meta { font-size: 0.72rem; color: var(--text-muted); line-height: 1.45; }
+
+    /* BADGE COLORATI PER PIATTAFORME E COSTO ZERO */
     .badge { display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 0.68rem; font-weight: 700; margin-right: 4px; }
     .badge-stock { background: var(--badge-stock-bg); color: var(--badge-stock-text); }
     .badge-sold { background: var(--badge-sold-bg); color: var(--badge-sold-text); }
     .badge-expense { background: #fee2e2; color: #991b1b; }
     [data-theme="dark"] .badge-expense { background: #7f1d1d; color: #fca5a5; }
+    .badge-vinted { background: #007782; color: #fff; }
+    .badge-wallapop { background: #13c1a3; color: #fff; }
+    .badge-subito { background: #ff4d4d; color: #fff; }
+    .badge-ebay { background: #0064d2; color: #fff; }
+    .badge-persona { background: #475569; color: #fff; }
+    .badge-free { background: #8b5cf6; color: #fff; }
+
     .roi-pos { color: var(--success-color); font-weight: 700; }
     .roi-neg { color: var(--danger-color); font-weight: 700; }
     .expense-amount { color: var(--danger-color); font-weight: 800; }
-    .days-tag { color: var(--warn-color); font-weight: 600; }
+    .days-tag { font-weight: 600; font-size: 0.68rem; display: inline-block; margin-top: 2px; }
 
     #itemList.grid-mode { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     #itemList.grid-mode .swipe-container { margin-bottom: 0; }
@@ -108,6 +141,9 @@
     .chart-container h3 { font-size: 0.9rem; margin-bottom: 10px; text-align: center; }
 
     .fab-btn { position: fixed; bottom: 20px; right: 20px; width: 56px; height: 56px; border-radius: 28px; background: var(--accent-color); color: white; border: none; font-size: 1.8rem; font-weight: 700; display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 14px rgba(0,0,0,0.4); cursor: pointer; z-index: 99; }
+    
+    /* PULSANTE TORNA IN ALTO */
+    .scroll-top-btn { position: fixed; bottom: 20px; left: 20px; width: 44px; height: 44px; border-radius: 22px; background: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); font-size: 1.2rem; font-weight: 700; display: none; justify-content: center; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.3); cursor: pointer; z-index: 98; }
 
     .modal-overlay { position: fixed; inset: 0; background: var(--modal-overlay); display: none; justify-content: center; align-items: center; z-index: 100; padding: 16px; }
     .modal-content { background: var(--card-bg); width: 100%; max-width: 500px; border-radius: 14px; padding: 16px; max-height: 90vh; overflow-y: auto; border: 1px solid var(--border-color); }
@@ -123,7 +159,7 @@
     .photo-upload-box { display: flex; align-items: center; gap: 12px; margin-top: 4px; }
     .btn-upload-photo { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 10px 14px; background: var(--input-bg); border: 1px dashed var(--accent-color); color: var(--accent-color); border-radius: 8px; font-size: 0.8rem; font-weight: 700; cursor: pointer; flex-grow: 1; }
     .photo-preview-box { position: relative; width: 84px; height: 84px; flex-shrink: 0; }
-    .photo-preview-box img { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; border: 1px solid var(--border-color); }
+    .photo-preview-box img { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; border: 1px solid var(--border-color); cursor: zoom-in; }
     .btn-remove-photo { position: absolute; top: -6px; right: -6px; background: var(--danger-color); color: #fff; border: none; border-radius: 50%; width: 22px; height: 22px; font-size: 0.8rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
 
     .bottom-sheet-overlay { position: fixed; inset: 0; background: var(--modal-overlay); z-index: 200; display: flex; align-items: flex-end; justify-content: center; }
@@ -142,13 +178,7 @@
     .btn-p-ebay { background: #0064d2; } .btn-p-persona { background: #475569; }
     .btn-sheet-cancel { background: transparent; border: none; color: var(--text-muted); font-weight: 700; cursor: pointer; padding: 10px; margin-top: 4px; }
 
-    /* BOTTONI SELEZIONE BOTTOM SHEET FAB */
-    .choice-btn {
-      display: flex; align-items: center; gap: 14px; padding: 14px;
-      border-radius: 12px; border: 1px solid var(--border-color);
-      background: var(--input-bg); color: var(--text-color);
-      cursor: pointer; text-align: left; width: 100%; transition: background 0.15s;
-    }
+    .choice-btn { display: flex; align-items: center; gap: 14px; padding: 14px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-color); cursor: pointer; text-align: left; width: 100%; transition: background 0.15s; }
     .choice-btn:active { background: var(--border-color); }
     .choice-icon { font-size: 1.8rem; flex-shrink: 0; }
     .choice-text { display: flex; flex-direction: column; gap: 2px; }
@@ -159,137 +189,29 @@
     .adjust-item { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border-color); }
     .adjust-pos { color: var(--success-color); } .adjust-neg { color: var(--danger-color); }
 
-    .celebrate-modal-content {
-      background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
-      width: 100%;
-      max-width: 400px;
-      border-radius: 24px;
-      padding: 24px 20px;
-      text-align: center;
-      border: 2px solid #fbbf24;
-      box-shadow: 0 0 30px rgba(251, 191, 36, 0.3), 0 10px 40px rgba(0,0,0,0.8);
-      position: relative;
-      animation: popIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-    @keyframes popIn {
-      0% { transform: scale(0.7); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
-    }
-    .celebrate-icon-wrapper {
-      font-size: 3.5rem;
-      margin-bottom: 6px;
-      line-height: 1;
-      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4));
-      animation: bounce 1.2s infinite alternate ease-in-out;
-    }
-    @keyframes bounce {
-      0% { transform: translateY(0) scale(1); }
-      100% { transform: translateY(-10px) scale(1.08); }
-    }
-    .celebrate-title {
-      font-size: 1.6rem;
-      font-weight: 900;
-      color: #fbbf24;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      margin-bottom: 2px;
-      text-shadow: 0 2px 10px rgba(251, 191, 36, 0.4);
-    }
-    .celebrate-item-name {
-      font-size: 1.3rem;
-      font-weight: 800;
-      margin-bottom: 8px;
-      color: #ffffff;
-    }
-    .celebrate-trans-row {
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: #94a3b8;
-      margin-bottom: 16px;
-      background: rgba(15, 23, 42, 0.6);
-      padding: 6px 14px;
-      border-radius: 20px;
-      display: inline-block;
-      border: 1px solid rgba(255,255,255,0.1);
-    }
+    .celebrate-modal-content { background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%); width: 100%; max-width: 400px; border-radius: 24px; padding: 24px 20px; text-align: center; border: 2px solid #fbbf24; box-shadow: 0 0 30px rgba(251, 191, 36, 0.3), 0 10px 40px rgba(0,0,0,0.8); position: relative; animation: popIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+    @keyframes popIn { 0% { transform: scale(0.7); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+    .celebrate-icon-wrapper { font-size: 3.5rem; margin-bottom: 6px; line-height: 1; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4)); animation: bounce 1.2s infinite alternate ease-in-out; }
+    @keyframes bounce { 0% { transform: translateY(0) scale(1); } 100% { transform: translateY(-10px) scale(1.08); } }
+    .celebrate-title { font-size: 1.6rem; font-weight: 900; color: #fbbf24; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 2px; text-shadow: 0 2px 10px rgba(251, 191, 36, 0.4); }
+    .celebrate-item-name { font-size: 1.3rem; font-weight: 800; margin-bottom: 8px; color: #ffffff; }
+    .celebrate-trans-row { font-size: 0.85rem; font-weight: 600; color: #94a3b8; margin-bottom: 16px; background: rgba(15, 23, 42, 0.6); padding: 6px 14px; border-radius: 20px; display: inline-block; border: 1px solid rgba(255,255,255,0.1); }
     .celebrate-trans-row .val-acq { color: #f87171; font-weight: 700; }
     .celebrate-trans-row .val-vend { color: #4ade80; font-weight: 700; }
-
-    .celebrate-metrics-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 16px;
-    }
-    .celebrate-box {
-      border-radius: 16px;
-      padding: 12px 10px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.25);
-    }
-    .celebrate-box.profit {
-      background: linear-gradient(135deg, rgba(22, 163, 74, 0.25), rgba(21, 128, 61, 0.15));
-      border: 2px solid #22c55e;
-    }
-    .celebrate-box.roi {
-      background: linear-gradient(135deg, rgba(217, 119, 6, 0.25), rgba(180, 83, 9, 0.15));
-      border: 2px solid #f59e0b;
-    }
-    .celebrate-box-lbl {
-      font-size: 0.68rem;
-      font-weight: 800;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      margin-bottom: 4px;
-    }
+    .celebrate-metrics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+    .celebrate-box { border-radius: 16px; padding: 12px 10px; display: flex; flex-direction: column; justify-content: center; align-items: center; box-shadow: 0 4px 14px rgba(0,0,0,0.25); }
+    .celebrate-box.profit { background: linear-gradient(135deg, rgba(22, 163, 74, 0.25), rgba(21, 128, 61, 0.15)); border: 2px solid #22c55e; }
+    .celebrate-box.roi { background: linear-gradient(135deg, rgba(217, 119, 6, 0.25), rgba(180, 83, 9, 0.15)); border: 2px solid #f59e0b; }
+    .celebrate-box-lbl { font-size: 0.68rem; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 4px; }
     .celebrate-box.profit .celebrate-box-lbl { color: #86efac; }
     .celebrate-box.roi .celebrate-box-lbl { color: #fde68a; }
-
-    .celebrate-box-val {
-      font-size: 1.45rem;
-      font-weight: 900;
-    }
+    .celebrate-box-val { font-size: 1.45rem; font-weight: 900; }
     .celebrate-box.profit .celebrate-box-val { color: #4ade80; text-shadow: 0 2px 8px rgba(34, 197, 94, 0.4); }
     .celebrate-box.roi .celebrate-box-val { color: #fbbf24; text-shadow: 0 2px 8px rgba(245, 158, 11, 0.4); }
+    .celebrate-quote-box { background: rgba(30, 41, 59, 0.8); border-left: 4px solid #3b82f6; border-radius: 12px; padding: 12px 14px; font-size: 0.88rem; font-style: italic; color: #cbd5e1; margin-bottom: 20px; line-height: 1.45; text-align: left; border-top: 1px solid rgba(255,255,255,0.05); border-right: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .btn-celebrate-close { background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); color: #ffffff; border: none; font-size: 1.05rem; font-weight: 900; padding: 14px; border-radius: 14px; cursor: pointer; box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4); width: 100%; letter-spacing: 0.5px; text-transform: uppercase; transition: transform 0.1s ease; }
+    .btn-celebrate-close:active { transform: scale(0.98); }
 
-    .celebrate-quote-box {
-      background: rgba(30, 41, 59, 0.8);
-      border-left: 4px solid #3b82f6;
-      border-radius: 12px;
-      padding: 12px 14px;
-      font-size: 0.88rem;
-      font-style: italic;
-      color: #cbd5e1;
-      margin-bottom: 20px;
-      line-height: 1.45;
-      text-align: left;
-      border-top: 1px solid rgba(255,255,255,0.05);
-      border-right: 1px solid rgba(255,255,255,0.05);
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-    }
-    .btn-celebrate-close {
-      background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
-      color: #ffffff;
-      border: none;
-      font-size: 1.05rem;
-      font-weight: 900;
-      padding: 14px;
-      border-radius: 14px;
-      cursor: pointer;
-      box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
-      width: 100%;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      transition: transform 0.1s ease;
-    }
-    .btn-celebrate-close:active {
-      transform: scale(0.98);
-    }
-
-    /* MESSAGGI A COMPARSA (TOAST) */
     #toastWrap { position: fixed; left: 0; right: 0; bottom: 90px; display: flex; flex-direction: column; align-items: center; gap: 8px; z-index: 500; pointer-events: none; padding: 0 16px; }
     .toast { background: #0f172a; color: #f8fafc; border: 1px solid rgba(255,255,255,0.15); border-radius: 12px; padding: 10px 14px; font-size: 0.85rem; display: flex; align-items: center; gap: 12px; box-shadow: 0 6px 20px rgba(0,0,0,0.4); max-width: 420px; pointer-events: auto; white-space: pre-line; animation: toastIn 0.2s ease-out; }
     .toast button { width: auto; background: none; border: none; color: #93c5fd; font-weight: 700; font-size: 0.85rem; padding: 2px 4px; cursor: pointer; }
@@ -299,6 +221,11 @@
     .trash-row .tr-title { font-weight: 700; font-size: 0.9rem; }
     .trash-row .tr-meta { font-size: 0.72rem; color: var(--text-muted); }
     .trash-row button { width: auto; padding: 6px 10px; font-size: 0.75rem; font-weight: 700; cursor: pointer; }
+
+    /* LIGHTBOX PER INGRANDIMENTO FOTO */
+    .lightbox-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 600; display: none; justify-content: center; align-items: center; padding: 16px; }
+    .lightbox-img { max-width: 95vw; max-height: 85vh; border-radius: 12px; object-fit: contain; box-shadow: 0 8px 30px rgba(0,0,0,0.5); }
+    .lightbox-close { position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,0.2); color: #fff; border: none; font-size: 1.5rem; width: 40px; height: 40px; border-radius: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
   </style>
 </head>
 <body>
@@ -356,7 +283,10 @@
   <div id="mainView">
     <div class="controls-card">
       <div class="search-row-flex">
-        <input type="text" id="searchInput" placeholder="🔍 Cerca..." oninput="renderApp()">
+        <div class="search-wrapper">
+          <input type="text" id="searchInput" placeholder="🔍 Cerca..." oninput="handleSearchInput()">
+          <button type="button" class="search-reset-btn" id="searchResetBtn" onclick="clearSearch()">✕</button>
+        </div>
         <div class="view-toggle-btns">
           <button class="view-btn active" id="btnListView" onclick="setViewMode('list')" title="Vista Lista">☰</button>
           <button class="view-btn" id="btnGridView" onclick="setViewMode('grid')" title="Vista Griglia">⊞</button>
@@ -398,6 +328,13 @@
       </div>
     </div>
 
+    <!-- MINI BANNER CATEGORIA E SOMMATORIA FILTRO -->
+    <div id="catBanner" class="cat-banner" style="display:none;"></div>
+    <div id="filterSummaryBar" class="filter-summary-bar">
+      <span id="summaryCount">Mostrando: 0 oggetti</span>
+      <span id="summaryValues">Acq: €0.00</span>
+    </div>
+
     <div id="itemList"></div>
   </div>
 
@@ -417,7 +354,16 @@
   </div>
 
   <div id="toastWrap"></div>
+  
+  <!-- BOTTONI FLUTTUANTI -->
+  <button class="scroll-top-btn" id="scrollTopBtn" onclick="scrollToTop()" title="Torna in alto">⬆</button>
   <button class="fab-btn" onclick="handleFabClick()">+</button>
+
+  <!-- LIGHTBOX PER INGRANDIMENTO FOTO -->
+  <div id="lightboxModal" class="lightbox-modal" onclick="closeLightbox()">
+    <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+    <img id="lightboxImg" class="lightbox-img" src="" alt="Ingrandimento Foto">
+  </div>
 
   <!-- BOTTOM SHEET SCELTA AGGIUNTA TAB -->
   <div id="addChoiceSheet" class="bottom-sheet-overlay hidden" onclick="closeAddChoiceSheet(event)">
@@ -533,9 +479,7 @@
         <div class="full-width">
           <label style="font-size:0.75rem;font-weight:700;display:block;margin-bottom:4px;">FOTO OGGETTO (OPZIONALE)</label>
           <div class="photo-upload-box">
-            <label for="addPhotoInput" class="btn-upload-photo">
-              📷 Scegli dalla Galleria
-            </label>
+            <label for="addPhotoInput" class="btn-upload-photo">📷 Scegli dalla Galleria</label>
             <input type="file" id="addPhotoInput" accept="image/*" onchange="handlePhotoSelect(event, 'add')" style="display:none;">
             
             <div id="addPhotoPreviewContainer" class="photo-preview-box" style="display:none;">
@@ -688,13 +632,11 @@
         <div class="full-width">
           <label style="font-size:0.75rem;font-weight:700;display:block;margin-bottom:4px;">FOTO OGGETTO (OPZIONALE)</label>
           <div class="photo-upload-box">
-            <label for="editPhotoInput" class="btn-upload-photo">
-              📷 Cambia / Aggiungi Foto
-            </label>
+            <label for="editPhotoInput" class="btn-upload-photo">📷 Cambia / Aggiungi Foto</label>
             <input type="file" id="editPhotoInput" accept="image/*" onchange="handlePhotoSelect(event, 'edit')" style="display:none;">
             
             <div id="editPhotoPreviewContainer" class="photo-preview-box" style="display:none;">
-              <img id="editPhotoPreviewImg" src="" alt="Anteprima">
+              <img id="editPhotoPreviewImg" src="" alt="Anteprima" onclick="openLightboxFromEdit()">
               <button type="button" class="btn-remove-photo" onclick="removePhoto('edit')">✕</button>
             </div>
           </div>
@@ -777,9 +719,7 @@
         </div>
       </div>
 
-      <div class="celebrate-quote-box" id="celebrateQuoteText">
-        "Un altro affare andato a segno!"
-      </div>
+      <div class="celebrate-quote-box" id="celebrateQuoteText">"Un altro affare andato a segno!"</div>
 
       <button class="btn-celebrate-close" onclick="closeModal('celebrateModal')">GRANDE! 🔥</button>
     </div>
@@ -921,11 +861,8 @@
       return new Promise((resolve) => {
         const tx = imageDB.transaction([IDB_STORE], "readwrite");
         const store = tx.objectStore(IDB_STORE);
-        if (base64Data) {
-          store.put({ id: String(id), data: base64Data });
-        } else {
-          store.delete(String(id));
-        }
+        if (base64Data) { store.put({ id: String(id), data: base64Data }); }
+        else { store.delete(String(id)); }
         tx.oncomplete = () => resolve();
         tx.onerror = () => resolve();
       });
@@ -1017,19 +954,53 @@
       }
     }
 
+    /* LIGHTBOX PER INGRANDIMENTO FOTO */
+    function openLightbox(src) {
+      if (!src) return;
+      document.getElementById("lightboxImg").src = src;
+      document.getElementById("lightboxModal").style.display = "flex";
+    }
+    function closeLightbox() {
+      document.getElementById("lightboxModal").style.display = "none";
+      document.getElementById("lightboxImg").src = "";
+    }
+    function openLightboxFromEdit() {
+      const src = document.getElementById("editPhotoPreviewImg").src;
+      if (src) openLightbox(src);
+    }
+
+    /* BARRA DI RICERCA CON RESET E SCROLL TO TOP */
+    function handleSearchInput() {
+      const val = document.getElementById("searchInput").value;
+      document.getElementById("searchResetBtn").style.display = val ? "block" : "none";
+      renderApp();
+    }
+    function clearSearch() {
+      document.getElementById("searchInput").value = "";
+      document.getElementById("searchResetBtn").style.display = "none";
+      renderApp();
+    }
+
+    window.onscroll = function() {
+      const btn = document.getElementById("scrollTopBtn");
+      if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+        btn.style.display = "flex";
+      } else {
+        btn.style.display = "none";
+      }
+    };
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
     try {
       const saved = localStorage.getItem(DB_KEY);
       db = saved ? JSON.parse(saved) : userRealDataset;
       if (!saved) localStorage.setItem(DB_KEY, JSON.stringify(db));
     } catch(e) { db = userRealDataset; }
 
-    try {
-      expenses = JSON.parse(localStorage.getItem(EXP_KEY) || "[]");
-    } catch(e) { expenses = []; }
-
-    try {
-      adjustments = JSON.parse(localStorage.getItem(ADJ_KEY) || "[]");
-    } catch(e) { adjustments = []; }
+    try { expenses = JSON.parse(localStorage.getItem(EXP_KEY) || "[]"); } catch(e) { expenses = []; }
+    try { adjustments = JSON.parse(localStorage.getItem(ADJ_KEY) || "[]"); } catch(e) { adjustments = []; }
 
     const savedTheme = localStorage.getItem(THEME_KEY);
     if (savedTheme) {
@@ -1040,16 +1011,12 @@
     const savedGoal = localStorage.getItem(GOAL_KEY);
     if (savedGoal) document.getElementById("targetGoalInput").value = savedGoal;
 
-    function openDataModal() {
-      document.getElementById("dataModal").style.display = "flex";
-    }
-
+    function openDataModal() { document.getElementById("dataModal").style.display = "flex"; }
     function setViewMode(mode) {
       viewMode = mode;
       localStorage.setItem(VIEW_MODE_KEY, mode);
       renderApp();
     }
-
     function saveData() {
       localStorage.setItem(DB_KEY, JSON.stringify(db));
       localStorage.setItem(EXP_KEY, JSON.stringify(expenses));
@@ -1057,11 +1024,7 @@
       if (currentStatusFilter === "STATS") renderCharts();
       else renderApp();
     }
-
-    function manualSave() {
-      saveData();
-      notify("Dati salvati con successo!");
-    }
+    function manualSave() { saveData(); notify("Dati salvati con successo!"); }
 
     function itToIso(s) {
       const p = String(s || "").split("/");
@@ -1071,19 +1034,16 @@
       const p = String(s || "").split("-");
       return p.length === 3 ? p[2] + "/" + p[1] + "/" + p[0] : "";
     }
-
     function todayFormatted() {
       const t = new Date();
       return String(t.getDate()).padStart(2,"0") + "/" + String(t.getMonth()+1).padStart(2,"0") + "/" + t.getFullYear();
     }
-
     function parseDate(dStr) {
       if (!dStr) return null;
       const p = dStr.split("/");
       if (p.length === 3) return new Date(+p[2], +p[1]-1, +p[0]);
       return null;
     }
-
     function daysInStock(item) {
       if (item.s !== "stock") return 0;
       const d = parseDate(item.d);
@@ -1100,14 +1060,8 @@
       return { invested, salesRevenue };
     }
     const initialBaseHash = getInitialStateHash();
-
-    function getTotalAdjustments() {
-      return adjustments.reduce((s, a) => s + (parseFloat(a.amount) || 0), 0);
-    }
-
-    function getTotalExpensesSum() {
-      return expenses.reduce((s, e) => s + (parseFloat(e.amount) || 0), 0);
-    }
+    function getTotalAdjustments() { return adjustments.reduce((s, a) => s + (parseFloat(a.amount) || 0), 0); }
+    function getTotalExpensesSum() { return expenses.reduce((s, e) => s + (parseFloat(e.amount) || 0), 0); }
 
     function toggleTheme() {
       const html = document.documentElement;
@@ -1140,37 +1094,17 @@
       setStatusFilter("sold");
     }
 
-    // GESTIONE TAP SU TASTO FAB (+)
-    function handleFabClick() {
-      openAddChoiceSheet();
-    }
-
-    function openAddChoiceSheet() {
-      document.getElementById("addChoiceSheet").classList.remove("hidden");
-    }
-
+    function handleFabClick() { openAddChoiceSheet(); }
+    function openAddChoiceSheet() { document.getElementById("addChoiceSheet").classList.remove("hidden"); }
     function closeAddChoiceSheet(e) {
       if (!e || e.target.id === "addChoiceSheet" || e.target.classList.contains("btn-sheet-cancel") || e.currentTarget.id === "addChoiceSheet") {
         document.getElementById("addChoiceSheet").classList.add("hidden");
       }
     }
+    function openAddModalFromChoice() { closeAddChoiceSheet(); openAddModal(); }
+    function openLotModalFromChoice() { closeAddChoiceSheet(); openLotModal(); }
+    function openAddExpenseModalFromChoice() { closeAddChoiceSheet(); openAddExpenseModal(); }
 
-    function openAddModalFromChoice() {
-      closeAddChoiceSheet();
-      openAddModal();
-    }
-
-    function openLotModalFromChoice() {
-      closeAddChoiceSheet();
-      openLotModal();
-    }
-
-    function openAddExpenseModalFromChoice() {
-      closeAddChoiceSheet();
-      openAddExpenseModal();
-    }
-
-    // LOGICA MODALE AGGIUNTA IN LOTTO / BLOCCO
     function openLotModal() {
       document.getElementById("lotDate").valueAsDate = new Date();
       document.getElementById("lotTotalCost").value = "";
@@ -1227,31 +1161,16 @@
       const src = document.getElementById("lotSource").value;
       const dateInput = document.getElementById("lotDate").value;
       let d = todayFormatted();
-      if (dateInput) {
-        const p = dateInput.split("-");
-        d = p[2] + "/" + p[1] + "/" + p[0];
-      }
+      if (dateInput) { const p = dateInput.split("-"); d = p[2] + "/" + p[1] + "/" + p[0]; }
 
       const newItems = [];
       const baseTimestamp = Date.now();
       inputs.forEach((input, index) => {
         const title = input.value.trim() || `Oggetto #${index + 1} (Lotto)`;
-        newItems.push({
-          id: String(baseTimestamp + index),
-          t: title,
-          c: cat,
-          src: src,
-          bp: costs[index],
-          sp: 0,
-          s: "stock",
-          d: d,
-          soldPlatform: "",
-          soldDate: ""
-        });
+        newItems.push({ id: String(baseTimestamp + index), t: title, c: cat, src: src, bp: costs[index], sp: 0, s: "stock", d: d, soldPlatform: "", soldDate: "" });
       });
 
       newItems.reverse().forEach(item => db.unshift(item));
-
       saveData();
       closeModal("lotModal");
       notify(`Registrati ${qty} oggetti per un totale di €${totalCost.toFixed(2)}.`);
@@ -1269,21 +1188,11 @@
       if (isNaN(amount) || amount <= 0) return notify("Inserisci un importo valido.");
       const dateInput = document.getElementById("expDate").value;
       let d = todayFormatted();
-      if (dateInput) {
-        const p = dateInput.split("-");
-        d = p[2] + "/" + p[1] + "/" + p[0];
-      }
+      if (dateInput) { const p = dateInput.split("-"); d = p[2] + "/" + p[1] + "/" + p[0]; }
       const category = document.getElementById("expCategory").value;
       const note = document.getElementById("expNote").value.trim() || "Spesa generica";
 
-      expenses.unshift({
-        id: String(Date.now()),
-        amount: amount,
-        category: category,
-        note: note,
-        date: d
-      });
-
+      expenses.unshift({ id: String(Date.now()), amount: amount, category: category, note: note, date: d });
       saveData();
       closeModal("addExpenseModal");
     }
@@ -1323,9 +1232,7 @@
       let raw = document.getElementById("cashAmount").value.trim().replace(",", ".");
       raw = raw.replace(/[−–—]/g, "-");
       const amount = parseFloat(raw);
-      if (isNaN(amount) || amount === 0) {
-        return notify("Inserisci un importo valido (es. 50 oppure -30).");
-      }
+      if (isNaN(amount) || amount === 0) return notify("Inserisci un importo valido (es. 50 oppure -30).");
       const reason = document.getElementById("cashReason").value.trim() || "Aggiustamento";
       adjustments.push({ amount: amount, reason: reason, date: todayFormatted(), id: Date.now() });
       localStorage.setItem(ADJ_KEY, JSON.stringify(adjustments));
@@ -1344,6 +1251,17 @@
         case "Libri": return "📚";
         default: return "📦";
       }
+    }
+
+    /* BADGE COLORATI PER PIATTAFORMA */
+    function getPlatformBadge(platName) {
+      if (!platName) return "";
+      let cls = "badge-persona";
+      if (platName.includes("Vinted")) cls = "badge-vinted";
+      else if (platName.includes("Wallapop")) cls = "badge-wallapop";
+      else if (platName.includes("Subito")) cls = "badge-subito";
+      else if (platName.includes("eBay")) cls = "badge-ebay";
+      return `<span class="badge ${cls}">${esc(platName)}</span>`;
     }
 
     function renderApp() {
@@ -1383,7 +1301,6 @@
       const netTotalProfit = totalSalesProfit - totalExpensesSum;
       const netMonthProfit = monthSalesProfit - monthExpensesSum;
 
-      // Aggiornamento contatori dinamici nei tasti filtri e nella card
       document.getElementById("tabALL").innerText = `Tutti (${db.length})`;
       document.getElementById("tabstock").innerText = `📦 Stock (${stockCount})`;
       document.getElementById("tabsold").innerText = `✅ Venduti (${soldCount})`;
@@ -1421,11 +1338,16 @@
 
       // VISTA DEDICATA SPESE EXTRA
       if (currentStatusFilter === "EXPENSES") {
+        document.getElementById("catBanner").style.display = "none";
         const search = document.getElementById("searchInput").value.toLowerCase();
         let filteredExp = expenses.filter(e => String(e.note || "").toLowerCase().includes(search) || String(e.category || "").toLowerCase().includes(search));
         const expMonthSel = document.getElementById("filterMonth").value;
         const expTarget = expMonthSel === "CURR_MONTH" ? currentMMYYYY : (expMonthSel !== "ALL" ? expMonthSel : "");
         if (expTarget) filteredExp = filteredExp.filter(e => monthKeyOf(e.date) === expTarget);
+
+        let totalExpFiltered = filteredExp.reduce((sum, e) => sum + (parseFloat(e.amount)||0), 0);
+        document.getElementById("summaryCount").innerText = `Spese registrate: ${filteredExp.length}`;
+        document.getElementById("summaryValues").innerText = `Totale: −€${totalExpFiltered.toFixed(2)}`;
 
         if (!filteredExp.length) {
           listEl.innerHTML = '<div style="text-align:center;padding:24px;color:var(--text-muted);grid-column:span 2;">Nessuna spesa extra registrata. Tocca + per aggiungerne una!</div>';
@@ -1459,6 +1381,23 @@
       const category = document.getElementById("filterCategory").value;
       const monthFilter = document.getElementById("filterMonth").value;
       const sortBy = document.getElementById("sortBy").value;
+
+      // MINI BANNER CATEGORIA
+      const catBannerEl = document.getElementById("catBanner");
+      if (category !== "ALL") {
+        let catStockCount = 0, catStockVal = 0, catSoldCount = 0, catProfit = 0;
+        db.forEach(i => {
+          if (i.c === category) {
+            const bp = parseFloat(i.bp)||0, sp = parseFloat(i.sp)||0;
+            if (i.s === "stock") { catStockCount++; catStockVal += bp; }
+            else if (i.s === "sold") { catSoldCount++; catProfit += (sp - bp); }
+          }
+        });
+        catBannerEl.style.display = "block";
+        catBannerEl.innerHTML = `${getCategoryEmoji(category)} <b>${esc(category)}</b>: ${catStockCount} in stock (€${catStockVal.toFixed(2)}) • ${catSoldCount} venduti (profitto: €${catProfit.toFixed(2)})`;
+      } else {
+        catBannerEl.style.display = "none";
+      }
 
       let filtered = db.filter(item => {
         const matchSearch = String(item.t || "").toLowerCase().includes(search);
@@ -1497,6 +1436,17 @@
         return diff !== 0 ? diff : Number(b.id) - Number(a.id);
       });
 
+      // SOMMATORIA DINAMICA FILTRO
+      let sumBp = 0, sumSp = 0;
+      filtered.forEach(i => {
+        sumBp += parseFloat(i.bp)||0;
+        if (i.s === "sold") sumSp += parseFloat(i.sp)||0;
+      });
+      document.getElementById("summaryCount").innerText = `Mostrando: ${filtered.length} oggetti`;
+      document.getElementById("summaryValues").innerText = currentStatusFilter === "sold"
+        ? `Vendite: €${sumSp.toFixed(2)} | Profitto: €${(sumSp - sumBp).toFixed(2)}`
+        : `Investito: €${sumBp.toFixed(2)}`;
+
       if (!filtered.length) {
         listEl.innerHTML = '<div style="text-align:center;padding:24px;color:var(--text-muted);grid-column:span 2;">Nessun articolo trovato.</div>';
         return;
@@ -1507,12 +1457,24 @@
         const bp = parseFloat(item.bp)||0, sp = parseFloat(item.sp)||0;
         const profit = sp - bp;
         const days = daysInStock(item);
+
+        /* INDICATORE STOCK 3 LIVELLI (Fresco / Stazionario / Critico) */
+        let stockAgeClass = "";
+        if (!isSold) {
+          if (days < 15) stockAgeClass = " stock-fresh";
+          else if (days <= 30) stockAgeClass = " stock-warning";
+          else stockAgeClass = " stock-critical";
+        }
+
+        /* GESTIONE OGGETTI COSTO ZERO (Omaggi) */
+        const bpText = bp === 0 ? '<span class="badge badge-free">🎁 Omaggio</span>' : `Acq: €${bp.toFixed(2)}`;
+
         let roiHtml = "";
         if (isSold) {
-          const roi = bp > 0 ? ((profit/bp)*100).toFixed(0) : "∞";
+          const roi = bp > 0 ? ((profit/bp)*100).toFixed(0) + "%" : "100% (Gratis)";
           const cls = profit >= 0 ? "roi-pos" : "roi-neg";
           const sgn = profit >= 0 ? "+" : "−";
-          roiHtml = `<span class="${cls}">(${sgn}€${Math.abs(profit).toFixed(2)} • ROI ${roi}%)</span>`;
+          roiHtml = `<span class="${cls}">(${sgn}€${Math.abs(profit).toFixed(2)} • ROI ${roi})</span>`;
         }
 
         const wrapper = document.createElement("div");
@@ -1522,16 +1484,20 @@
         swipeBg.innerHTML = `<div class="swipe-bg-left">🛒 Vendi</div><div class="swipe-bg-right">✏️ Modifica</div>`;
 
         const card = document.createElement("div");
-        card.className = "item-card" + (!isSold && days >= 30 ? " old-stock" : "");
+        card.className = "item-card" + stockAgeClass;
+
+        const srcBadge = getPlatformBadge(item.src || "Mercatino / Di Persona");
+        const soldPlatBadge = isSold ? getPlatformBadge(item.soldPlatform) : "";
+
         card.innerHTML = `
           <div class="item-card-placeholder" id="thumb-${item.id}">${getCategoryEmoji(item.c)}</div>
           <div class="item-info">
             <div class="item-title">${esc(item.t)}</div>
             <div class="item-meta">
               <span class="badge ${isSold ? "badge-sold" : "badge-stock"}">${isSold ? "✅ Venduto" : "STOCK"}</span>
-              ${esc(item.c)} • Acq: €${bp.toFixed(2)} (${esc(item.d)})
-              ${!isSold && days > 0 ? `<br><span class="days-tag">In stock da ${days} giorni</span>` : ""}
-              ${isSold ? `<br>Vend: €${sp.toFixed(2)} (${esc(item.soldDate||"-")}) ${roiHtml}` : ""}
+              ${srcBadge} ${esc(item.c)} • ${bpText} (${esc(item.d)})
+              ${!isSold ? `<br><span class="days-tag" style="color:${days > 30 ? 'var(--danger-color)' : (days >= 15 ? 'var(--warn-color)' : 'var(--success-color)')}">⏳ In stock da ${days} giorni</span>` : ""}
+              ${isSold ? `<br>Vend: €${sp.toFixed(2)} ${soldPlatBadge} (${esc(item.soldDate||"-")}) ${roiHtml}` : ""}
             </div>
           </div>
           <div class="arrow-icon" style="color:var(--text-muted);font-size:1.2rem;">➔</div>
@@ -1541,18 +1507,26 @@
           if (photoData) {
             const thumbEl = document.getElementById(`thumb-${item.id}`);
             if (thumbEl) {
-              thumbEl.outerHTML = `<img src="${photoData}" class="item-card-thumb" id="thumb-${item.id}" alt="${esc(item.t)}">`;
+              const imgEl = document.createElement("img");
+              imgEl.src = photoData;
+              imgEl.className = "item-card-thumb";
+              imgEl.id = `thumb-${item.id}`;
+              imgEl.alt = esc(item.t);
+              imgEl.onclick = (e) => { e.stopPropagation(); openLightbox(photoData); };
+              thumbEl.replaceWith(imgEl);
             }
           }
         });
 
-        let startX = 0, startY = 0, currentX = 0, isSwiping = false, isScrolling = false;
+        /* SWIPE CON VIBRAZIONE TATTILE */
+        let startX = 0, startY = 0, currentX = 0, isSwiping = false, isScrolling = false, hasVibrated = false;
         card.addEventListener("touchstart", e => {
           startX = e.touches[0].clientX;
           startY = e.touches[0].clientY;
           card.style.transition = "none";
           isSwiping = false;
           isScrolling = false;
+          hasVibrated = false;
         }, {passive:true});
 
         card.addEventListener("touchmove", e => {
@@ -1568,6 +1542,11 @@
           if (Math.abs(diffX) > 10) isSwiping = true;
           currentX = Math.max(-90, Math.min(90, diffX));
           card.style.transform = `translateX(${currentX}px)`;
+
+          if (Math.abs(currentX) > 50 && !hasVibrated) {
+            if (navigator.vibrate) navigator.vibrate(30);
+            hasVibrated = true;
+          }
         }, {passive:true});
 
         card.addEventListener("touchend", () => {
@@ -1591,11 +1570,21 @@
       updateGoalProgress(lastMonthProfit);
     }
 
+    /* ANIMAZIONE OBIETTIVO >100% */
     function updateGoalProgress(monthProfit) {
       const target = parseFloat(String(document.getElementById("targetGoalInput").value).replace(",", ".")) || 200;
       const pct = Math.max(0, Math.round((monthProfit / target) * 100));
-      document.getElementById("goalProgressBar").style.width = Math.min(pct, 100) + "%";
-      document.getElementById("goalPercentText").innerText = pct + "%";
+      const bar = document.getElementById("goalProgressBar");
+      const txt = document.getElementById("goalPercentText");
+      
+      bar.style.width = Math.min(pct, 100) + "%";
+      if (pct >= 100) {
+        bar.classList.add("goal-complete");
+        txt.innerHTML = `${pct}% 🏆`;
+      } else {
+        bar.classList.remove("goal-complete");
+        txt.innerText = pct + "%";
+      }
     }
 
     function renderCharts() {
@@ -1635,7 +1624,6 @@
       platformChartInst = hbar("platformChart", plat, platformChartInst);
       categoryChartInst = hbar("categoryChart", cats, categoryChartInst);
 
-      // Profitto mensile: vendite meno spese extra, come la carta "Profitto Totale"
       const monthKey = d => {
         const p = String(d || "").split("/");
         return p.length === 3 ? p[1].padStart(2, "0") + "/" + p[2] : "Sconosciuto";
@@ -1673,7 +1661,6 @@
     }
     function closeModal(id) { document.getElementById(id).style.display = "none"; }
 
-    // MESSAGGI A COMPARSA (non bloccano lo schermo, con "Annulla" opzionale)
     function notify(msg, actionLabel, actionFn) {
       const wrap = document.getElementById("toastWrap");
       if (!wrap) return;
@@ -1695,15 +1682,11 @@
       setTimeout(remove, ms);
     }
 
-    // CESTINO (30 giorni). Le foto restano nell'archivio finché l'elemento non viene eliminato per sempre.
     const TRASH_KEY = "reselling_pro_max_trash_v1";
     const TRASH_DAYS = 30;
     let trash = [];
 
-    function saveTrash() {
-      try { localStorage.setItem(TRASH_KEY, JSON.stringify(trash)); } catch (e) {}
-    }
-
+    function saveTrash() { try { localStorage.setItem(TRASH_KEY, JSON.stringify(trash)); } catch (e) {} }
     function loadTrash() {
       try { trash = JSON.parse(localStorage.getItem(TRASH_KEY) || "[]"); } catch (e) { trash = []; }
       if (!Array.isArray(trash)) trash = [];
@@ -1765,11 +1748,7 @@
       renderTrashList();
     }
 
-    function openTrashModal() {
-      renderTrashList();
-      document.getElementById("trashModal").style.display = "flex";
-    }
-
+    function openTrashModal() { renderTrashList(); document.getElementById("trashModal").style.display = "flex"; }
     function renderTrashList() {
       const box = document.getElementById("trashList");
       if (!box) return;
@@ -1792,9 +1771,7 @@
       }).join("");
     }
 
-    // SELETTORE MESE
     const MONTH_NAMES = ["Gennaio","Febbraio","Marzo","Aprile","Maggio","Giugno","Luglio","Agosto","Settembre","Ottobre","Novembre","Dicembre"];
-
     function monthKeyOf(d) {
       const p = String(d || "").split("/");
       if (p.length !== 3) return "";
@@ -1824,10 +1801,7 @@
       if (!title) return notify("Inserisci un nome.");
       const dateInput = document.getElementById("addItemDate").value;
       let d = todayFormatted();
-      if (dateInput) {
-        const p = dateInput.split("-");
-        d = p[2] + "/" + p[1] + "/" + p[0];
-      }
+      if (dateInput) { const p = dateInput.split("-"); d = p[2] + "/" + p[1] + "/" + p[0]; }
       const buyPrice = parseFloat(document.getElementById("addBuyPrice").value.replace(",", ".")) || 0;
       const newId = String(Date.now());
 
@@ -1835,14 +1809,10 @@
         id: newId, t: title,
         c: document.getElementById("addCategory").value,
         src: document.getElementById("addSource").value,
-        bp: buyPrice,
-        sp: 0, s: "stock", d, soldPlatform: "", soldDate: ""
+        bp: buyPrice, sp: 0, s: "stock", d, soldPlatform: "", soldDate: ""
       });
 
-      if (currentAddPhotoBase64) {
-        await savePhotoIDB(newId, currentAddPhotoBase64);
-      }
-
+      if (currentAddPhotoBase64) { await savePhotoIDB(newId, currentAddPhotoBase64); }
       saveData();
       closeModal("addModal");
       document.getElementById("addTitle").value = "";
@@ -1909,15 +1879,10 @@
         item.soldDate = "";
       }
 
-      if (currentEditPhotoBase64 !== null) {
-        await savePhotoIDB(id, currentEditPhotoBase64);
-      }
-
+      if (currentEditPhotoBase64 !== null) { await savePhotoIDB(id, currentEditPhotoBase64); }
       saveData();
       closeModal("editModal");
-      if (wasStock && isNowSold) {
-        showCelebrationModal(item);
-      }
+      if (wasStock && isNowSold) { showCelebrationModal(item); }
     }
 
     async function deleteCurrentItem() {
@@ -1971,7 +1936,6 @@
     function esc(v) {
       return String(v == null ? "" : v).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
     }
-
     function safeId(v, fallback) {
       const id = String(v == null ? "" : v).replace(/[^\w-]/g, "");
       return id || fallback;
@@ -2175,7 +2139,7 @@
       const bp = parseFloat(item.bp) || 0;
       const sp = parseFloat(item.sp) || 0;
       const profit = sp - bp;
-      const roi = bp > 0 ? ((profit / bp) * 100).toFixed(0) : "∞";
+      const roi = bp > 0 ? ((profit / bp) * 100).toFixed(0) : "100";
 
       document.getElementById("celebrateItemTitle").innerText = item.t;
       document.getElementById("celebrateTransRow").innerHTML = `Acquisto: <span class="val-acq">€${bp.toFixed(2)}</span> ➔ Venduto a: <span class="val-vend">€${sp.toFixed(2)}</span> (${esc(item.soldPlatform || "Di Persona")})`;
@@ -2184,12 +2148,38 @@
 
       const randomQuote = CELEBRATION_PHRASES[Math.floor(Math.random() * CELEBRATION_PHRASES.length)];
       document.getElementById("celebrateQuoteText").innerText = `"${randomQuote}"`;
-
       document.getElementById("celebrateModal").style.display = "flex";
     }
 
     if (navigator.storage && navigator.storage.persist) {
       navigator.storage.persist().catch(() => {});
+    }
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then(reg => console.log('Service Worker attivo:', reg.scope))
+          .catch(err => console.error('Errore Service Worker:', err));
+      });
+    }
+
+    let deferredPrompt = null;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      const btn = document.getElementById('installBtn');
+      if (btn) btn.style.display = 'inline-block';
+    });
+
+    async function installPWA() {
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        const btn = document.getElementById('installBtn');
+        if (btn) btn.style.display = 'none';
+      }
+      deferredPrompt = null;
     }
 
     initIndexedDB().then(() => {
