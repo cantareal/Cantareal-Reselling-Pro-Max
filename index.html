@@ -416,11 +416,11 @@
   <div id="trophiesView">
     <div class="trophy-hero">
       <h2>🏆 Hall of Fame & Trofei</h2>
-      <div class="level-chip-badge" id="userLevelTitle">GURU DEL FLIP 🌟</div>
+      <div class="level-chip-badge" id="userLevelTitle">Livello 1 · Avvio</div>
       <div class="progress-bar-bg" style="margin-top: 10px; height: 8px;">
-        <div class="progress-bar-fill goal-complete" id="trophyOverallProgress" style="width: 58%;"></div>
+        <div class="progress-bar-fill goal-complete" id="trophyOverallProgress" style="width: 0%;"></div>
       </div>
-      <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700; margin-top: 4px;" id="trophyProgressText">7 su 12 Trofei Sbloccati</div>
+      <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700; margin-top: 4px;" id="trophyProgressText">0 su 0 Trofei Sbloccati</div>
     </div>
 
     <div class="section-title-gold">👑 Record Personali Assoluti</div>
@@ -428,26 +428,27 @@
       <div class="record-card gold-border">
         <div class="record-icon">👑</div>
         <div class="record-label">Colpo Grosso</div>
-        <div style="font-weight: 700; font-size: 0.85rem;" id="recBestProfitName">PS4 Slim</div>
-        <div class="record-val" id="recBestProfitVal">+€85.00</div>
+        <div style="font-weight: 700; font-size: 0.85rem;" id="recBestProfitName">—</div>
+        <div class="record-val" id="recBestProfitVal">—</div>
       </div>
       <div class="record-card gold-border">
         <div class="record-icon">🚀</div>
         <div class="record-label">Miglior ROI %</div>
-        <div style="font-weight: 700; font-size: 0.85rem;" id="recBestRoiName">Libro "Edda"</div>
-        <div class="record-val" style="color: var(--warn-color);" id="recBestRoiVal">+100%</div>
+        <div style="font-weight: 700; font-size: 0.85rem;" id="recBestRoiName">—</div>
+        <div class="record-val" style="color: var(--warn-color);" id="recBestRoiVal">—</div>
       </div>
       <div class="record-card">
         <div class="record-icon">⚡</div>
         <div class="record-label">Flip Più Veloce</div>
-        <div style="font-weight: 700; font-size: 0.85rem;" id="recFastestName">Maglia DHL</div>
-        <div class="record-val" style="color: var(--accent-color);" id="recFastestVal">0 Giorni</div>
+        <div style="font-weight: 700; font-size: 0.85rem;" id="recFastestName">—</div>
+        <div class="record-val" style="color: var(--accent-color);" id="recFastestVal">—</div>
       </div>
       <div class="record-card">
-        <div class="record-icon">📦</div>
-        <div class="record-label">Lotto Top</div>
-        <div style="font-weight: 700; font-size: 0.85rem;" id="recBestLotName">Lotto PS4 (8p)</div>
-        <div class="record-val" id="recBestLotVal">+€140.00</div>
+        <div class="record-icon">🎁</div>
+        <div class="record-label">Miglior Affare a Costo 0</div>
+        <div style="font-weight: 700; font-size: 0.85rem;" id="recZeroName">—</div>
+        <div class="record-val" id="recZeroVal">—</div>
+        <div style="font-size: 0.68rem; color: var(--text-muted); margin-top: 4px;" id="recZeroSub"></div>
       </div>
     </div>
 
@@ -484,7 +485,7 @@
         </div>
         <input type="file" id="avatarFileInput" accept="image/*" style="display:none;" onchange="handleAvatarUpload(event)">
         <input type="text" id="userNickname" class="nick-input" value="Miki Resell" oninput="saveUserProfile()" placeholder="Il tuo Nickname">
-        <div class="level-chip-badge" onclick="closeAvatarSheet(); setStatusFilter('TROPHIES');">GURU DEL FLIP 🌟</div>
+        <div class="level-chip-badge" id="sheetLevelChip" onclick="closeAvatarSheet(); setStatusFilter('TROPHIES');">Livello 1 · Avvio</div>
       </div>
 
       <!-- CARRIERA SNAPSHOT -->
@@ -495,7 +496,7 @@
           <div class="snap-lbl">Profitto Netto</div>
         </div>
         <div class="snap-card">
-          <div class="snap-val" id="snapTrophies">7 / 12</div>
+          <div class="snap-val" id="snapTrophies">0 / 0</div>
           <div class="snap-lbl">Trofei Sbloccati</div>
         </div>
         <div class="snap-card">
@@ -1389,6 +1390,7 @@
     function openAvatarMenu() {
       updateAvatarSnapshot();
       loadUserProfile();
+      renderLevelInfo();
       document.getElementById("avatarSheet").classList.remove("hidden");
     }
 
@@ -1466,61 +1468,68 @@
     }
 
     /* CALCOLO RECORD PERSONALI TROFEI */
+    // Stato provvisorio: verrà calcolato dai traguardi quando saranno inseriti
+    const TROPHY_STATE = { level: 1, levelName: "Avvio", unlocked: 0, total: 0 };
+
+    function renderLevelInfo() {
+      const t = TROPHY_STATE;
+      const label = "Livello " + t.level + " · " + t.levelName;
+      ["userLevelTitle", "sheetLevelChip"].forEach(id => { const el = document.getElementById(id); if (el) el.innerText = label; });
+      const pct = t.total > 0 ? Math.round((t.unlocked / t.total) * 100) : 0;
+      const bar = document.getElementById("trophyOverallProgress");
+      if (bar) bar.style.width = pct + "%";
+      const txt = document.getElementById("trophyProgressText");
+      if (txt) txt.innerText = t.unlocked + " su " + t.total + " Trofei Sbloccati";
+      const snap = document.getElementById("snapTrophies");
+      if (snap) snap.innerText = t.unlocked + " / " + t.total;
+    }
+
     function computeTrophies() {
-      const soldItems = db.filter(i => i.s === "sold");
-      if (!soldItems.length) return;
+      const fmt = v => (v >= 0 ? "+€" : "−€") + Math.abs(v).toFixed(2);
+      const setTxt = (id, t) => { const el = document.getElementById(id); if (el) el.innerText = t; };
+      ["recBestProfitName","recBestProfitVal","recBestRoiName","recBestRoiVal","recFastestName","recFastestVal","recZeroName","recZeroVal"].forEach(id => setTxt(id, "—"));
+      setTxt("recZeroSub", "");
 
-      let maxProfitItem = null;
-      let maxProfit = -Infinity;
+      let bestProfit = null, bestProfitVal = -Infinity;
+      let bestRoi = null, bestRoiVal = -Infinity;
+      let fastest = null, minDays = Infinity;
+      let bestZero = null, bestZeroVal = -Infinity, zeroCount = 0, zeroTotal = 0;
 
-      let maxRoiItem = null;
-      let maxRoi = -Infinity;
-
-      let fastestItem = null;
-      let minDays = Infinity;
-
-      soldItems.forEach(item => {
+      db.filter(i => i.s === "sold").forEach(item => {
         const bp = parseFloat(item.bp) || 0;
         const sp = parseFloat(item.sp) || 0;
         const profit = sp - bp;
 
-        if (profit > maxProfit) {
-          maxProfit = profit;
-          maxProfitItem = item;
+        if (profit > bestProfitVal) { bestProfitVal = profit; bestProfit = item; }
+
+        if (bp > 0) {
+          const roi = (profit / bp) * 100;
+          if (roi > bestRoiVal) { bestRoiVal = roi; bestRoi = item; }
+        } else if (sp > 0) {
+          zeroCount++;
+          zeroTotal += sp;
+          if (sp > bestZeroVal) { bestZeroVal = sp; bestZero = item; }
         }
 
-        const roi = bp > 0 ? (profit / bp) * 100 : (sp > 0 ? 9999 : 0);
-        if (roi > maxRoi) {
-          maxRoi = roi;
-          maxRoiItem = item;
-        }
-
-        const dAcq = parseDate(item.d);
-        const dSold = parseDate(item.soldDate || item.d);
-        if (dAcq && dSold) {
-          const diffDays = Math.max(0, Math.floor((dSold.getTime() - dAcq.getTime()) / 86400000));
-          if (diffDays < minDays) {
-            minDays = diffDays;
-            fastestItem = item;
+        if (item.soldDate) {
+          const dAcq = parseDate(item.d);
+          const dSold = parseDate(item.soldDate);
+          if (dAcq && dSold) {
+            const diff = Math.floor((dSold.getTime() - dAcq.getTime()) / 86400000);
+            if (diff >= 0 && diff < minDays) { minDays = diff; fastest = item; }
           }
         }
       });
 
-      if (maxProfitItem) {
-        document.getElementById("recBestProfitName").innerText = maxProfitItem.t;
-        document.getElementById("recBestProfitVal").innerText = "+€" + maxProfit.toFixed(2);
+      if (bestProfit) { setTxt("recBestProfitName", bestProfit.t); setTxt("recBestProfitVal", fmt(bestProfitVal)); }
+      if (bestRoi) { setTxt("recBestRoiName", bestRoi.t); setTxt("recBestRoiVal", (bestRoiVal >= 0 ? "+" : "−") + Math.abs(bestRoiVal).toFixed(0) + "%"); }
+      if (fastest) { setTxt("recFastestName", fastest.t); setTxt("recFastestVal", minDays === 1 ? "1 Giorno" : minDays + " Giorni"); }
+      if (bestZero) {
+        setTxt("recZeroName", bestZero.t);
+        setTxt("recZeroVal", fmt(bestZeroVal));
+        setTxt("recZeroSub", zeroCount + (zeroCount === 1 ? " oggetto a costo 0 venduto" : " oggetti a costo 0 venduti") + " · " + fmt(zeroTotal) + " in totale");
       }
-
-      if (maxRoiItem) {
-        document.getElementById("recBestRoiName").innerText = maxRoiItem.t;
-        const roiTxt = parseFloat(maxRoiItem.bp) === 0 ? "+100% (Gratis)" : "+" + maxRoi.toFixed(0) + "%";
-        document.getElementById("recBestRoiVal").innerText = roiTxt;
-      }
-
-      if (fastestItem) {
-        document.getElementById("recFastestName").innerText = fastestItem.t;
-        document.getElementById("recFastestVal").innerText = minDays === 0 ? "0 Giorni" : minDays + " Giorni";
-      }
+      renderLevelInfo();
     }
 
     function handleFabClick() { openAddChoiceSheet(); }
@@ -2435,7 +2444,7 @@
     }
 
     async function applyImport(parsed) {
-      let newDb, newExp = expenses, newAdj = adjustments, photos = null;
+      let newDb, newExp = expenses, newAdj = adjustments, photos = null, prof = null;
       if (Array.isArray(parsed)) {
         newDb = sanitizeItems(parsed);
       } else if (parsed && Array.isArray(parsed.db)) {
@@ -2443,6 +2452,7 @@
         if (Array.isArray(parsed.expenses)) newExp = sanitizeExpenses(parsed.expenses);
         if (Array.isArray(parsed.adjustments)) newAdj = sanitizeAdjustments(parsed.adjustments);
         if (parsed.photos && typeof parsed.photos === "object") photos = parsed.photos;
+        if (parsed.profile && typeof parsed.profile === "object") prof = parsed.profile;
       } else {
         return notify("Formato non valido. Serve un backup creato da questa app.");
       }
@@ -2455,6 +2465,16 @@
       db = newDb; expenses = newExp; adjustments = newAdj;
       trash = []; saveTrash();
       if (photos) await replacePhotosIDB(photos);
+      if (prof) {
+        if (typeof prof.nick === "string" && prof.nick.trim()) {
+          localStorage.setItem(USER_NICK_KEY, prof.nick.trim().slice(0, 40));
+          loadUserProfile();
+        }
+        if (typeof prof.avatar === "string" && prof.avatar.indexOf("data:image/") === 0) {
+          await saveAvatarToIDB(prof.avatar);
+          applyAvatarImage(prof.avatar);
+        }
+      }
       saveData();
       notify("Dati importati. Oggetti: " + db.length + " | Spese: " + expenses.length + (photos ? " | Foto: " + nPhotos : ""));
     }
@@ -2521,8 +2541,24 @@
       setTimeout(() => URL.revokeObjectURL(url), 10000);
     }
 
+    function getAvatarIDB() {
+      return new Promise((resolve) => {
+        if (!imageDB) return resolve(null);
+        try {
+          const req = imageDB.transaction([IDB_AVATAR_STORE], "readonly").objectStore(IDB_AVATAR_STORE).get("userAvatar");
+          req.onsuccess = () => resolve(typeof req.result === "string" ? req.result : null);
+          req.onerror = () => resolve(null);
+        } catch (e) { resolve(null); }
+      });
+    }
+
     async function downloadBackup(withPhotos) {
-      const payload = { version: 2, db, expenses, adjustments };
+      const profile = { nick: localStorage.getItem(USER_NICK_KEY) || "" };
+      if (withPhotos) {
+        const av = await getAvatarIDB();
+        if (av) profile.avatar = av;
+      }
+      const payload = { version: 3, db, expenses, adjustments, profile };
       if (withPhotos) payload.photos = await getAllPhotosIDB();
       const blob = new Blob([JSON.stringify(payload)], { type: "application/json" });
       const url = URL.createObjectURL(blob);
