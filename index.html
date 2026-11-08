@@ -52,7 +52,7 @@
     .progress-bar-fill { background: var(--success-color); height: 100%; width: 0%; transition: width 0.3s; }
 
     .status-tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-bottom: 10px; }
-    .tab-btn { padding: 9px 4px; font-size: 0.75rem; font-weight: 700; border-radius: 8px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-color); cursor: pointer; }
+    .tab-btn { padding: 9px 4px; font-size: 0.73rem; font-weight: 700; border-radius: 8px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-color); cursor: pointer; text-align: center; }
     .tab-btn.active { background: var(--tab-active); color: var(--tab-active-text); border-color: var(--tab-active); }
 
     .controls-card { background: var(--card-bg); padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); margin-bottom: 12px; }
@@ -315,9 +315,9 @@
   </div>
 
   <div class="status-tabs">
-    <button class="tab-btn active" id="tabALL" onclick="setStatusFilter('ALL')">Tutti</button>
-    <button class="tab-btn" id="tabstock" onclick="setStatusFilter('stock')">📦 Stock</button>
-    <button class="tab-btn" id="tabsold" onclick="setStatusFilter('sold')">✅ Venduti</button>
+    <button class="tab-btn active" id="tabALL" onclick="setStatusFilter('ALL')">Tutti (0)</button>
+    <button class="tab-btn" id="tabstock" onclick="setStatusFilter('stock')">📦 Stock (0)</button>
+    <button class="tab-btn" id="tabsold" onclick="setStatusFilter('sold')">✅ Venduti (0)</button>
     <button class="tab-btn" id="tabSTATS" onclick="setStatusFilter('STATS')">📊 Grafici</button>
   </div>
 
@@ -999,6 +999,32 @@
     }
 
     function renderApp() {
+      let stockVal = 0, totalProfit = 0, monthProfit = 0, currentInvested = 0, currentSalesRevenue = 0;
+      let stockCount = 0, soldCount = 0;
+      const now = new Date();
+      const currentMMYYYY = String(now.getMonth()+1).padStart(2,"0") + "/" + now.getFullYear();
+
+      db.forEach(item => {
+        const bp = parseFloat(item.bp)||0, sp = parseFloat(item.sp)||0;
+        currentInvested += bp;
+        if (item.s === "stock") {
+          stockVal += bp;
+          stockCount++;
+        } else if (item.s === "sold") {
+          const profit = sp - bp;
+          totalProfit += profit;
+          currentSalesRevenue += sp;
+          soldCount++;
+          const sd = item.soldDate || item.d;
+          if (sd && sd.endsWith(currentMMYYYY)) monthProfit += profit;
+        }
+      });
+
+      // Aggiornamento contatori dinamici nei tasti filtri
+      document.getElementById("tabALL").innerText = `Tutti (${db.length})`;
+      document.getElementById("tabstock").innerText = `📦 Stock (${stockCount})`;
+      document.getElementById("tabsold").innerText = `✅ Venduti (${soldCount})`;
+
       if (currentStatusFilter === "STATS") return;
 
       const listBtn = document.getElementById("btnListView");
@@ -1019,8 +1045,6 @@
       const category = document.getElementById("filterCategory").value;
       const monthFilter = document.getElementById("filterMonth").value;
       const sortBy = document.getElementById("sortBy").value;
-      const now = new Date();
-      const currentMMYYYY = String(now.getMonth()+1).padStart(2,"0") + "/" + now.getFullYear();
 
       let filtered = db.filter(item => {
         const matchSearch = item.t.toLowerCase().includes(search);
@@ -1056,21 +1080,6 @@
         }
         const diff = parseD(b.d) - parseD(a.d);
         return diff !== 0 ? diff : Number(b.id) - Number(a.id);
-      });
-
-      let stockVal = 0, totalProfit = 0, monthProfit = 0, currentInvested = 0, currentSalesRevenue = 0;
-      db.forEach(item => {
-        const bp = parseFloat(item.bp)||0, sp = parseFloat(item.sp)||0;
-        currentInvested += bp;
-        if (item.s === "stock") {
-          stockVal += bp;
-        } else if (item.s === "sold") {
-          const profit = sp - bp;
-          totalProfit += profit;
-          currentSalesRevenue += sp;
-          const sd = item.soldDate || item.d;
-          if (sd && sd.endsWith(currentMMYYYY)) monthProfit += profit;
-        }
       });
 
       const deltaRev = currentSalesRevenue - initialBaseHash.salesRevenue;
