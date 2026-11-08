@@ -52,8 +52,8 @@
     .progress-bar-bg { background: var(--border-color); border-radius: 6px; height: 10px; overflow: hidden; }
     .progress-bar-fill { background: var(--success-color); height: 100%; width: 0%; transition: width 0.3s; }
 
-    .status-tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-bottom: 10px; }
-    .tab-btn { padding: 9px 4px; font-size: 0.73rem; font-weight: 700; border-radius: 8px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-color); cursor: pointer; text-align: center; }
+    .status-tabs { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; margin-bottom: 10px; }
+    .tab-btn { padding: 9px 2px; font-size: 0.68rem; font-weight: 700; border-radius: 8px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-color); cursor: pointer; text-align: center; }
     .tab-btn.active { background: var(--tab-active); color: var(--tab-active-text); border-color: var(--tab-active); }
 
     .controls-card { background: var(--card-bg); padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); margin-bottom: 12px; }
@@ -88,8 +88,11 @@
     .badge { display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 0.68rem; font-weight: 700; margin-right: 4px; }
     .badge-stock { background: var(--badge-stock-bg); color: var(--badge-stock-text); }
     .badge-sold { background: var(--badge-sold-bg); color: var(--badge-sold-text); }
+    .badge-expense { background: #fee2e2; color: #991b1b; }
+    [data-theme="dark"] .badge-expense { background: #7f1d1d; color: #fca5a5; }
     .roi-pos { color: var(--success-color); font-weight: 700; }
     .roi-neg { color: var(--danger-color); font-weight: 700; }
+    .expense-amount { color: var(--danger-color); font-weight: 800; }
     .days-tag { color: var(--warn-color); font-weight: 600; }
 
     #itemList.grid-mode { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -297,7 +300,7 @@
     </div>
     <div class="stat-card profit" onclick="setStatusFilter('sold')" style="cursor:pointer;" title="Vai a Venduti">
       <span class="stat-icon">📈</span>
-      <div class="label">Profitto Totale</div>
+      <div class="label">Profitto Netto Totale</div>
       <div class="val" id="statProfit">€0.00</div>
     </div>
     <div class="stat-card month" onclick="filterThisMonth()" style="cursor:pointer;" title="Mostra vendite questo mese">
@@ -322,13 +325,14 @@
     <button class="tab-btn active" id="tabALL" onclick="setStatusFilter('ALL')">Tutti (0)</button>
     <button class="tab-btn" id="tabstock" onclick="setStatusFilter('stock')">📦 Stock (0)</button>
     <button class="tab-btn" id="tabsold" onclick="setStatusFilter('sold')">✅ Venduti (0)</button>
+    <button class="tab-btn" id="tabEXPENSES" onclick="setStatusFilter('EXPENSES')">💸 Spese (0)</button>
     <button class="tab-btn" id="tabSTATS" onclick="setStatusFilter('STATS')">📊 Grafici</button>
   </div>
 
   <div id="mainView">
     <div class="controls-card">
       <div class="search-row-flex">
-        <input type="text" id="searchInput" placeholder="🔍 Cerca oggetto..." oninput="renderApp()">
+        <input type="text" id="searchInput" placeholder="🔍 Cerca..." oninput="renderApp()">
         <div class="view-toggle-btns">
           <button class="view-btn active" id="btnListView" onclick="setViewMode('list')" title="Vista Lista">☰</button>
           <button class="view-btn" id="btnGridView" onclick="setViewMode('grid')" title="Vista Griglia">⊞</button>
@@ -388,7 +392,7 @@
     </div>
   </div>
 
-  <button class="fab-btn" onclick="openAddModal()">+</button>
+  <button class="fab-btn" onclick="handleFabClick()">+</button>
 
   <!-- MODALE GESTIONE DATI -->
   <div class="modal-overlay" id="dataModal">
@@ -410,7 +414,7 @@
     </div>
   </div>
 
-  <!-- MODALE AGGIUNGI -->
+  <!-- MODALE AGGIUNGI OGGETTO -->
   <div class="modal-overlay" id="addModal">
     <div class="modal-content">
       <div class="modal-header">
@@ -473,7 +477,44 @@
     </div>
   </div>
 
-  <!-- MODALE MODIFICA -->
+  <!-- MODALE AGGIUNGI SPESA EXTRA -->
+  <div class="modal-overlay" id="addExpenseModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="modal-title">💸 Nuova Spesa Extra</span>
+        <button class="close-modal" onclick="closeModal('addExpenseModal')">✕</button>
+      </div>
+      <div class="form-grid">
+        <div class="full-width">
+          <label style="font-size:0.75rem;font-weight:700;">IMPORTO SPESO (€)</label>
+          <input type="number" id="expAmount" step="0.01" placeholder="es. 3.50">
+        </div>
+        <div class="full-width">
+          <label style="font-size:0.75rem;font-weight:700;">CATEGORIA SPESA</label>
+          <select id="expCategory">
+            <option value="📢 Pubblicità / Boost">📢 Pubblicità / Boost (Subito, Vinted, ecc.)</option>
+            <option value="📦 Imballaggi & Materiali">📦 Imballaggi & Materiali (Nastro, Scatole, Pluriball)</option>
+            <option value="⛽ Carburante & Trasporti">⛽ Carburante & Trasporti (Giri ai mercatini)</option>
+            <option value="🛠️ Riparazioni / Ricambi">🛠️ Riparazioni / Ricambi</option>
+            <option value="🏷️ Altro">🏷️ Altro</option>
+          </select>
+        </div>
+        <div class="full-width">
+          <label style="font-size:0.75rem;font-weight:700;">NOTE / DESCRIZIONE</label>
+          <input type="text" id="expNote" placeholder="es. Vetrina Subito 7 giorni, Rotolo pluriball 50m...">
+        </div>
+        <div class="full-width">
+          <label style="font-size:0.75rem;font-weight:700;">DATA SPESA</label>
+          <input type="date" id="expDate">
+        </div>
+        <div class="full-width">
+          <button class="btn-main" onclick="addExpense()">Registra Spesa Extra</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODALE MODIFICA OGGETTO -->
   <div class="modal-overlay" id="editModal">
     <div class="modal-content">
       <div class="modal-header">
@@ -640,6 +681,7 @@
   <script>
     const BASELINE_CASH = 200.64;
     const DB_KEY = "reselling_pro_max_db_v6";
+    const EXP_KEY = "reselling_pro_max_expenses_v1";
     const ADJ_KEY = "reselling_pro_max_adjustments";
     const GOAL_KEY = "reselling_pro_max_goal";
     const THEME_KEY = "reselling_pro_max_theme";
@@ -713,6 +755,7 @@
     ];
 
     let db = [];
+    let expenses = [];
     let lastMonthProfit = 0;
     let adjustments = [];
     let currentStatusFilter = "ALL";
@@ -852,6 +895,10 @@
     } catch(e) { db = userRealDataset; }
 
     try {
+      expenses = JSON.parse(localStorage.getItem(EXP_KEY) || "[]");
+    } catch(e) { expenses = []; }
+
+    try {
       adjustments = JSON.parse(localStorage.getItem(ADJ_KEY) || "[]");
     } catch(e) { adjustments = []; }
 
@@ -876,6 +923,7 @@
 
     function saveData() {
       localStorage.setItem(DB_KEY, JSON.stringify(db));
+      localStorage.setItem(EXP_KEY, JSON.stringify(expenses));
       localStorage.setItem(ADJ_KEY, JSON.stringify(adjustments));
       if (currentStatusFilter === "STATS") renderCharts();
       else renderApp();
@@ -928,6 +976,10 @@
       return adjustments.reduce((s, a) => s + (parseFloat(a.amount) || 0), 0);
     }
 
+    function getTotalExpensesSum() {
+      return expenses.reduce((s, e) => s + (parseFloat(e.amount) || 0), 0);
+    }
+
     function toggleTheme() {
       const html = document.documentElement;
       const next = html.getAttribute("data-theme") === "dark" ? "light" : "dark";
@@ -957,6 +1009,52 @@
     function filterThisMonth() {
       document.getElementById("filterMonth").value = "CURR_MONTH";
       setStatusFilter("sold");
+    }
+
+    function handleFabClick() {
+      if (currentStatusFilter === "EXPENSES") {
+        openAddExpenseModal();
+      } else {
+        openAddModal();
+      }
+    }
+
+    function openAddExpenseModal() {
+      document.getElementById("expDate").valueAsDate = new Date();
+      document.getElementById("expAmount").value = "";
+      document.getElementById("expNote").value = "";
+      document.getElementById("addExpenseModal").style.display = "flex";
+    }
+
+    function addExpense() {
+      const amount = parseFloat(document.getElementById("expAmount").value.replace(",", "."));
+      if (isNaN(amount) || amount <= 0) return alert("Inserisci un importo valido.");
+      const dateInput = document.getElementById("expDate").value;
+      let d = todayFormatted();
+      if (dateInput) {
+        const p = dateInput.split("-");
+        d = p[2] + "/" + p[1] + "/" + p[0];
+      }
+      const category = document.getElementById("expCategory").value;
+      const note = document.getElementById("expNote").value.trim() || "Spesa generica";
+
+      expenses.unshift({
+        id: String(Date.now()),
+        amount: amount,
+        category: category,
+        note: note,
+        date: d
+      });
+
+      saveData();
+      closeModal("addExpenseModal");
+    }
+
+    function deleteExpense(id) {
+      if (confirm("Eliminare questa spesa extra?")) {
+        expenses = expenses.filter(e => e.id !== String(id));
+        saveData();
+      }
     }
 
     function openCashAdjust() {
@@ -1008,7 +1106,7 @@
     }
 
     function renderApp() {
-      let stockVal = 0, totalProfit = 0, monthProfit = 0, currentInvested = 0, currentSalesRevenue = 0;
+      let stockVal = 0, totalSalesProfit = 0, monthSalesProfit = 0, currentInvested = 0, currentSalesRevenue = 0;
       let stockCount = 0, soldCount = 0, monthSoldCount = 0;
       const now = new Date();
       const currentMMYYYY = String(now.getMonth()+1).padStart(2,"0") + "/" + now.getFullYear();
@@ -1021,21 +1119,33 @@
           stockCount++;
         } else if (item.s === "sold") {
           const profit = sp - bp;
-          totalProfit += profit;
+          totalSalesProfit += profit;
           currentSalesRevenue += sp;
           soldCount++;
           const sd = item.soldDate || item.d;
           if (sd && sd.endsWith(currentMMYYYY)) {
-            monthProfit += profit;
+            monthSalesProfit += profit;
             monthSoldCount++;
           }
         }
       });
 
+      let totalExpensesSum = getTotalExpensesSum();
+      let monthExpensesSum = 0;
+      expenses.forEach(e => {
+        if (e.date && e.date.endsWith(currentMMYYYY)) {
+          monthExpensesSum += parseFloat(e.amount) || 0;
+        }
+      });
+
+      const netTotalProfit = totalSalesProfit - totalExpensesSum;
+      const netMonthProfit = monthSalesProfit - monthExpensesSum;
+
       // Aggiornamento contatori dinamici nei tasti filtri e nella card
       document.getElementById("tabALL").innerText = `Tutti (${db.length})`;
       document.getElementById("tabstock").innerText = `📦 Stock (${stockCount})`;
       document.getElementById("tabsold").innerText = `✅ Venduti (${soldCount})`;
+      document.getElementById("tabEXPENSES").innerText = `💸 Spese (${expenses.length})`;
       document.getElementById("statMonthCount").innerText = `${monthSoldCount} vendit${monthSoldCount === 1 ? 'a' : 'e'}`;
 
       if (currentStatusFilter === "STATS") return;
@@ -1054,6 +1164,52 @@
         listEl.classList.remove("grid-mode");
       }
 
+      const deltaRev = currentSalesRevenue - initialBaseHash.salesRevenue;
+      const deltaInvested = currentInvested - initialBaseHash.invested;
+      const cashVal = BASELINE_CASH - deltaInvested + deltaRev + getTotalAdjustments() - totalExpensesSum;
+
+      document.getElementById("statStockVal").innerText = `€${stockVal.toFixed(2)}`;
+      document.getElementById("statCash").innerText = `€${cashVal.toFixed(2)}`;
+      document.getElementById("statProfit").innerText = `€${netTotalProfit.toFixed(2)}`;
+      document.getElementById("statMonthProfit").innerText = `€${netMonthProfit.toFixed(2)}`;
+      lastMonthProfit = netMonthProfit;
+      updateGoalProgress(netMonthProfit);
+
+      listEl.innerHTML = "";
+
+      // VISTA DEDICATA SPESE EXTRA
+      if (currentStatusFilter === "EXPENSES") {
+        const search = document.getElementById("searchInput").value.toLowerCase();
+        let filteredExp = expenses.filter(e => e.note.toLowerCase().includes(search) || e.category.toLowerCase().includes(search));
+
+        if (!filteredExp.length) {
+          listEl.innerHTML = '<div style="text-align:center;padding:24px;color:var(--text-muted);grid-column:span 2;">Nessuna spesa extra registrata. Tocca + per aggiungerne una!</div>';
+          return;
+        }
+
+        filteredExp.forEach(e => {
+          const card = document.createElement("div");
+          card.className = "item-card";
+          card.style.cursor = "default";
+          card.innerHTML = `
+            <div class="item-card-placeholder" style="font-size:1.8rem;">💸</div>
+            <div class="item-info">
+              <div class="item-title">${e.note}</div>
+              <div class="item-meta">
+                <span class="badge badge-expense">${e.category}</span> Data: ${e.date}
+              </div>
+            </div>
+            <div style="text-align:right;">
+              <div class="expense-amount">−€${parseFloat(e.amount).toFixed(2)}</div>
+              <button onclick="deleteExpense('${e.id}')" style="background:none;border:none;color:var(--danger-color);font-size:0.75rem;cursor:pointer;padding:2px 0;">🗑 Elimina</button>
+            </div>
+          `;
+          listEl.appendChild(card);
+        });
+        return;
+      }
+
+      // VISTA OGGETTI INVENTARIO
       const search = document.getElementById("searchInput").value.toLowerCase();
       const category = document.getElementById("filterCategory").value;
       const monthFilter = document.getElementById("filterMonth").value;
@@ -1095,18 +1251,6 @@
         return diff !== 0 ? diff : Number(b.id) - Number(a.id);
       });
 
-      const deltaRev = currentSalesRevenue - initialBaseHash.salesRevenue;
-      const deltaInvested = currentInvested - initialBaseHash.invested;
-      const cashVal = BASELINE_CASH - deltaInvested + deltaRev + getTotalAdjustments();
-
-      document.getElementById("statStockVal").innerText = `€${stockVal.toFixed(2)}`;
-      document.getElementById("statCash").innerText = `€${cashVal.toFixed(2)}`;
-      document.getElementById("statProfit").innerText = `€${totalProfit.toFixed(2)}`;
-      document.getElementById("statMonthProfit").innerText = `€${monthProfit.toFixed(2)}`;
-      lastMonthProfit = monthProfit;
-      updateGoalProgress(monthProfit);
-
-      listEl.innerHTML = "";
       if (!filtered.length) {
         listEl.innerHTML = '<div style="text-align:center;padding:24px;color:var(--text-muted);grid-column:span 2;">Nessun articolo trovato.</div>';
         return;
@@ -1407,7 +1551,7 @@
     }
 
     function copyData() {
-      const payload = JSON.stringify({ db, adjustments });
+      const payload = JSON.stringify({ db, expenses, adjustments });
       navigator.clipboard.writeText(payload).then(() => {
         alert("Dati copiati negli appunti con successo!");
       }).catch(() => {
@@ -1429,17 +1573,17 @@
           db = parsed;
         } else if (parsed && Array.isArray(parsed.db)) {
           db = parsed.db;
-          if (Array.isArray(parsed.adjustments)) {
-            adjustments = parsed.adjustments;
-          }
+          if (Array.isArray(parsed.expenses)) expenses = parsed.expenses;
+          if (Array.isArray(parsed.adjustments)) adjustments = parsed.adjustments;
         } else {
           return alert("Formato non valido. Deve essere un array di oggetti o una struttura di backup valida.");
         }
 
         localStorage.setItem(DB_KEY, JSON.stringify(db));
+        localStorage.setItem(EXP_KEY, JSON.stringify(expenses));
         localStorage.setItem(ADJ_KEY, JSON.stringify(adjustments));
         renderApp();
-        alert("Dati importati con successo! Oggetti caricati: " + db.length);
+        alert("Dati importati con successo! Oggetti: " + db.length + " | Spese: " + expenses.length);
       } catch (e) {
         alert("Errore durante la lettura del JSON. Verificare di aver copiato il testo completo.");
         console.error(e);
@@ -1462,7 +1606,7 @@
     }
 
     function downloadBackup() {
-      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ db, adjustments }, null, 2));
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ db, expenses, adjustments }, null, 2));
       const a = document.createElement("a");
       a.href = dataStr;
       a.download = `reselling_backup_${new Date().toISOString().slice(0,10)}.json`;
