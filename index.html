@@ -33,29 +33,29 @@
     
     .header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
     .header-left { display: flex; align-items: center; gap: 12px; }
-    .avatar-btn { width: 48px; height: 48px; border-radius: 50%; border: 2px solid var(--warn-color); background: var(--card-bg); overflow: hidden; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 12px rgba(251, 191, 36, 0.4); flex-shrink: 0; position: relative; }
+    .avatar-btn { width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--warn-color); background: var(--card-bg); overflow: hidden; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 10px rgba(251, 191, 36, 0.3); flex-shrink: 0; position: relative; }
     .avatar-btn img { width: 100%; height: 100%; object-fit: cover; }
-    .avatar-btn span { font-size: 1.4rem; }
-    h1 { font-size: 1.2rem; font-weight: 800; }
+    .avatar-btn span { font-size: 1.3rem; }
+    h1 { font-size: 1.15rem; font-weight: 800; }
     .header-actions { display: flex; gap: 8px; align-items: center; }
-    .trophy-header-btn { background: var(--card-bg); border: 1.5px solid var(--warn-color); color: var(--warn-color); padding: 7px 12px; border-radius: 20px; font-size: 0.82rem; cursor: pointer; width: auto; font-weight: 800; box-shadow: 0 2px 8px rgba(251, 191, 36, 0.2); }
+    .trophy-header-btn { background: var(--card-bg); border: 1.5px solid var(--warn-color); color: var(--warn-color); padding: 6px 11px; border-radius: 20px; font-size: 0.8rem; cursor: pointer; width: auto; font-weight: 800; box-shadow: 0 2px 8px rgba(251, 191, 36, 0.2); }
 
-    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
-    .stat-card { padding: 12px 10px; border-radius: 14px; text-align: left; position: relative; border: none; color: #fff; min-height: 72px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 12px rgba(0,0,0,0.25); }
-    .stat-card .label { font-size: 0.7rem; opacity: 0.9; font-weight: 600; }
-    .stat-card .val { font-size: 1.2rem; font-weight: 800; margin-top: 2px; color: #fff !important; }
-    .stat-card .subtext { font-size: 0.68rem; opacity: 0.88; font-weight: 600; margin-top: 2px; }
-    .stat-card .stat-icon { position: absolute; top: 10px; right: 10px; font-size: 1.3rem; opacity: 0.85; }
+    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+    .stat-card { padding: 10px 10px; border-radius: 12px; text-align: left; position: relative; border: none; color: #fff; min-height: 64px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 12px rgba(0,0,0,0.25); }
+    .stat-card .label { font-size: 0.68rem; opacity: 0.9; font-weight: 600; }
+    .stat-card .val { font-size: 1.1rem; font-weight: 800; margin-top: 1px; color: #fff !important; }
+    .stat-card .subtext { font-size: 0.65rem; opacity: 0.88; font-weight: 600; margin-top: 1px; }
+    .stat-card .stat-icon { position: absolute; top: 8px; right: 8px; font-size: 1.1rem; opacity: 0.85; }
     .stat-card.stock { background: linear-gradient(135deg, #2563eb, #1d4ed8); }
     .stat-card.cash { background: linear-gradient(135deg, #0d9488, #0f766e); }
     .stat-card.profit { background: linear-gradient(135deg, #7c3aed, #6d28d9); }
     .stat-card.month { background: linear-gradient(135deg, #d97706, #b45309); }
-    .cash-adjust-btn { position: absolute; top: 8px; right: 8px; background: rgba(255,255,255,0.2); border: none; color: #fff; font-size: 0.85rem; cursor: pointer; width: auto; padding: 3px 7px; border-radius: 6px; }
+    .cash-adjust-btn { position: absolute; top: 6px; right: 6px; background: rgba(255,255,255,0.2); border: none; color: #fff; font-size: 0.8rem; cursor: pointer; width: auto; padding: 2px 6px; border-radius: 6px; }
 
-    .goal-card { background: var(--card-bg); padding: 10px; border-radius: 10px; border: 1px solid var(--border-color); margin-bottom: 12px; }
-    .goal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 0.8rem; font-weight: 700; }
-    .goal-input { width: 70px; padding: 2px 4px; font-size: 0.8rem; text-align: right; background: var(--input-bg); color: var(--text-color); border: 1px solid var(--border-color); border-radius: 4px; }
-    .progress-bar-bg { background: var(--border-color); border-radius: 6px; height: 10px; overflow: hidden; }
+    .goal-card { background: var(--card-bg); padding: 8px 10px; border-radius: 10px; border: 1px solid var(--border-color); margin-bottom: 10px; }
+    .goal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; font-size: 0.78rem; font-weight: 700; }
+    .goal-input { width: 65px; padding: 1px 4px; font-size: 0.78rem; text-align: right; background: var(--input-bg); color: var(--text-color); border: 1px solid var(--border-color); border-radius: 4px; }
+    .progress-bar-bg { background: var(--border-color); border-radius: 6px; height: 8px; overflow: hidden; }
     .progress-bar-fill { background: var(--success-color); height: 100%; width: 0%; transition: width 0.3s; }
     .progress-bar-fill.goal-complete {
       background: linear-gradient(90deg, #f59e0b, #fbbf24, #f59e0b);
@@ -69,25 +69,30 @@
     @keyframes goldShift { 0% { background-position: 0% 50%; } 100% { background-position: 100% 50%; } }
 
     .status-tabs { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; margin-bottom: 10px; }
-    .tab-btn { padding: 9px 2px; font-size: 0.68rem; font-weight: 700; border-radius: 8px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-color); cursor: pointer; text-align: center; }
+    .tab-btn { padding: 8px 2px; font-size: 0.68rem; font-weight: 700; border-radius: 8px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-color); cursor: pointer; text-align: center; }
     .tab-btn.active { background: var(--tab-active); color: var(--tab-active-text); border-color: var(--tab-active); }
 
-    .controls-card { background: var(--card-bg); padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); margin-bottom: 10px; }
+    .controls-card { background: var(--card-bg); padding: 10px; border-radius: 10px; border: 1px solid var(--border-color); margin-bottom: 10px; }
     
     .search-wrapper { position: relative; flex-grow: 1; display: flex; align-items: center; }
     .search-wrapper input { width: 100%; padding-right: 30px; }
     .search-reset-btn { position: absolute; right: 8px; background: none; border: none; font-size: 0.95rem; color: var(--text-muted); cursor: pointer; display: none; width: auto; padding: 2px 4px; }
 
-    .search-row-flex { display: flex; gap: 6px; align-items: center; margin-bottom: 8px; }
+    .search-row-flex { display: flex; gap: 6px; align-items: center; }
     .view-toggle-btns { display: flex; gap: 4px; flex-shrink: 0; }
-    .view-btn { width: 40px; height: 40px; padding: 0; display: flex; align-items: center; justify-content: center; border-radius: 8px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-color); font-size: 1.1rem; cursor: pointer; }
+    .view-btn { width: 38px; height: 38px; padding: 0; display: flex; align-items: center; justify-content: center; border-radius: 8px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-color); font-size: 1rem; cursor: pointer; }
     .view-btn.active { background: var(--accent-color); color: #fff; border-color: var(--accent-color); }
 
-    input, select, textarea, button { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); font-size: 0.9rem; outline: none; background: var(--input-bg); color: var(--text-color); }
-    textarea { resize: vertical; min-height: 60px; font-size: 0.85rem; }
-    
-    .filter-row { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 8px; }
+    .filter-toggle-btn { width: 38px; height: 38px; padding: 0; display: flex; align-items: center; justify-content: center; border-radius: 8px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-color); font-size: 1rem; cursor: pointer; flex-shrink: 0; position: relative; }
+    .filter-toggle-btn.active { background: var(--accent-color); color: #fff; border-color: var(--accent-color); }
+    .filter-badge { position: absolute; top: -4px; right: -4px; background: var(--danger-color); color: #fff; font-size: 0.62rem; font-weight: 800; border-radius: 10px; padding: 1px 5px; line-height: 1; }
+
+    .filter-accordion { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border-color); }
+    .filter-row { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
     .filter-row label { font-size: 0.65rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 2px; }
+
+    input, select, textarea, button { width: 100%; padding: 9px; border-radius: 8px; border: 1px solid var(--border-color); font-size: 0.88rem; outline: none; background: var(--input-bg); color: var(--text-color); }
+    textarea { resize: vertical; min-height: 60px; font-size: 0.85rem; }
 
     .filter-summary-bar { font-size: 0.73rem; font-weight: 700; color: var(--text-muted); background: var(--card-bg); padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
     .cat-banner { background: rgba(59, 130, 246, 0.12); border: 1px solid var(--accent-color); border-radius: 8px; padding: 8px 12px; margin-bottom: 8px; font-size: 0.78rem; font-weight: 700; color: var(--accent-color); }
@@ -341,54 +346,62 @@
           <input type="text" id="searchInput" placeholder="🔍 Cerca..." oninput="handleSearchInput()">
           <button type="button" class="search-reset-btn" id="searchResetBtn" onclick="clearSearch()">✕</button>
         </div>
+        
+        <button type="button" class="filter-toggle-btn" id="filterToggleBtn" onclick="toggleFilterAccordion()" title="Espandi/Riduci Filtri">
+          ⚙️ <span id="filterActiveBadge" class="filter-badge" style="display:none;">0</span>
+        </button>
+        
         <div class="view-toggle-btns">
           <button class="view-btn active" id="btnListView" onclick="setViewMode('list')" title="Vista Lista">☰</button>
           <button class="view-btn" id="btnGridView" onclick="setViewMode('grid')" title="Vista Griglia">⊞</button>
         </div>
       </div>
-      <div class="filter-row">
-        <div>
-          <label>CATEGORIA</label>
-          <select id="filterCategory" onchange="renderApp()">
-            <option value="ALL">Tutte</option>
-            <option value="Gaming / Videogiochi">Gaming</option>
-            <option value="Abbigliamento">Abbigliamento</option>
-            <option value="Elettronica">Elettronica</option>
-            <option value="Libri">Libri</option>
-            <option value="Altro">Altro</option>
-          </select>
-        </div>
-        <div>
-          <label>PIATTAFORMA</label>
-          <select id="filterPlatform" onchange="renderApp()">
-            <option value="ALL">Tutte</option>
-            <option value="Vinted">Vinted</option>
-            <option value="Wallapop">Wallapop</option>
-            <option value="Subito">Subito</option>
-            <option value="eBay">eBay</option>
-            <option value="Mercatino / Di Persona">Di Persona</option>
-          </select>
-        </div>
-        <div>
-          <label>PERIODO</label>
-          <select id="filterMonth" onchange="renderApp()">
-            <option value="ALL">Sempre</option>
-            <option value="CURR_MONTH">Questo Mese</option>
-          </select>
-        </div>
-        <div>
-          <label>ORDINA</label>
-          <select id="sortBy" onchange="renderApp()">
-            <option value="date-desc">Recenti (Data)</option>
-            <option value="date-asc">Vecchi (Data)</option>
-            <option value="days-desc">Giorni in stock ↓</option>
-            <option value="soldDate-desc">Data Vendita ↓</option>
-            <option value="roi-desc">ROI ↓</option>
-            <option value="margin-desc">Margine ↓</option>
-            <option value="price-desc">Prezzo ↓</option>
-            <option value="price-asc">Prezzo ↑</option>
-            <option value="alpha-asc">A → Z</option>
-          </select>
+
+      <div class="filter-accordion" id="filterAccordion" style="display: none;">
+        <div class="filter-row">
+          <div>
+            <label>CATEGORIA</label>
+            <select id="filterCategory" onchange="onFilterChange()">
+              <option value="ALL">Tutte</option>
+              <option value="Gaming / Videogiochi">Gaming</option>
+              <option value="Abbigliamento">Abbigliamento</option>
+              <option value="Elettronica">Elettronica</option>
+              <option value="Libri">Libri</option>
+              <option value="Altro">Altro</option>
+            </select>
+          </div>
+          <div>
+            <label>PIATTAFORMA</label>
+            <select id="filterPlatform" onchange="onFilterChange()">
+              <option value="ALL">Tutte</option>
+              <option value="Vinted">Vinted</option>
+              <option value="Wallapop">Wallapop</option>
+              <option value="Subito">Subito</option>
+              <option value="eBay">eBay</option>
+              <option value="Mercatino / Di Persona">Di Persona</option>
+            </select>
+          </div>
+          <div>
+            <label>PERIODO</label>
+            <select id="filterMonth" onchange="onFilterChange()">
+              <option value="ALL">Sempre</option>
+              <option value="CURR_MONTH">Questo Mese</option>
+            </select>
+          </div>
+          <div>
+            <label>ORDINA</label>
+            <select id="sortBy" onchange="onFilterChange()">
+              <option value="date-desc">Recenti (Data)</option>
+              <option value="date-asc">Vecchi (Data)</option>
+              <option value="days-desc">Giorni in stock ↓</option>
+              <option value="soldDate-desc">Data Vendita ↓</option>
+              <option value="roi-desc">ROI ↓</option>
+              <option value="margin-desc">Margine ↓</option>
+              <option value="price-desc">Prezzo ↓</option>
+              <option value="price-asc">Prezzo ↑</option>
+              <option value="alpha-asc">A → Z</option>
+            </select>
+          </div>
         </div>
       </div>
     </div>
@@ -1072,7 +1085,6 @@
     let platformChartInst = null, monthChartInst = null, categoryChartInst = null, leadTimeChartInst = null;
     let viewMode = localStorage.getItem(VIEW_MODE_KEY) || "list";
 
-    // IN-MEMORY IMAGE CACHE FOR 60FPS SCROLLING
     const photoCache = {};
 
     let imageDB = null;
@@ -1301,6 +1313,40 @@
       renderApp();
     }
 
+    function toggleFilterAccordion() {
+      const accordion = document.getElementById("filterAccordion");
+      const btn = document.getElementById("filterToggleBtn");
+      const isHidden = accordion.style.display === "none";
+      accordion.style.display = isHidden ? "block" : "none";
+      btn.classList.toggle("active", isHidden);
+    }
+
+    function onFilterChange() {
+      updateFilterBadge();
+      renderApp();
+    }
+
+    function updateFilterBadge() {
+      const cat = document.getElementById("filterCategory").value;
+      const plat = document.getElementById("filterPlatform").value;
+      const month = document.getElementById("filterMonth").value;
+      const sort = document.getElementById("sortBy").value;
+      
+      let activeCount = 0;
+      if (cat !== "ALL") activeCount++;
+      if (plat !== "ALL") activeCount++;
+      if (month !== "ALL") activeCount++;
+      if (sort !== "date-desc") activeCount++;
+      
+      const badge = document.getElementById("filterActiveBadge");
+      if (activeCount > 0) {
+        badge.innerText = activeCount;
+        badge.style.display = "block";
+      } else {
+        badge.style.display = "none";
+      }
+    }
+
     window.onscroll = function() {
       const btn = document.getElementById("scrollTopBtn");
       if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
@@ -1337,7 +1383,6 @@
       renderApp();
     }
 
-    // AUTO SAVE WITH ROLLING SAFETY SNAPSHOTS
     function createAutoSnapshot() {
       try {
         let snapshots = JSON.parse(localStorage.getItem(SNAPSHOTS_KEY) || "[]");
@@ -1441,6 +1486,7 @@
 
     function filterThisMonth() {
       document.getElementById("filterMonth").value = "CURR_MONTH";
+      updateFilterBadge();
       setStatusFilter("sold");
     }
 
@@ -1763,7 +1809,11 @@
       const cat = document.getElementById("editCategory").value;
       const notes = document.getElementById("editNotes").value.trim();
       
-      const text = `📦 ${title}\n\n• Categoria: ${cat}\n${notes ? "• Condizioni / Dettagli: " + notes + "\n" : ""}• Spedizione rapida e imballo accurato! ⚡`;
+      const text = `📦 ${title}
+
+• Categoria: ${cat}
+${notes ? "• Condizioni / Dettagli: " + notes + "
+" : ""}• Spedizione rapida e imballo accurato! ⚡`;
       
       navigator.clipboard.writeText(text).then(() => {
         notify("Bozza annuncio copiata negli appunti!");
@@ -1778,6 +1828,7 @@
       const now = new Date();
       const currentMMYYYY = String(now.getMonth()+1).padStart(2,"0") + "/" + now.getFullYear();
       populateMonthFilter(currentMMYYYY);
+      updateFilterBadge();
 
       db.forEach(item => {
         const bp = parseFloat(item.bp)||0, sp = parseFloat(item.sp)||0;
@@ -2118,7 +2169,6 @@
         });
       }
 
-      // 1. TEMPO MEDIO DI VENDITA (LEAD TIME)
       const leadTimes = {};
       const leadCounts = {};
       db.forEach(i => {
@@ -2137,7 +2187,6 @@
       });
       leadTimeChartInst = hbar("leadTimeChart", avgLeadTimes, leadTimeChartInst, true);
 
-      // 2. PROFITTO PER PIATTAFORMA E CATEGORIA
       const plat = {};
       const cats = {};
       db.forEach(i => {
@@ -2150,7 +2199,6 @@
       platformChartInst = hbar("platformChart", plat, platformChartInst);
       categoryChartInst = hbar("categoryChart", cats, categoryChartInst);
 
-      // 3. PROFITTO MENSILE
       const monthKey = d => {
         const p = String(d || "").split("/");
         return p.length === 3 ? p[1].padStart(2, "0") + "/" + p[2] : "Sconosciuto";
@@ -2564,7 +2612,9 @@
       const nPhotos = photos ? Object.keys(photos).length : 0;
       const msg = "Sostituire i dati attuali (" + db.length + " oggetti, " + expenses.length + " spese) con quelli del backup (" +
         newDb.length + " oggetti, " + newExp.length + " spese" + (photos ? ", " + nPhotos + " foto" : "") +
-        ")?\n\nPrima viene scaricata una copia di sicurezza dei dati attuali.";
+        ")?
+
+Prima viene scaricata una copia di sicurezza dei dati attuali.";
       if (!confirm(msg)) return;
       await downloadBackup(true);
       db = newDb; expenses = newExp; adjustments = newAdj;
@@ -2615,7 +2665,8 @@
     function downloadCSV() {
       const q = v => {
         let t = String(v == null ? "" : v);
-        if (/^[=+\-@\t\r]/.test(t)) t = "'" + t;
+        if (/^[=+\-@	
+]/.test(t)) t = "'" + t;
         return '"' + t.replace(/"/g, '""') + '"';
       };
       const n = v => (typeof v === "number" && !isNaN(v)) ? v.toFixed(2).replace(".", ",") : "";
@@ -2636,7 +2687,8 @@
       expenses.forEach(e => {
         lines.push([q(e.id), q(e.note), q(e.category), n(parseFloat(e.amount) || 0), q(e.date)].join(";"));
       });
-      const blob = new Blob(["\uFEFF" + lines.join("\r\n")], { type: "text/csv;charset=utf-8" });
+      const blob = new Blob(["﻿" + lines.join("
+")], { type: "text/csv;charset=utf-8" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
@@ -2755,3 +2807,4 @@
   </script>
 </body>
 </html>
+
