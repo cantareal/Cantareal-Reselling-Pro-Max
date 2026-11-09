@@ -31,7 +31,6 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     body { background: var(--bg-color); color: var(--text-color); padding: 12px; padding-bottom: 90px; max-width: 600px; margin: 0 auto; }
     
-    /* HEADER E AVATAR HUB (IMMAGINE INGRANDITA A 48px) */
     .header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
     .header-left { display: flex; align-items: center; gap: 12px; }
     .avatar-btn { width: 48px; height: 48px; border-radius: 50%; border: 2px solid var(--warn-color); background: var(--card-bg); overflow: hidden; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 12px rgba(251, 191, 36, 0.4); flex-shrink: 0; position: relative; }
@@ -53,7 +52,6 @@
     .stat-card.month { background: linear-gradient(135deg, #d97706, #b45309); }
     .cash-adjust-btn { position: absolute; top: 8px; right: 8px; background: rgba(255,255,255,0.2); border: none; color: #fff; font-size: 0.85rem; cursor: pointer; width: auto; padding: 3px 7px; border-radius: 6px; }
 
-    /* ANIMAZIONE OBIETTIVO >100% */
     .goal-card { background: var(--card-bg); padding: 10px; border-radius: 10px; border: 1px solid var(--border-color); margin-bottom: 12px; }
     .goal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 0.8rem; font-weight: 700; }
     .goal-input { width: 70px; padding: 2px 4px; font-size: 0.8rem; text-align: right; background: var(--input-bg); color: var(--text-color); border: 1px solid var(--border-color); border-radius: 4px; }
@@ -70,14 +68,12 @@
     }
     @keyframes goldShift { 0% { background-position: 0% 50%; } 100% { background-position: 100% 50%; } }
 
-    /* BARRA TAB DI STATO PERFETTA A 5 SEZIONI */
     .status-tabs { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; margin-bottom: 10px; }
     .tab-btn { padding: 9px 2px; font-size: 0.68rem; font-weight: 700; border-radius: 8px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-color); cursor: pointer; text-align: center; }
     .tab-btn.active { background: var(--tab-active); color: var(--tab-active-text); border-color: var(--tab-active); }
 
     .controls-card { background: var(--card-bg); padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); margin-bottom: 10px; }
     
-    /* RESET RICERCA INLINE */
     .search-wrapper { position: relative; flex-grow: 1; display: flex; align-items: center; }
     .search-wrapper input { width: 100%; padding-right: 30px; }
     .search-reset-btn { position: absolute; right: 8px; background: none; border: none; font-size: 0.95rem; color: var(--text-muted); cursor: pointer; display: none; width: auto; padding: 2px 4px; }
@@ -87,11 +83,12 @@
     .view-btn { width: 40px; height: 40px; padding: 0; display: flex; align-items: center; justify-content: center; border-radius: 8px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-color); font-size: 1.1rem; cursor: pointer; }
     .view-btn.active { background: var(--accent-color); color: #fff; border-color: var(--accent-color); }
 
-    input, select, button { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); font-size: 0.9rem; outline: none; background: var(--input-bg); color: var(--text-color); }
-    .filter-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-top: 8px; }
+    input, select, textarea, button { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); font-size: 0.9rem; outline: none; background: var(--input-bg); color: var(--text-color); }
+    textarea { resize: vertical; min-height: 60px; font-size: 0.85rem; }
+    
+    .filter-row { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 8px; }
     .filter-row label { font-size: 0.65rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 2px; }
 
-    /* SOMMATORIA FILTRO E MINI BANNER CATEGORIA */
     .filter-summary-bar { font-size: 0.73rem; font-weight: 700; color: var(--text-muted); background: var(--card-bg); padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
     .cat-banner { background: rgba(59, 130, 246, 0.12); border: 1px solid var(--accent-color); border-radius: 8px; padding: 8px 12px; margin-bottom: 8px; font-size: 0.78rem; font-weight: 700; color: var(--accent-color); }
 
@@ -105,7 +102,6 @@
     .swipe-bg-left { background: var(--success-color); padding-left: 16px; display: flex; align-items: center; width: 50%; height: 100%; }
     .swipe-bg-right { background: var(--danger-color); padding-right: 16px; display: flex; justify-content: flex-end; align-items: center; width: 50%; height: 100%; }
 
-    /* INDICATORE STOCK 3 LIVELLI (Fresco / Stazionario / Critico) */
     .item-card { background: var(--card-bg); padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; cursor: pointer; position: relative; z-index: 1; touch-action: pan-y; }
     .item-card.stock-fresh { border-left: 4px solid var(--success-color); }
     .item-card.stock-warning { border-left: 4px solid var(--warn-color); }
@@ -115,9 +111,9 @@
 
     .item-info { flex-grow: 1; padding-right: 8px; pointer-events: none; }
     .item-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 3px; }
+    .item-notes { font-size: 0.7rem; font-style: italic; color: var(--text-muted); margin-top: 2px; }
     .item-meta { font-size: 0.72rem; color: var(--text-muted); line-height: 1.45; }
 
-    /* BADGE COLORATI PER PIATTAFORME E COSTO ZERO */
     .badge { display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 0.68rem; font-weight: 700; margin-right: 4px; }
     .badge-stock { background: var(--badge-stock-bg); color: var(--badge-stock-text); }
     .badge-sold { background: var(--badge-sold-bg); color: var(--badge-sold-text); }
@@ -147,7 +143,6 @@
     .chart-container { background: var(--card-bg); padding: 14px; border-radius: 10px; border: 1px solid var(--border-color); margin-bottom: 12px; position: relative; height: 280px; width: 100%; }
     .chart-container h3 { font-size: 0.9rem; margin-bottom: 10px; text-align: center; }
 
-    /* VISTA TROFEI & BACHECA (SCHELETRO) */
     #trophiesView { display: none; }
     .trophy-hero {
       background: linear-gradient(135deg, rgba(251, 191, 36, 0.15) 0%, var(--card-bg) 100%);
@@ -179,11 +174,9 @@
       margin-top: 10px;
     }
 
-    /* BOTTONI FLUTTUANTI */
     .fab-btn { position: fixed; bottom: 20px; right: 20px; width: 56px; height: 56px; border-radius: 28px; background: var(--accent-color); color: white; border: none; font-size: 1.8rem; font-weight: 700; display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 14px rgba(0,0,0,0.4); cursor: pointer; z-index: 99; }
     .scroll-top-btn { position: fixed; bottom: 20px; left: 20px; width: 44px; height: 44px; border-radius: 22px; background: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); font-size: 1.2rem; font-weight: 700; display: none; justify-content: center; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.3); cursor: pointer; z-index: 98; }
 
-    /* MODALI E BOTTOM SHEETS */
     .modal-overlay { position: fixed; inset: 0; background: var(--modal-overlay); display: none; justify-content: center; align-items: center; z-index: 100; padding: 16px; }
     .modal-content { background: var(--card-bg); width: 100%; max-width: 500px; border-radius: 14px; padding: 16px; max-height: 90vh; overflow-y: auto; border: 1px solid var(--border-color); }
     .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
@@ -192,6 +185,7 @@
     .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     .full-width { grid-column: span 2; }
     .btn-main { background: var(--accent-color); color: white; border: none; font-weight: 700; cursor: pointer; margin-top: 8px; }
+    .btn-copy { background: #8b5cf6; color: white; border: none; font-weight: 700; cursor: pointer; margin-top: 6px; }
     .btn-sell-modal { background: var(--success-color); color: white; border: none; font-weight: 700; cursor: pointer; margin-top: 8px; }
     .btn-danger { background: var(--danger-color); color: white; border: none; font-weight: 700; cursor: pointer; margin-top: 8px; }
 
@@ -207,9 +201,12 @@
     .sheet-handle { width: 36px; height: 4px; background: var(--border-color); border-radius: 2px; margin: 0 auto 12px; }
     .sheet-title { font-size: 1.1rem; font-weight: 700; text-align: center; }
     .sheet-subtitle { font-size: 0.8rem; color: var(--text-muted); text-align: center; margin-bottom: 16px; }
-    .sheet-price-group { margin-bottom: 16px; }
-    .sheet-price-group label { display: block; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); margin-bottom: 4px; }
+    
+    .sheet-price-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 8px; margin-bottom: 16px; }
+    .sheet-price-group label { display: block; font-size: 0.72rem; font-weight: 700; color: var(--text-muted); margin-bottom: 4px; }
     .sheet-price-input { font-size: 1.3rem; font-weight: 800; padding: 10px 12px; color: var(--success-color); background: var(--input-bg); border: 2px solid var(--border-color); border-radius: 8px; }
+    .sheet-fee-input { font-size: 1.1rem; font-weight: 800; padding: 10px 12px; color: var(--danger-color); background: var(--input-bg); border: 1.5px solid var(--border-color); border-radius: 8px; }
+    
     .sheet-platform-grid { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
     .btn-sheet-platform { display: flex; align-items: center; padding: 12px 14px; border: none; border-radius: 8px; font-size: 0.95rem; font-weight: 700; color: #fff; cursor: pointer; width: 100%; text-align: left; }
     .btn-sheet-platform .p-icon { width: 24px; margin-right: 10px; text-align: center; }
@@ -217,7 +214,6 @@
     .btn-p-ebay { background: #0064d2; } .btn-p-persona { background: #475569; }
     .btn-sheet-cancel { background: transparent; border: none; color: var(--text-muted); font-weight: 700; cursor: pointer; padding: 10px; margin-top: 4px; }
 
-    /* ELEMENTI AVATAR HUB MENU (AVATAR INGRANDITO A 96px) */
     .avatar-edit-box { display: flex; flex-direction: column; align-items: center; gap: 10px; margin-bottom: 18px; text-align: center; }
     .avatar-large { width: 96px; height: 96px; border-radius: 50%; border: 3px solid var(--warn-color); overflow: hidden; background: var(--input-bg); position: relative; cursor: pointer; box-shadow: 0 0 16px rgba(251, 191, 36, 0.35); }
     .avatar-large img { width: 100%; height: 100%; object-fit: cover; }
@@ -276,7 +272,6 @@
     .trash-row .tr-meta { font-size: 0.72rem; color: var(--text-muted); }
     .trash-row button { width: auto; padding: 6px 10px; font-size: 0.75rem; font-weight: 700; cursor: pointer; }
 
-    /* LIGHTBOX PER INGRANDIMENTO FOTO */
     .lightbox-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 600; display: none; justify-content: center; align-items: center; padding: 16px; }
     .lightbox-img { max-width: 95vw; max-height: 85vh; border-radius: 12px; object-fit: contain; box-shadow: 0 8px 30px rgba(0,0,0,0.5); }
     .lightbox-close { position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,0.2); color: #fff; border: none; font-size: 1.5rem; width: 40px; height: 40px; border-radius: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
@@ -364,6 +359,17 @@
           </select>
         </div>
         <div>
+          <label>PIATTAFORMA</label>
+          <select id="filterPlatform" onchange="renderApp()">
+            <option value="ALL">Tutte</option>
+            <option value="Vinted">Vinted</option>
+            <option value="Wallapop">Wallapop</option>
+            <option value="Subito">Subito</option>
+            <option value="eBay">eBay</option>
+            <option value="Mercatino / Di Persona">Di Persona</option>
+          </select>
+        </div>
+        <div>
           <label>PERIODO</label>
           <select id="filterMonth" onchange="renderApp()">
             <option value="ALL">Sempre</option>
@@ -399,7 +405,11 @@
 
   <div id="chartsView">
     <div class="chart-container">
-      <h3>Profitto per Piattaforma (prima delle spese)</h3>
+      <h3>Tempo Medio di Vendita (Giorni) per Categoria</h3>
+      <canvas id="leadTimeChart"></canvas>
+    </div>
+    <div class="chart-container">
+      <h3>Profitto per Piattaforma (netto commissioni)</h3>
       <canvas id="platformChart"></canvas>
     </div>
     <div class="chart-container">
@@ -407,12 +417,12 @@
       <canvas id="monthChart"></canvas>
     </div>
     <div class="chart-container">
-      <h3>Profitto per Categoria (prima delle spese)</h3>
+      <h3>Profitto per Categoria (netto commissioni)</h3>
       <canvas id="categoryChart"></canvas>
     </div>
   </div>
 
-  <!-- VISTA TROFEI (SCHELETRO PRONTO PER PROSSIMA FASE) -->
+  <!-- VISTA TROFEI -->
   <div id="trophiesView">
     <div class="trophy-hero">
       <h2>🏆 Hall of Fame & Trofei</h2>
@@ -462,11 +472,9 @@
 
   <div id="toastWrap"></div>
   
-  <!-- BOTTONI FLUTTUANTI -->
   <button class="scroll-top-btn" id="scrollTopBtn" onclick="scrollToTop()" title="Torna in alto">⬆</button>
   <button class="fab-btn" onclick="handleFabClick()">+</button>
 
-  <!-- LIGHTBOX PER INGRANDIMENTO FOTO -->
   <div id="lightboxModal" class="lightbox-modal" onclick="closeLightbox()">
     <button class="lightbox-close" onclick="closeLightbox()">✕</button>
     <img id="lightboxImg" class="lightbox-img" src="" alt="Ingrandimento Foto">
@@ -488,7 +496,6 @@
         <div class="level-chip-badge" id="sheetLevelChip" onclick="closeAvatarSheet(); setStatusFilter('TROPHIES');">Livello 1 · Avvio</div>
       </div>
 
-      <!-- CARRIERA SNAPSHOT -->
       <div class="sheet-section-title">Carriera (Snapshot)</div>
       <div class="snapshot-grid">
         <div class="snap-card">
@@ -509,7 +516,6 @@
         </div>
       </div>
 
-      <!-- CONTROLLO DATI & SISTEMA -->
       <div class="sheet-section-title">Controllo Dati & Sistema</div>
       <div class="menu-list-group">
         <div class="menu-list-item" onclick="closeAvatarSheet(); openDataModal();">
@@ -530,7 +536,6 @@
         </div>
       </div>
 
-      <!-- UTILITY RAPIDE -->
       <div class="sheet-section-title">Utility Rapide</div>
       <div class="menu-list-group">
         <div class="menu-list-item" onclick="closeAvatarSheet(); openCalculator();">
@@ -687,6 +692,11 @@
         </div>
         
         <div class="full-width">
+          <label style="font-size:0.75rem;font-weight:700;">NOTE / CONDITON / TAGLIA (OPZIONALE)</label>
+          <textarea id="addNotes" placeholder="es. Taglia L, CIB completo di manuale, mai aperto..."></textarea>
+        </div>
+
+        <div class="full-width">
           <label style="font-size:0.75rem;font-weight:700;display:block;margin-bottom:4px;">FOTO OGGETTO (OPZIONALE)</label>
           <div class="photo-upload-box">
             <label for="addPhotoInput" class="btn-upload-photo">📷 Scegli dalla Galleria</label>
@@ -840,6 +850,11 @@
         </div>
 
         <div class="full-width">
+          <label style="font-size:0.75rem;font-weight:700;">NOTE / CONDIZIONI / TAGLIA</label>
+          <textarea id="editNotes" placeholder="Dettagli sulle condizioni, difetti, taglia..."></textarea>
+        </div>
+
+        <div class="full-width">
           <label style="font-size:0.75rem;font-weight:700;display:block;margin-bottom:4px;">FOTO OGGETTO (OPZIONALE)</label>
           <div class="photo-upload-box">
             <label for="editPhotoInput" class="btn-upload-photo">📷 Cambia / Aggiungi Foto</label>
@@ -860,6 +875,10 @@
           <input type="number" id="editSellPrice" step="0.01" placeholder="0.00">
         </div>
         <div>
+          <label style="font-size:0.75rem;font-weight:700;">COMMISSIONI (€)</label>
+          <input type="number" id="editSellFee" step="0.01" placeholder="0.00">
+        </div>
+        <div>
           <label style="font-size:0.75rem;font-weight:700;">PIATTAFORMA</label>
           <select id="editSoldPlatform">
             <option value="">Seleziona...</option>
@@ -870,11 +889,12 @@
             <option value="Mercatino / Di Persona">Mercatino / Di Persona</option>
           </select>
         </div>
-        <div class="full-width">
+        <div>
           <label style="font-size:0.75rem;font-weight:700;">DATA VENDITA</label>
           <input type="date" id="editSoldDate">
         </div>
         <div class="full-width">
+          <button class="btn-copy" onclick="copyListingDraft()">📋 Copia Testo Annuncio</button>
           <button class="btn-sell-modal" id="btnQuickSell">🛒 Segna come Venduto</button>
           <button class="btn-main" onclick="saveEditChanges()">💾 Salva Modifiche</button>
           <button class="btn-danger" onclick="deleteCurrentItem()">🗑 Elimina</button>
@@ -935,16 +955,24 @@
     </div>
   </div>
 
-  <!-- BOTTOM SHEET VENDITA -->
+  <!-- BOTTOM SHEET VENDITA RAPIDA CON COMMISSIONI -->
   <div id="sellSheet" class="bottom-sheet-overlay hidden" onclick="closeSellSheet(event)">
     <div class="bottom-sheet-content" onclick="event.stopPropagation()">
       <div class="sheet-handle"></div>
       <div class="sheet-title">🛒 Registra Vendita</div>
       <div class="sheet-subtitle" id="sheetItemTitle">Nome Oggetto</div>
-      <div class="sheet-price-group">
-        <label>PREZZO FINALE INCASSATO (€)</label>
-        <input type="number" id="sheetSellPrice" step="0.50" class="sheet-price-input" placeholder="0.00">
+      
+      <div class="sheet-price-grid">
+        <div class="sheet-price-group">
+          <label>INCASSO TOTALE (€)</label>
+          <input type="number" id="sheetSellPrice" step="0.50" class="sheet-price-input" placeholder="0.00">
+        </div>
+        <div class="sheet-price-group">
+          <label>COMMISSIONI (€)</label>
+          <input type="number" id="sheetSellFee" step="0.10" class="sheet-fee-input" placeholder="0.00">
+        </div>
       </div>
+
       <label style="font-size:0.75rem;font-weight:700;color:var(--text-muted);display:block;margin-bottom:8px;">PIATTAFORMA:</label>
       <div class="sheet-platform-grid">
         <button type="button" class="btn-sheet-platform btn-p-vinted" onclick="confirmSheetSell('Vinted')"><span class="p-icon">V</span> Vinted</button>
@@ -966,72 +994,73 @@
     const THEME_KEY = "reselling_pro_max_theme";
     const VIEW_MODE_KEY = "reselling_pro_max_view_mode";
     const USER_NICK_KEY = "reselling_pro_user_nick";
+    const SNAPSHOTS_KEY = "reselling_auto_snapshots_v1";
 
     const userRealDataset = [
-      {"id":"1793884343763","t":"Felpa Napapijri","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.15,"sp":0,"s":"stock","d":"05/11/2026","soldPlatform":"","soldDate":""},
-      {"id":"1793884334722","t":"Felpa Guinness","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.15,"sp":0,"s":"stock","d":"05/11/2026","soldPlatform":"","soldDate":""},
-      {"id":"1793884319850","t":"Felpa DHL taglia M","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.15,"sp":0,"s":"stock","d":"05/11/2026","soldPlatform":"","soldDate":""},
-      {"id":"1793884304211","t":"Felpa DHL taglia L","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.15,"sp":0,"s":"stock","d":"05/11/2026","soldPlatform":"","soldDate":""},
-      {"id":"1793709293839","t":"Felpa Ascoli Nike","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3,"sp":0,"s":"stock","d":"03/11/2026","soldPlatform":"","soldDate":""},
-      {"id":"1793261983990","t":"Miti del nord","c":"Libri","src":"Mercatino / Di Persona","bp":0,"sp":0,"s":"stock","d":"29/10/2026","soldPlatform":"","soldDate":""},
-      {"id":"1793261971110","t":"Enciclopedia del fantastico","c":"Libri","src":"Mercatino / Di Persona","bp":0,"sp":0,"s":"stock","d":"29/10/2026","soldPlatform":"","soldDate":""},
-      {"id":"1793261957954","t":"Edda","c":"Libri","src":"Mercatino / Di Persona","bp":0,"sp":10,"s":"sold","d":"29/10/2026","soldPlatform":"Vinted","soldDate":"01/11/2026"},
-      {"id":"1793109700688","t":"Bushido","c":"Libri","src":"Mercatino / Di Persona","bp":0,"sp":0,"s":"stock","d":"27/10/2026","soldPlatform":"","soldDate":""},
-      {"id":"1793109690566","t":"Cuore oscuro","c":"Libri","src":"Mercatino / Di Persona","bp":0,"sp":0,"s":"stock","d":"27/10/2026","soldPlatform":"","soldDate":""},
-      {"id":"1793109674532","t":"Maglia DHL","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":2,"sp":17,"s":"sold","d":"27/10/2026","soldPlatform":"Vinted","soldDate":"28/10/2026"},
-      {"id":"1793109660940","t":"Maglia Lipsia","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":5,"sp":0,"s":"stock","d":"27/10/2026","soldPlatform":"","soldDate":""},
-      {"id":"1792655015266","t":"Don Chisciotte DVD","c":"Altro","src":"Mercatino / Di Persona","bp":0,"sp":0,"s":"stock","d":"22/10/2026","soldPlatform":"","soldDate":""},
-      {"id":"1792655005063","t":"Il miracolo di berna DVD","c":"Altro","src":"Mercatino / Di Persona","bp":0,"sp":0,"s":"stock","d":"22/10/2026","soldPlatform":"","soldDate":""},
-      {"id":"1792654995011","t":"Nella terra dei cannibali dvd","c":"Altro","src":"Mercatino / Di Persona","bp":0,"sp":0,"s":"stock","d":"22/10/2026","soldPlatform":"","soldDate":""},
-      {"id":"1792654978314","t":"The getaway Ps2","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":0,"sp":0,"s":"stock","d":"22/10/2026","soldPlatform":"","soldDate":""},
-      {"id":"1792499154342","t":"Felpa Borussia Dortmund","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.3,"sp":30,"s":"sold","d":"20/10/2026","soldPlatform":"Wallapop","soldDate":"29/10/2026"},
-      {"id":"1792499138053","t":"Maglia Chicago bulls","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.3,"sp":0,"s":"stock","d":"20/10/2026","soldPlatform":"","soldDate":""},
-      {"id":"1792499116883","t":"Maglia Jordan PSG","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.3,"sp":0,"s":"stock","d":"20/10/2026","soldPlatform":"","soldDate":""},
-      {"id":"1791914659856","t":"PS4 slim","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":25,"sp":0,"s":"stock","d":"13/10/2026","soldPlatform":"","soldDate":""},
-      {"id":"1791651300704","t":"Inazuma Eleven striker wii","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":5,"sp":0,"s":"stock","d":"10/10/2026","soldPlatform":"","soldDate":""},
-      {"id":"1791651288584","t":"Mario kart wii","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":5,"sp":0,"s":"stock","d":"10/10/2026","soldPlatform":"","soldDate":""},
-      {"id":"1791596827414","t":"Camicia uomo Tommy Hilfiger","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.75,"sp":0,"s":"stock","d":"06/10/2026","soldPlatform":"","soldDate":""},
-      {"id":"1791596810008","t":"Felpa Adidas donna con zip","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.75,"sp":0,"s":"stock","d":"06/10/2026","soldPlatform":"","soldDate":""},
-      {"id":"1791596787282","t":"Felpa Adidas oliva","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.75,"sp":0,"s":"stock","d":"06/10/2026","soldPlatform":"","soldDate":""},
-      {"id":"1791596760197","t":"Maglietta Rosario central","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":5.14,"sp":35,"s":"sold","d":"06/10/2026","soldPlatform":"Wallapop","soldDate":"29/10/2026"},
-      {"id":"1791157418467","t":"God of war ps3","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":6,"sp":0,"s":"stock","d":"05/10/2026","soldPlatform":"","soldDate":""},
-      {"id":"1791157403004","t":"Maglietta Marcelo burlon","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":16.65,"sp":0,"s":"stock","d":"05/10/2026","soldPlatform":"","soldDate":""},
-      {"id":"1791157390221","t":"Crash twinsanity","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":6.84,"sp":0,"s":"stock","d":"05/10/2026","soldPlatform":"","soldDate":""},
-      {"id":"1791157369967","t":"Spyro the eternal night","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":6.84,"sp":0,"s":"stock","d":"05/10/2026","soldPlatform":"","soldDate":""},
-      {"id":"1791157184294","t":"Crash 4","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":5,"sp":0,"s":"stock","d":"05/10/2026","soldPlatform":"","soldDate":""},
-      {"id":"1791157170580","t":"Rayman Legend","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":5,"sp":0,"s":"stock","d":"05/10/2026","soldPlatform":"","soldDate":""},
-      {"id":"1791157157611","t":"Crash Trilogy ps4","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":5,"sp":15,"s":"sold","d":"05/10/2026","soldPlatform":"Vinted","soldDate":"05/10/2026"},
-      {"id":"1791157144737","t":"Spyro Trilogy ps4","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":5,"sp":15,"s":"sold","d":"05/10/2026","soldPlatform":"Vinted","soldDate":"05/10/2026"},
-      {"id":"1791157109063","t":"PS4 fat","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":40,"sp":0,"s":"stock","d":"05/10/2026","soldPlatform":"","soldDate":""},
-      {"id":"1","t":"Onimusha: Dawn of Dreams (PS2)","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":20,"sp":0,"d":"05/09/2026","soldPlatform":"","soldDate":""},
-      {"id":"2","t":"Zerocalcare (Libro)","c":"Libri","src":"Vinted","s":"sold","bp":0,"sp":9,"d":"05/09/2026","soldPlatform":"Vinted","soldDate":"05/09/2026"},
-      {"id":"3","t":"Crash l'ira di Cortex","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":0,"sp":0,"d":"05/09/2026","soldPlatform":"","soldDate":""},
-      {"id":"4","t":"Gta V","c":"Gaming / Videogiochi","src":"Wallapop","s":"sold","bp":0,"sp":8,"d":"05/09/2026","soldPlatform":"Wallapop","soldDate":"05/09/2026"},
-      {"id":"5","t":"Jak e dexter","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":0,"sp":0,"d":"05/09/2026","soldPlatform":"","soldDate":""},
-      {"id":"6","t":"SmackDown shut your mouth","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":0,"sp":0,"d":"05/09/2026","soldPlatform":"","soldDate":""},
-      {"id":"7","t":"Smackdown here comes the pain","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":0,"sp":0,"d":"05/09/2026","soldPlatform":"","soldDate":""},
-      {"id":"8","t":"TMNT Wii","c":"Gaming / Videogiochi","src":"eBay","s":"sold","bp":0,"sp":6.94,"d":"05/09/2026","soldPlatform":"eBay","soldDate":"05/09/2026"},
-      {"id":"9","t":"Cardigan Abercrombie","c":"Abbigliamento","src":"Vinted","s":"sold","bp":0,"sp":7,"d":"05/09/2026","soldPlatform":"Vinted","soldDate":"05/09/2026"},
-      {"id":"10","t":"The last of us part 2","c":"Gaming / Videogiochi","src":"Vinted","s":"sold","bp":5,"sp":14,"d":"05/09/2026","soldPlatform":"Vinted","soldDate":"05/09/2026"},
-      {"id":"11","t":"Dying light","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"sold","bp":5,"sp":11.5,"d":"05/09/2026","soldPlatform":"Vinted","soldDate":"05/11/2026"},
-      {"id":"12","t":"Ring fit Adventure","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":20,"sp":0,"d":"06/09/2026","soldPlatform":"","soldDate":""},
-      {"id":"13","t":"Distruggi documenti","c":"Elettronica","src":"Mercatino / Di Persona","s":"stock","bp":0,"sp":0,"d":"09/09/2026","soldPlatform":"","soldDate":""},
-      {"id":"14","t":"Resistance 2","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":3,"sp":0,"d":"16/09/2026","soldPlatform":"","soldDate":""},
-      {"id":"15","t":"Resistance fall of man","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":3,"sp":0,"d":"16/09/2026","soldPlatform":"","soldDate":""},
-      {"id":"16","t":"Gran Turismo 6","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"sold","bp":3,"sp":6,"d":"16/09/2026","soldPlatform":"Vinted","soldDate":"01/11/2026"},
-      {"id":"17","t":"Street fighter IV","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":3,"sp":0,"d":"16/09/2026","soldPlatform":"","soldDate":""},
-      {"id":"18","t":"Metal Gear Solid guns of the patriots","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":3,"sp":0,"d":"16/09/2026","soldPlatform":"","soldDate":""},
-      {"id":"19","t":"Binary domain","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":3,"sp":0,"d":"16/09/2026","soldPlatform":"","soldDate":""},
-      {"id":"20","t":"Time crisis razing storm","c":"Gaming / Videogiochi","src":"Vinted","s":"sold","bp":3,"sp":13,"d":"16/09/2026","soldPlatform":"Vinted","soldDate":"16/09/2026"},
-      {"id":"21","t":"The Legend of Spyro","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"sold","bp":3,"sp":24,"d":"16/09/2026","soldPlatform":"Vinted","soldDate":"05/10/2026"},
-      {"id":"22","t":"The last of us","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":3,"sp":0,"d":"16/09/2026","soldPlatform":"","soldDate":""},
-      {"id":"23","t":"COD Advanced warfare","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":3,"sp":0,"d":"16/09/2026","soldPlatform":"","soldDate":""},
-      {"id":"24","t":"Costume adidas","c":"Abbigliamento","src":"Mercatino / Di Persona","s":"stock","bp":0,"sp":0,"d":"18/09/2026","soldPlatform":"","soldDate":""},
-      {"id":"25","t":"Castlevania","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"sold","bp":6,"sp":19,"d":"19/09/2026","soldPlatform":"Vinted","soldDate":"10/10/2026"},
-      {"id":"26","t":"Dead space 2","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":6,"sp":0,"d":"19/09/2026","soldPlatform":"","soldDate":""},
-      {"id":"27","t":"Polo Lacoste","c":"Abbigliamento","src":"Vinted","s":"sold","bp":5,"sp":19,"d":"19/09/2026","soldPlatform":"Vinted","soldDate":"19/09/2026"},
-      {"id":"28","t":"Life Is strange","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":11.39,"sp":0,"d":"24/09/2026","soldPlatform":"","soldDate":""},
-      {"id":"29","t":"GTA Trilogy ps4","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"sold","bp":9.63,"sp":15,"d":"27/09/2026","soldPlatform":"Vinted","soldDate":"05/10/2026"}
+      {"id":"1793884343763","t":"Felpa Napapijri","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.15,"sp":0,"fee":0,"s":"stock","d":"05/11/2026","soldPlatform":"","soldDate":"","n":""},
+      {"id":"1793884334722","t":"Felpa Guinness","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.15,"sp":0,"fee":0,"s":"stock","d":"05/11/2026","soldPlatform":"","soldDate":"","n":""},
+      {"id":"1793884319850","t":"Felpa DHL taglia M","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.15,"sp":0,"fee":0,"s":"stock","d":"05/11/2026","soldPlatform":"","soldDate":"","n":""},
+      {"id":"1793884304211","t":"Felpa DHL taglia L","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.15,"sp":0,"fee":0,"s":"stock","d":"05/11/2026","soldPlatform":"","soldDate":"","n":""},
+      {"id":"1793709293839","t":"Felpa Ascoli Nike","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3,"sp":0,"fee":0,"s":"stock","d":"03/11/2026","soldPlatform":"","soldDate":"","n":""},
+      {"id":"1793261983990","t":"Miti del nord","c":"Libri","src":"Mercatino / Di Persona","bp":0,"sp":0,"fee":0,"s":"stock","d":"29/10/2026","soldPlatform":"","soldDate":"","n":""},
+      {"id":"1793261971110","t":"Enciclopedia del fantastico","c":"Libri","src":"Mercatino / Di Persona","bp":0,"sp":0,"fee":0,"s":"stock","d":"29/10/2026","soldPlatform":"","soldDate":"","n":""},
+      {"id":"1793261957954","t":"Edda","c":"Libri","src":"Mercatino / Di Persona","bp":0,"sp":10,"fee":0,"s":"sold","d":"29/10/2026","soldPlatform":"Vinted","soldDate":"01/11/2026","n":""},
+      {"id":"1793109700688","t":"Bushido","c":"Libri","src":"Mercatino / Di Persona","bp":0,"sp":0,"fee":0,"s":"stock","d":"27/10/2026","soldPlatform":"","soldDate":"","n":""},
+      {"id":"1793109690566","t":"Cuore oscuro","c":"Libri","src":"Mercatino / Di Persona","bp":0,"sp":0,"fee":0,"s":"stock","d":"27/10/2026","soldPlatform":"","soldDate":"","n":""},
+      {"id":"1793109674532","t":"Maglia DHL","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":2,"sp":17,"fee":0,"s":"sold","d":"27/10/2026","soldPlatform":"Vinted","soldDate":"28/10/2026","n":""},
+      {"id":"1793109660940","t":"Maglia Lipsia","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":5,"sp":0,"fee":0,"s":"stock","d":"27/10/2026","soldPlatform":"","soldDate":"","n":""},
+      {"id":"1792655015266","t":"Don Chisciotte DVD","c":"Altro","src":"Mercatino / Di Persona","bp":0,"sp":0,"fee":0,"s":"stock","d":"22/10/2026","soldPlatform":"","soldDate":"","n":""},
+      {"id":"1792655005063","t":"Il miracolo di berna DVD","c":"Altro","src":"Mercatino / Di Persona","bp":0,"sp":0,"fee":0,"s":"stock","d":"22/10/2026","soldPlatform":"","soldDate":"","n":""},
+      {"id":"1792654995011","t":"Nella terra dei cannibali dvd","c":"Altro","src":"Mercatino / Di Persona","bp":0,"sp":0,"fee":0,"s":"stock","d":"22/10/2026","soldPlatform":"","soldDate":"","n":""},
+      {"id":"1792654978314","t":"The getaway Ps2","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":0,"sp":0,"fee":0,"s":"stock","d":"22/10/2026","soldPlatform":"","soldDate":"","n":""},
+      {"id":"1792499154342","t":"Felpa Borussia Dortmund","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.3,"sp":30,"fee":0,"s":"sold","d":"20/10/2026","soldPlatform":"Wallapop","soldDate":"29/10/2026","n":""},
+      {"id":"1792499138053","t":"Maglia Chicago bulls","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.3,"sp":0,"fee":0,"s":"stock","d":"20/10/2026","soldPlatform":"","soldDate":"","n":""},
+      {"id":"1792499116883","t":"Maglia Jordan PSG","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.3,"sp":0,"fee":0,"s":"stock","d":"20/10/2026","soldPlatform":"","soldDate":"","n":""},
+      {"id":"1791914659856","t":"PS4 slim","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":25,"sp":0,"fee":0,"s":"stock","d":"13/10/2026","soldPlatform":"","soldDate":"","n":""},
+      {"id":"1791651300704","t":"Inazuma Eleven striker wii","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":5,"sp":0,"fee":0,"s":"stock","d":"10/10/2026","soldPlatform":"","soldDate":"","n":""},
+      {"id":"1791651288584","t":"Mario kart wii","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":5,"sp":0,"fee":0,"s":"stock","d":"10/10/2026","soldPlatform":"","soldDate":"","n":""},
+      {"id":"1791596827414","t":"Camicia uomo Tommy Hilfiger","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.75,"sp":0,"fee":0,"s":"stock","d":"06/10/2026","soldPlatform":"","soldDate":"","n":""},
+      {"id":"1791596810008","t":"Felpa Adidas donna con zip","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.75,"sp":0,"fee":0,"s":"stock","d":"06/10/2026","soldPlatform":"","soldDate":"","n":""},
+      {"id":"1791596787282","t":"Felpa Adidas oliva","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.75,"sp":0,"fee":0,"s":"stock","d":"06/10/2026","soldPlatform":"","soldDate":"","n":""},
+      {"id":"1791596760197","t":"Maglietta Rosario central","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":5.14,"sp":35,"fee":0,"s":"sold","d":"06/10/2026","soldPlatform":"Wallapop","soldDate":"29/10/2026","n":""},
+      {"id":"1791157418467","t":"God of war ps3","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":6,"sp":0,"fee":0,"s":"stock","d":"05/10/2026","soldPlatform":"","soldDate":"","n":""},
+      {"id":"1791157403004","t":"Maglietta Marcelo burlon","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":16.65,"sp":0,"fee":0,"s":"stock","d":"05/10/2026","soldPlatform":"","soldDate":"","n":""},
+      {"id":"1791157390221","t":"Crash twinsanity","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":6.84,"sp":0,"fee":0,"s":"stock","d":"05/10/2026","soldPlatform":"","soldDate":"","n":""},
+      {"id":"1791157369967","t":"Spyro the eternal night","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":6.84,"sp":0,"fee":0,"s":"stock","d":"05/10/2026","soldPlatform":"","soldDate":"","n":""},
+      {"id":"1791157184294","t":"Crash 4","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":5,"sp":0,"fee":0,"s":"stock","d":"05/10/2026","soldPlatform":"","soldDate":"","n":""},
+      {"id":"1791157170580","t":"Rayman Legend","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":5,"sp":0,"fee":0,"s":"stock","d":"05/10/2026","soldPlatform":"","soldDate":"","n":""},
+      {"id":"1791157157611","t":"Crash Trilogy ps4","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":5,"sp":15,"fee":0,"s":"sold","d":"05/10/2026","soldPlatform":"Vinted","soldDate":"05/10/2026","n":""},
+      {"id":"1791157144737","t":"Spyro Trilogy ps4","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":5,"sp":15,"fee":0,"s":"sold","d":"05/10/2026","soldPlatform":"Vinted","soldDate":"05/10/2026","n":""},
+      {"id":"1791157109063","t":"PS4 fat","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":40,"sp":0,"fee":0,"s":"stock","d":"05/10/2026","soldPlatform":"","soldDate":"","n":""},
+      {"id":"1","t":"Onimusha: Dawn of Dreams (PS2)","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":20,"sp":0,"fee":0,"d":"05/09/2026","soldPlatform":"","soldDate":"","n":""},
+      {"id":"2","t":"Zerocalcare (Libro)","c":"Libri","src":"Vinted","s":"sold","bp":0,"sp":9,"fee":0,"d":"05/09/2026","soldPlatform":"Vinted","soldDate":"05/09/2026","n":""},
+      {"id":"3","t":"Crash l'ira di Cortex","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":0,"sp":0,"fee":0,"d":"05/09/2026","soldPlatform":"","soldDate":"","n":""},
+      {"id":"4","t":"Gta V","c":"Gaming / Videogiochi","src":"Wallapop","s":"sold","bp":0,"sp":8,"fee":0,"d":"05/09/2026","soldPlatform":"Wallapop","soldDate":"05/09/2026","n":""},
+      {"id":"5","t":"Jak e dexter","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":0,"sp":0,"fee":0,"d":"05/09/2026","soldPlatform":"","soldDate":"","n":""},
+      {"id":"6","t":"SmackDown shut your mouth","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":0,"sp":0,"fee":0,"d":"05/09/2026","soldPlatform":"","soldDate":"","n":""},
+      {"id":"7","t":"Smackdown here comes the pain","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":0,"sp":0,"fee":0,"d":"05/09/2026","soldPlatform":"","soldDate":"","n":""},
+      {"id":"8","t":"TMNT Wii","c":"Gaming / Videogiochi","src":"eBay","s":"sold","bp":0,"sp":6.94,"fee":0,"d":"05/09/2026","soldPlatform":"eBay","soldDate":"05/09/2026","n":""},
+      {"id":"9","t":"Cardigan Abercrombie","c":"Abbigliamento","src":"Vinted","s":"sold","bp":0,"sp":7,"fee":0,"d":"05/09/2026","soldPlatform":"Vinted","soldDate":"05/09/2026","n":""},
+      {"id":"10","t":"The last of us part 2","c":"Gaming / Videogiochi","src":"Vinted","s":"sold","bp":5,"sp":14,"fee":0,"d":"05/09/2026","soldPlatform":"Vinted","soldDate":"05/09/2026","n":""},
+      {"id":"11","t":"Dying light","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"sold","bp":5,"sp":11.5,"fee":0,"d":"05/09/2026","soldPlatform":"Vinted","soldDate":"05/11/2026","n":""},
+      {"id":"12","t":"Ring fit Adventure","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":20,"sp":0,"fee":0,"d":"06/09/2026","soldPlatform":"","soldDate":"","n":""},
+      {"id":"13","t":"Distruggi documenti","c":"Elettronica","src":"Mercatino / Di Persona","s":"stock","bp":0,"sp":0,"fee":0,"d":"09/09/2026","soldPlatform":"","soldDate":"","n":""},
+      {"id":"14","t":"Resistance 2","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":3,"sp":0,"fee":0,"d":"16/09/2026","soldPlatform":"","soldDate":"","n":""},
+      {"id":"15","t":"Resistance fall of man","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":3,"sp":0,"fee":0,"d":"16/09/2026","soldPlatform":"","soldDate":"","n":""},
+      {"id":"16","t":"Gran Turismo 6","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"sold","bp":3,"sp":6,"fee":0,"d":"16/09/2026","soldPlatform":"Vinted","soldDate":"01/11/2026","n":""},
+      {"id":"17","t":"Street fighter IV","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":3,"sp":0,"fee":0,"d":"16/09/2026","soldPlatform":"","soldDate":"","n":""},
+      {"id":"18","t":"Metal Gear Solid guns of the patriots","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":3,"sp":0,"fee":0,"d":"16/09/2026","soldPlatform":"","soldDate":"","n":""},
+      {"id":"19","t":"Binary domain","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":3,"sp":0,"fee":0,"d":"16/09/2026","soldPlatform":"","soldDate":"","n":""},
+      {"id":"20","t":"Time crisis razing storm","c":"Gaming / Videogiochi","src":"Vinted","s":"sold","bp":3,"sp":13,"fee":0,"d":"16/09/2026","soldPlatform":"Vinted","soldDate":"16/09/2026","n":""},
+      {"id":"21","t":"The Legend of Spyro","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"sold","bp":3,"sp":24,"fee":0,"d":"16/09/2026","soldPlatform":"Vinted","soldDate":"05/10/2026","n":""},
+      {"id":"22","t":"The last of us","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":3,"sp":0,"fee":0,"d":"16/09/2026","soldPlatform":"","soldDate":"","n":""},
+      {"id":"23","t":"COD Advanced warfare","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":3,"sp":0,"fee":0,"d":"16/09/2026","soldPlatform":"","soldDate":"","n":""},
+      {"id":"24","t":"Costume adidas","c":"Abbigliamento","src":"Mercatino / Di Persona","s":"stock","bp":0,"sp":0,"fee":0,"d":"18/09/2026","soldPlatform":"","soldDate":"","n":""},
+      {"id":"25","t":"Castlevania","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"sold","bp":6,"sp":19,"fee":0,"d":"19/09/2026","soldPlatform":"Vinted","soldDate":"10/10/2026","n":""},
+      {"id":"26","t":"Dead space 2","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":6,"sp":0,"fee":0,"d":"19/09/2026","soldPlatform":"","soldDate":"","n":""},
+      {"id":"27","t":"Polo Lacoste","c":"Abbigliamento","src":"Vinted","s":"sold","bp":5,"sp":19,"fee":0,"d":"19/09/2026","soldPlatform":"Vinted","soldDate":"19/09/2026","n":""},
+      {"id":"28","t":"Life Is strange","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":11.39,"sp":0,"fee":0,"d":"24/09/2026","soldPlatform":"","soldDate":"","n":""},
+      {"id":"29","t":"GTA Trilogy ps4","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"sold","bp":9.63,"sp":15,"fee":0,"d":"27/09/2026","soldPlatform":"Vinted","soldDate":"05/10/2026","n":""}
     ];
 
     let db = [];
@@ -1040,8 +1069,11 @@
     let adjustments = [];
     let currentStatusFilter = "ALL";
     let activeSheetItemId = null;
-    let platformChartInst = null, monthChartInst = null, categoryChartInst = null;
+    let platformChartInst = null, monthChartInst = null, categoryChartInst = null, leadTimeChartInst = null;
     let viewMode = localStorage.getItem(VIEW_MODE_KEY) || "list";
+
+    // IN-MEMORY IMAGE CACHE FOR 60FPS SCROLLING
+    const photoCache = {};
 
     let imageDB = null;
     const IDB_NAME = "CantarealImageDB";
@@ -1073,6 +1105,9 @@
     }
 
     function savePhotoIDB(id, base64Data) {
+      if (base64Data) photoCache[id] = base64Data;
+      else delete photoCache[id];
+
       if (!imageDB) return Promise.resolve();
       return new Promise((resolve) => {
         const tx = imageDB.transaction([IDB_STORE], "readwrite");
@@ -1085,17 +1120,25 @@
     }
 
     function getPhotoIDB(id) {
+      if (photoCache[id] !== undefined) {
+        return Promise.resolve(photoCache[id]);
+      }
       if (!imageDB) return Promise.resolve(null);
       return new Promise((resolve) => {
         const tx = imageDB.transaction([IDB_STORE], "readonly");
         const store = tx.objectStore(IDB_STORE);
         const req = store.get(String(id));
-        req.onsuccess = () => resolve(req.result ? req.result.data : null);
+        req.onsuccess = () => {
+          const data = req.result ? req.result.data : null;
+          if (data) photoCache[id] = data;
+          resolve(data);
+        };
         req.onerror = () => resolve(null);
       });
     }
 
     function deletePhotoIDB(id) {
+      delete photoCache[id];
       if (!imageDB) return Promise.resolve();
       return new Promise((resolve) => {
         const tx = imageDB.transaction([IDB_STORE], "readwrite");
@@ -1106,7 +1149,6 @@
       });
     }
 
-    /* GESTIONE AVATAR PROFILO INDEXEDDB */
     function saveAvatarToIDB(base64Data) {
       if (!imageDB) return Promise.resolve();
       return new Promise((resolve) => {
@@ -1156,7 +1198,6 @@
       }).catch(() => notify("Errore caricamento avatar."));
     }
 
-    /* SALVATAGGIO & SINCRONIZZAZIONE TITOLO PROFILO (OPZIONE A) */
     function saveUserProfile() {
       const nick = document.getElementById("userNickname").value.trim() || "Miki Resell";
       localStorage.setItem(USER_NICK_KEY, nick);
@@ -1235,7 +1276,6 @@
       }
     }
 
-    /* LIGHTBOX PER INGRANDIMENTO FOTO */
     function openLightbox(src) {
       if (!src) return;
       document.getElementById("lightboxImg").src = src;
@@ -1250,7 +1290,6 @@
       if (src) openLightbox(src);
     }
 
-    /* BARRA DI RICERCA CON RESET E SCROLL TO TOP */
     function handleSearchInput() {
       const val = document.getElementById("searchInput").value;
       document.getElementById("searchResetBtn").style.display = val ? "block" : "none";
@@ -1297,7 +1336,19 @@
       localStorage.setItem(VIEW_MODE_KEY, mode);
       renderApp();
     }
+
+    // AUTO SAVE WITH ROLLING SAFETY SNAPSHOTS
+    function createAutoSnapshot() {
+      try {
+        let snapshots = JSON.parse(localStorage.getItem(SNAPSHOTS_KEY) || "[]");
+        snapshots.unshift({ timestamp: Date.now(), db: JSON.parse(JSON.stringify(db)), expenses: JSON.parse(JSON.stringify(expenses)) });
+        while (snapshots.length > 3) snapshots.pop();
+        localStorage.setItem(SNAPSHOTS_KEY, JSON.stringify(snapshots));
+      } catch(e){}
+    }
+
     function saveData() {
+      createAutoSnapshot();
       localStorage.setItem(DB_KEY, JSON.stringify(db));
       localStorage.setItem(EXP_KEY, JSON.stringify(expenses));
       localStorage.setItem(ADJ_KEY, JSON.stringify(adjustments));
@@ -1330,6 +1381,13 @@
       const d = parseDate(item.d);
       if (!d) return 0;
       return Math.max(0, Math.floor((Date.now() - d.getTime()) / 86400000));
+    }
+    function daysToSell(item) {
+      if (item.s !== "sold" || !item.soldDate) return null;
+      const dAcq = parseDate(item.d);
+      const dSold = parseDate(item.soldDate);
+      if (!dAcq || !dSold) return null;
+      return Math.max(0, Math.floor((dSold.getTime() - dAcq.getTime()) / 86400000));
     }
 
     function getInitialStateHash() {
@@ -1386,7 +1444,6 @@
       setStatusFilter("sold");
     }
 
-    /* AVATAR MENU & CALCOLATORE COMPRA/SALTA */
     function openAvatarMenu() {
       updateAvatarSnapshot();
       loadUserProfile();
@@ -1400,17 +1457,24 @@
       }
     }
 
+    function getItemNetProfit(i) {
+      const bp = parseFloat(i.bp) || 0;
+      const sp = parseFloat(i.sp) || 0;
+      const fee = parseFloat(i.fee) || 0;
+      return (sp - fee) - bp;
+    }
+
     function updateAvatarSnapshot() {
       const soldItems = db.filter(i => i.s === "sold");
-      const totalProfit = soldItems.reduce((acc, i) => acc + ((parseFloat(i.sp)||0) - (parseFloat(i.bp)||0)), 0) - getTotalExpensesSum();
+      const totalProfit = soldItems.reduce((acc, i) => acc + getItemNetProfit(i), 0) - getTotalExpensesSum();
       
       let totalRoiSum = 0;
       let countWithBp = 0;
       soldItems.forEach(i => {
         const bp = parseFloat(i.bp) || 0;
-        const sp = parseFloat(i.sp) || 0;
+        const netProfit = getItemNetProfit(i);
         if (bp > 0) {
-          totalRoiSum += ((sp - bp) / bp) * 100;
+          totalRoiSum += (netProfit / bp) * 100;
           countWithBp++;
         }
       });
@@ -1467,8 +1531,6 @@
       }
     }
 
-    /* CALCOLO RECORD PERSONALI TROFEI */
-    // Stato provvisorio: verrà calcolato dai traguardi quando saranno inseriti
     const TROPHY_STATE = { level: 1, levelName: "Avvio", unlocked: 0, total: 0 };
 
     function renderLevelInfo() {
@@ -1497,33 +1559,28 @@
 
       db.filter(i => i.s === "sold").forEach(item => {
         const bp = parseFloat(item.bp) || 0;
-        const sp = parseFloat(item.sp) || 0;
-        const profit = sp - bp;
+        const profit = getItemNetProfit(item);
 
         if (profit > bestProfitVal) { bestProfitVal = profit; bestProfit = item; }
 
         if (bp > 0) {
           const roi = (profit / bp) * 100;
           if (roi > bestRoiVal) { bestRoiVal = roi; bestRoi = item; }
-        } else if (sp > 0) {
+        } else if (profit > 0) {
           zeroCount++;
-          zeroTotal += sp;
-          if (sp > bestZeroVal) { bestZeroVal = sp; bestZero = item; }
+          zeroTotal += profit;
+          if (profit > bestZeroVal) { bestZeroVal = profit; bestZero = item; }
         }
 
-        if (item.soldDate) {
-          const dAcq = parseDate(item.d);
-          const dSold = parseDate(item.soldDate);
-          if (dAcq && dSold) {
-            const diff = Math.floor((dSold.getTime() - dAcq.getTime()) / 86400000);
-            if (diff >= 0 && diff < minDays) { minDays = diff; fastest = item; }
-          }
+        const diff = daysToSell(item);
+        if (diff !== null && diff >= 0 && diff < minDays) {
+          minDays = diff; fastest = item;
         }
       });
 
       if (bestProfit) { setTxt("recBestProfitName", bestProfit.t); setTxt("recBestProfitVal", fmt(bestProfitVal)); }
       if (bestRoi) { setTxt("recBestRoiName", bestRoi.t); setTxt("recBestRoiVal", (bestRoiVal >= 0 ? "+" : "−") + Math.abs(bestRoiVal).toFixed(0) + "%"); }
-      if (fastest) { setTxt("recFastestName", fastest.t); setTxt("recFastestVal", minDays === 1 ? "1 Giorno" : minDays + " Giorni"); }
+      if (fastest) { setTxt("recFastestName", fastest.t); setTxt("recFastestVal", minDays === 0 ? "Stesso Giorno ⚡" : (minDays === 1 ? "1 Giorno" : minDays + " Giorni")); }
       if (bestZero) {
         setTxt("recZeroName", bestZero.t);
         setTxt("recZeroVal", fmt(bestZeroVal));
@@ -1605,7 +1662,7 @@
       const baseTimestamp = Date.now();
       inputs.forEach((input, index) => {
         const title = input.value.trim() || `Oggetto #${index + 1} (Lotto)`;
-        newItems.push({ id: String(baseTimestamp + index), t: title, c: cat, src: src, bp: costs[index], sp: 0, s: "stock", d: d, soldPlatform: "", soldDate: "" });
+        newItems.push({ id: String(baseTimestamp + index), t: title, c: cat, src: src, bp: costs[index], sp: 0, fee: 0, s: "stock", d: d, soldPlatform: "", soldDate: "", n: "" });
       });
 
       newItems.reverse().forEach(item => db.unshift(item));
@@ -1691,7 +1748,6 @@
       }
     }
 
-    /* BADGE COLORATI PER PIATTAFORMA */
     function getPlatformBadge(platName) {
       if (!platName) return "";
       let cls = "badge-persona";
@@ -1700,6 +1756,20 @@
       else if (platName.includes("Subito")) cls = "badge-subito";
       else if (platName.includes("eBay")) cls = "badge-ebay";
       return `<span class="badge ${cls}">${esc(platName)}</span>`;
+    }
+
+    function copyListingDraft() {
+      const title = document.getElementById("editTitle").value.trim();
+      const cat = document.getElementById("editCategory").value;
+      const notes = document.getElementById("editNotes").value.trim();
+      
+      const text = `📦 ${title}\n\n• Categoria: ${cat}\n${notes ? "• Condizioni / Dettagli: " + notes + "\n" : ""}• Spedizione rapida e imballo accurato! ⚡`;
+      
+      navigator.clipboard.writeText(text).then(() => {
+        notify("Bozza annuncio copiata negli appunti!");
+      }).catch(() => {
+        prompt("Copia il testo dell'annuncio:", text);
+      });
     }
 
     function renderApp() {
@@ -1716,7 +1786,7 @@
           stockVal += bp;
           stockCount++;
         } else if (item.s === "sold") {
-          const profit = sp - bp;
+          const profit = getItemNetProfit(item);
           totalSalesProfit += profit;
           currentSalesRevenue += sp;
           soldCount++;
@@ -1774,7 +1844,6 @@
 
       listEl.innerHTML = "";
 
-      // VISTA DEDICATA SPESE EXTRA
       if (currentStatusFilter === "EXPENSES") {
         document.getElementById("catBanner").style.display = "none";
         const search = document.getElementById("searchInput").value.toLowerCase();
@@ -1814,21 +1883,20 @@
         return;
       }
 
-      // VISTA OGGETTI INVENTARIO
       const search = document.getElementById("searchInput").value.toLowerCase();
       const category = document.getElementById("filterCategory").value;
+      const platformSel = document.getElementById("filterPlatform").value;
       const monthFilter = document.getElementById("filterMonth").value;
       const sortBy = document.getElementById("sortBy").value;
 
-      // MINI BANNER CATEGORIA
       const catBannerEl = document.getElementById("catBanner");
       if (category !== "ALL") {
         let catStockCount = 0, catStockVal = 0, catSoldCount = 0, catProfit = 0;
         db.forEach(i => {
           if (i.c === category) {
-            const bp = parseFloat(i.bp)||0, sp = parseFloat(i.sp)||0;
+            const bp = parseFloat(i.bp)||0;
             if (i.s === "stock") { catStockCount++; catStockVal += bp; }
-            else if (i.s === "sold") { catSoldCount++; catProfit += (sp - bp); }
+            else if (i.s === "sold") { catSoldCount++; catProfit += getItemNetProfit(i); }
           }
         });
         catBannerEl.style.display = "block";
@@ -1838,8 +1906,9 @@
       }
 
       let filtered = db.filter(item => {
-        const matchSearch = String(item.t || "").toLowerCase().includes(search);
+        const matchSearch = String(item.t || "").toLowerCase().includes(search) || String(item.n || "").toLowerCase().includes(search);
         const matchCat = category === "ALL" || item.c === category;
+        const matchPlat = platformSel === "ALL" || (item.src === platformSel || item.soldPlatform === platformSel);
         const matchStatus = currentStatusFilter === "ALL" || item.s === currentStatusFilter;
         let matchMonth = true;
         const targetMonth = monthFilter === "CURR_MONTH" ? currentMMYYYY : (monthFilter !== "ALL" ? monthFilter : "");
@@ -1847,11 +1916,11 @@
           const d = item.s === "sold" ? (item.soldDate || item.d) : item.d;
           matchMonth = monthKeyOf(d) === targetMonth;
         }
-        return matchSearch && matchCat && matchStatus && matchMonth;
+        return matchSearch && matchCat && matchPlat && matchStatus && matchMonth;
       });
 
-      const getROI = i => i.bp > 0 ? ((i.sp||0) - i.bp) / i.bp : ((i.sp||0) > 0 ? 9999 : 0);
-      const getMargin = i => (i.sp||0) - (i.bp||0);
+      const getROI = i => i.bp > 0 ? (getItemNetProfit(i) / i.bp) : ((i.sp||0) > 0 ? 9999 : 0);
+      const getMargin = i => getItemNetProfit(i);
       const parseD = dStr => {
         if (!dStr) return 0;
         const p = dStr.split("/");
@@ -1874,15 +1943,17 @@
         return diff !== 0 ? diff : Number(b.id) - Number(a.id);
       });
 
-      // SOMMATORIA DINAMICA FILTRO
-      let sumBp = 0, sumSp = 0;
+      let sumBp = 0, sumSp = 0, sumNetProfit = 0;
       filtered.forEach(i => {
         sumBp += parseFloat(i.bp)||0;
-        if (i.s === "sold") sumSp += parseFloat(i.sp)||0;
+        if (i.s === "sold") {
+          sumSp += parseFloat(i.sp)||0;
+          sumNetProfit += getItemNetProfit(i);
+        }
       });
       document.getElementById("summaryCount").innerText = `Mostrando: ${filtered.length} oggetti`;
       document.getElementById("summaryValues").innerText = currentStatusFilter === "sold"
-        ? `Vendite: €${sumSp.toFixed(2)} | Profitto: €${(sumSp - sumBp).toFixed(2)}`
+        ? `Vendite: €${sumSp.toFixed(2)} | Profitto: €${sumNetProfit.toFixed(2)}`
         : `Investito: €${sumBp.toFixed(2)}`;
 
       if (!filtered.length) {
@@ -1892,11 +1963,10 @@
 
       filtered.forEach(item => {
         const isSold = item.s === "sold";
-        const bp = parseFloat(item.bp)||0, sp = parseFloat(item.sp)||0;
-        const profit = sp - bp;
+        const bp = parseFloat(item.bp)||0, sp = parseFloat(item.sp)||0, fee = parseFloat(item.fee)||0;
+        const profit = getItemNetProfit(item);
         const days = daysInStock(item);
 
-        /* INDICATORE STOCK 3 LIVELLI (Fresco / Stazionario / Critico) */
         let stockAgeClass = "";
         if (!isSold) {
           if (days < 15) stockAgeClass = " stock-fresh";
@@ -1904,7 +1974,6 @@
           else stockAgeClass = " stock-critical";
         }
 
-        /* GESTIONE OGGETTI COSTO ZERO (Omaggi) */
         const bpText = bp === 0 ? '<span class="badge badge-free">🎁 Omaggio</span>' : `Acq: €${bp.toFixed(2)}`;
 
         let roiHtml = "";
@@ -1912,7 +1981,8 @@
           const roi = bp > 0 ? ((profit/bp)*100).toFixed(0) + "%" : "100% (Gratis)";
           const cls = profit >= 0 ? "roi-pos" : "roi-neg";
           const sgn = profit >= 0 ? "+" : "−";
-          roiHtml = `<span class="${cls}">(${sgn}€${Math.abs(profit).toFixed(2)} • ROI ${roi})</span>`;
+          const feeTxt = fee > 0 ? ` [Comm: €${fee.toFixed(2)}]` : "";
+          roiHtml = `<span class="${cls}">(${sgn}€${Math.abs(profit).toFixed(2)}${feeTxt} • ROI ${roi})</span>`;
         }
 
         const wrapper = document.createElement("div");
@@ -1931,6 +2001,7 @@
           <div class="item-card-placeholder" id="thumb-${item.id}">${getCategoryEmoji(item.c)}</div>
           <div class="item-info">
             <div class="item-title">${esc(item.t)}</div>
+            ${item.n ? `<div class="item-notes">📝 ${esc(item.n)}</div>` : ""}
             <div class="item-meta">
               <span class="badge ${isSold ? "badge-sold" : "badge-stock"}">${isSold ? "✅ Venduto" : "STOCK"}</span>
               ${srcBadge} ${esc(item.c)} • ${bpText} (${esc(item.d)})
@@ -1956,7 +2027,6 @@
           }
         });
 
-        /* SWIPE CON VIBRAZIONE TATTILE */
         let startX = 0, startY = 0, currentX = 0, isSwiping = false, isScrolling = false, hasVibrated = false;
         card.addEventListener("touchstart", e => {
           startX = e.touches[0].clientX;
@@ -2008,7 +2078,6 @@
       updateGoalProgress(lastMonthProfit);
     }
 
-    /* ANIMAZIONE OBIETTIVO >100% */
     function updateGoalProgress(monthProfit) {
       const target = parseFloat(String(document.getElementById("targetGoalInput").value).replace(",", ".")) || 200;
       const pct = Math.max(0, Math.round((monthProfit / target) * 100));
@@ -2029,32 +2098,51 @@
       const css = getComputedStyle(document.documentElement);
       const textColor = css.getPropertyValue("--text-color").trim();
       const gridColor = css.getPropertyValue("--border-color").trim();
-      const GREEN = "#22c55e", RED = "#ef4444";
+      const GREEN = "#22c55e", RED = "#ef4444", BLUE = "#3b82f6";
       const eur = v => v.toFixed(2).replace(".", ",") + " €";
       const round2 = v => Math.round(v * 100) / 100;
-      const profitOf = i => (parseFloat(i.sp) || 0) - (parseFloat(i.bp) || 0);
       const colorsFor = vals => vals.map(v => v >= 0 ? GREEN : RED);
 
-      function hbar(canvasId, obj, oldInst) {
+      function hbar(canvasId, obj, oldInst, isDays = false) {
         if (oldInst) oldInst.destroy();
-        const entries = Object.entries(obj).sort((a, b) => b[1] - a[1]);
+        const entries = Object.entries(obj).sort((a, b) => isDays ? a[1] - b[1] : b[1] - a[1]);
         const vals = entries.map(e => round2(e[1]));
         return new Chart(document.getElementById(canvasId), {
           type: "bar",
-          data: { labels: entries.map(e => e[0]), datasets: [{ data: vals, backgroundColor: colorsFor(vals), borderRadius: 6 }] },
+          data: { labels: entries.map(e => e[0]), datasets: [{ data: vals, backgroundColor: isDays ? BLUE : colorsFor(vals), borderRadius: 6 }] },
           options: {
             indexAxis: "y", responsive: true, maintainAspectRatio: false,
-            plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => " " + eur(c.parsed.x) } } },
+            plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => isDays ? " " + c.parsed.x + " giorni medi" : " " + eur(c.parsed.x) } } },
             scales: { x: { ticks: { color: textColor }, grid: { color: gridColor } }, y: { ticks: { color: textColor }, grid: { display: false } } }
           }
         });
       }
 
+      // 1. TEMPO MEDIO DI VENDITA (LEAD TIME)
+      const leadTimes = {};
+      const leadCounts = {};
+      db.forEach(i => {
+        if (i.s === "sold") {
+          const days = daysToSell(i);
+          if (days !== null) {
+            const cat = i.c || "Altro";
+            leadTimes[cat] = (leadTimes[cat] || 0) + days;
+            leadCounts[cat] = (leadCounts[cat] || 0) + 1;
+          }
+        }
+      });
+      const avgLeadTimes = {};
+      Object.keys(leadTimes).forEach(cat => {
+        avgLeadTimes[cat] = Math.round(leadTimes[cat] / leadCounts[cat]);
+      });
+      leadTimeChartInst = hbar("leadTimeChart", avgLeadTimes, leadTimeChartInst, true);
+
+      // 2. PROFITTO PER PIATTAFORMA E CATEGORIA
       const plat = {};
       const cats = {};
       db.forEach(i => {
         if (i.s !== "sold") return;
-        const p = profitOf(i);
+        const p = getItemNetProfit(i);
         if (i.soldPlatform) plat[i.soldPlatform] = (plat[i.soldPlatform] || 0) + p;
         const c = i.c || "Altro";
         cats[c] = (cats[c] || 0) + p;
@@ -2062,6 +2150,7 @@
       platformChartInst = hbar("platformChart", plat, platformChartInst);
       categoryChartInst = hbar("categoryChart", cats, categoryChartInst);
 
+      // 3. PROFITTO MENSILE
       const monthKey = d => {
         const p = String(d || "").split("/");
         return p.length === 3 ? p[1].padStart(2, "0") + "/" + p[2] : "Sconosciuto";
@@ -2070,7 +2159,7 @@
       db.forEach(i => {
         if (i.s === "sold") {
           const k = monthKey(i.soldDate || i.d);
-          months[k] = (months[k] || 0) + profitOf(i);
+          months[k] = (months[k] || 0) + getItemNetProfit(i);
         }
       });
       expenses.forEach(e => {
@@ -2094,6 +2183,7 @@
 
     function openAddModal() {
       document.getElementById("addItemDate").valueAsDate = new Date();
+      document.getElementById("addNotes").value = "";
       removePhoto('add');
       document.getElementById("addModal").style.display = "flex";
     }
@@ -2241,13 +2331,14 @@
       let d = todayFormatted();
       if (dateInput) { const p = dateInput.split("-"); d = p[2] + "/" + p[1] + "/" + p[0]; }
       const buyPrice = parseFloat(document.getElementById("addBuyPrice").value.replace(",", ".")) || 0;
+      const notes = document.getElementById("addNotes").value.trim();
       const newId = String(Date.now());
 
       db.unshift({
         id: newId, t: title,
         c: document.getElementById("addCategory").value,
         src: document.getElementById("addSource").value,
-        bp: buyPrice, sp: 0, s: "stock", d, soldPlatform: "", soldDate: ""
+        bp: buyPrice, sp: 0, fee: 0, s: "stock", d, soldPlatform: "", soldDate: "", n: notes
       });
 
       if (currentAddPhotoBase64) { await savePhotoIDB(newId, currentAddPhotoBase64); }
@@ -2255,6 +2346,7 @@
       closeModal("addModal");
       document.getElementById("addTitle").value = "";
       document.getElementById("addBuyPrice").value = "";
+      document.getElementById("addNotes").value = "";
       removePhoto('add');
     }
 
@@ -2267,7 +2359,9 @@
       document.getElementById("editSource").value = item.src || "Mercatino / Di Persona";
       document.getElementById("editBuyPrice").value = item.bp;
       document.getElementById("editDate").value = itToIso(item.d);
+      document.getElementById("editNotes").value = item.n || "";
       document.getElementById("editSellPrice").value = item.sp || "";
+      document.getElementById("editSellFee").value = item.fee || "";
       document.getElementById("editSoldPlatform").value = item.soldPlatform || "";
       document.getElementById("editSoldDate").value = itToIso(item.soldDate);
 
@@ -2296,6 +2390,7 @@
       const buyDate = isoToIt(document.getElementById("editDate").value);
       if (!buyDate) return notify("Inserisci una data di acquisto.");
       const sp = parseFloat(String(document.getElementById("editSellPrice").value).replace(",", ".")) || 0;
+      const fee = parseFloat(String(document.getElementById("editSellFee").value).replace(",", ".")) || 0;
       const platform = document.getElementById("editSoldPlatform").value;
       if (sp > 0 && !platform) return notify("Hai inserito un prezzo di vendita: scegli anche la piattaforma, oppure svuota il prezzo.");
       const wasStock = item.s === "stock";
@@ -2304,15 +2399,18 @@
       item.src = document.getElementById("editSource").value;
       item.bp = parseFloat(String(document.getElementById("editBuyPrice").value).replace(",", ".")) || 0;
       item.d = buyDate;
+      item.n = document.getElementById("editNotes").value.trim();
       const isNowSold = sp > 0;
       if (isNowSold) {
         item.s = "sold";
         item.sp = sp;
+        item.fee = fee;
         item.soldPlatform = platform;
         item.soldDate = isoToIt(document.getElementById("editSoldDate").value) || item.soldDate || todayFormatted();
       } else {
         item.s = "stock";
         item.sp = 0;
+        item.fee = 0;
         item.soldPlatform = "";
         item.soldDate = "";
       }
@@ -2341,6 +2439,7 @@
       activeSheetItemId = item.id;
       document.getElementById("sheetItemTitle").innerText = item.t;
       document.getElementById("sheetSellPrice").value = item.sp > 0 ? item.sp : "";
+      document.getElementById("sheetSellFee").value = item.fee > 0 ? item.fee : "";
       document.getElementById("sellSheet").classList.remove("hidden");
     }
 
@@ -2351,11 +2450,14 @@
 
     function confirmSheetSell(platform) {
       const priceVal = document.getElementById("sheetSellPrice").value.replace(",", ".");
+      const feeVal = document.getElementById("sheetSellFee").value.replace(",", ".") || "0";
       const price = parseFloat(priceVal);
+      const fee = parseFloat(feeVal) || 0;
+
       if (isNaN(price) || price <= 0) return notify("Inserisci un prezzo valido.");
       const item = db.find(x => x.id === activeSheetItemId);
       if (item) {
-        item.s = "sold"; item.sp = price; item.soldPlatform = platform; item.soldDate = todayFormatted();
+        item.s = "sold"; item.sp = price; item.fee = fee; item.soldPlatform = platform; item.soldDate = todayFormatted();
         saveData();
         closeSellSheet();
         showCelebrationModal(item);
@@ -2387,10 +2489,12 @@
         src: String(x.src || ""),
         bp: parseFloat(x.bp) || 0,
         sp: parseFloat(x.sp) || 0,
+        fee: parseFloat(x.fee) || 0,
         s: x.s === "sold" ? "sold" : "stock",
         d: String(x.d || todayFormatted()),
         soldPlatform: String(x.soldPlatform || ""),
-        soldDate: String(x.soldDate || "")
+        soldDate: String(x.soldDate || ""),
+        n: String(x.n || "")
       }));
     }
 
@@ -2436,6 +2540,7 @@
           const data = photos[k];
           if (typeof data === "string" && data.indexOf("data:image/") === 0) {
             store.put({ id: safeId(k, k), data: data });
+            photoCache[k] = data;
           }
         });
         tx.oncomplete = () => resolve();
@@ -2516,13 +2621,14 @@
       const n = v => (typeof v === "number" && !isNaN(v)) ? v.toFixed(2).replace(".", ",") : "";
       const lines = [];
       lines.push("OGGETTI");
-      lines.push(["ID","Titolo","Categoria","Fonte","Stato","PrezzoAcq","PrezzoVend","Profitto","ROI%","DataAcq","DataVend","Piattaforma"].join(";"));
+      lines.push(["ID","Titolo","Categoria","Fonte","Stato","PrezzoAcq","PrezzoVend","Commissioni","Profitto","ROI%","DataAcq","DataVend","Piattaforma","Note"].join(";"));
       db.forEach(i => {
-        const bp = parseFloat(i.bp) || 0, sp = parseFloat(i.sp) || 0;
+        const bp = parseFloat(i.bp) || 0, sp = parseFloat(i.sp) || 0, fee = parseFloat(i.fee) || 0;
         const sold = i.s === "sold";
-        const profit = sold ? n(sp - bp) : "";
-        const roi = sold && bp > 0 ? (((sp - bp) / bp) * 100).toFixed(1).replace(".", ",") : "";
-        lines.push([q(i.id), q(i.t), q(i.c), q(i.src), q(sold ? "Venduto" : "In stock"), n(bp), sold ? n(sp) : "", profit, roi, q(i.d), q(i.soldDate || ""), q(i.soldPlatform || "")].join(";"));
+        const profitVal = getItemNetProfit(i);
+        const profit = sold ? n(profitVal) : "";
+        const roi = sold && bp > 0 ? ((profitVal / bp) * 100).toFixed(1).replace(".", ",") : "";
+        lines.push([q(i.id), q(i.t), q(i.c), q(i.src), q(sold ? "Venduto" : "In stock"), n(bp), sold ? n(sp) : "", sold ? n(fee) : "", profit, roi, q(i.d), q(i.soldDate || ""), q(i.soldPlatform || ""), q(i.n || "")].join(";"));
       });
       lines.push("");
       lines.push("SPESE");
@@ -2591,23 +2697,17 @@
       "Pezzo piazzato, cliente accontentato e profitto intascato. 🚚",
       "Il ciclo del resell continua: acquista, piazza, incassa! 🔄",
       "Niente male davvero! Avanti così verso il prossimo obiettivo. 🔥",
-      "Colpo grosso! Questa vendita è una piccola opera d'arte. 🏆",
-      "Trasformare l'usato in valore reale: un classico che non delude mai. ✨",
-      "Un passo avanti verso il traguardo del mese. Grande lavoro! 🚀",
-      "Comprare bene, vendere meglio, sorridere alla cassa. 😎",
-      "Centro perfetto! Quando il reselling diventa una scienza esatta. 🎯",
-      "Vendita esplosiva! Un altro pezzo portato a termine. 💣"
+      "Colpo grosso! Questa vendita è una piccola opera d'arte. 🏆"
     ];
 
     function showCelebrationModal(item) {
       if (!item) return;
       const bp = parseFloat(item.bp) || 0;
-      const sp = parseFloat(item.sp) || 0;
-      const profit = sp - bp;
+      const profit = getItemNetProfit(item);
       const roi = bp > 0 ? ((profit / bp) * 100).toFixed(0) : "100";
 
       document.getElementById("celebrateItemTitle").innerText = item.t;
-      document.getElementById("celebrateTransRow").innerHTML = `Acquisto: <span class="val-acq">€${bp.toFixed(2)}</span> ➔ Venduto a: <span class="val-vend">€${sp.toFixed(2)}</span> (${esc(item.soldPlatform || "Di Persona")})`;
+      document.getElementById("celebrateTransRow").innerHTML = `Acquisto: <span class="val-acq">€${bp.toFixed(2)}</span> ➔ Venduto a: <span class="val-vend">€${(parseFloat(item.sp)||0).toFixed(2)}</span> (${esc(item.soldPlatform || "Di Persona")})`;
       document.getElementById("celebrateProfitVal").innerText = (profit >= 0 ? "+€" : "-€") + Math.abs(profit).toFixed(2);
       document.getElementById("celebrateRoiVal").innerText = (profit >= 0 ? "+" : "") + roi + "%";
 
