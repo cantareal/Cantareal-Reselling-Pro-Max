@@ -52,7 +52,6 @@
     .stat-card.month { background: linear-gradient(135deg, #d97706, #b45309); }
     .cash-adjust-btn { position: absolute; top: 8px; right: 8px; background: rgba(255,255,255,0.2); border: none; color: #fff; font-size: 0.85rem; cursor: pointer; width: auto; padding: 3px 7px; border-radius: 6px; }
 
-    /* OBIETTIVO COMPATTO */
     .goal-card { background: var(--card-bg); padding: 8px 12px; border-radius: 10px; border: 1px solid var(--border-color); margin-bottom: 10px; }
     .goal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; font-size: 0.78rem; font-weight: 700; }
     .goal-header-left { display: flex; align-items: center; gap: 6px; }
@@ -71,7 +70,6 @@
     .tab-btn { padding: 9px 2px; font-size: 0.68rem; font-weight: 700; border-radius: 8px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-color); cursor: pointer; text-align: center; }
     .tab-btn.active { background: var(--tab-active); color: var(--tab-active-text); border-color: var(--tab-active); }
 
-    /* BARRA DEI FILTRI COMPATTA */
     .controls-card { background: var(--card-bg); padding: 8px 10px; border-radius: 10px; border: 1px solid var(--border-color); margin-bottom: 10px; }
     
     .search-wrapper { position: relative; flex-grow: 1; display: flex; align-items: center; }
@@ -197,7 +195,6 @@
     .photo-preview-box img { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; border: 1px solid var(--border-color); cursor: zoom-in; }
     .btn-remove-photo { position: absolute; top: -6px; right: -6px; background: var(--danger-color); color: #fff; border: none; border-radius: 50%; width: 22px; height: 22px; font-size: 0.8rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
 
-    /* NUOVO LAYOUT PULSANTI MODALE MODIFICA */
     .edit-modal-actions {
       grid-column: span 2;
       display: flex;
@@ -207,13 +204,8 @@
       padding-top: 12px;
       border-top: 1px solid var(--border-color);
     }
-    .modal-btn-row {
-      display: flex;
-      gap: 8px;
-    }
-    .modal-btn-row .btn-modal-action {
-      flex: 1;
-    }
+    .modal-btn-row { display: flex; gap: 8px; }
+    .modal-btn-row .btn-modal-action { flex: 1; }
     .btn-modal-action {
       width: 100%;
       padding: 11px 12px;
@@ -228,9 +220,7 @@
       gap: 6px;
       transition: transform 0.1s ease, filter 0.15s ease;
     }
-    .btn-modal-action:active {
-      transform: scale(0.98);
-    }
+    .btn-modal-action:active { transform: scale(0.98); }
     .btn-modal-sell { background: var(--success-color); color: #ffffff; border-color: var(--success-color); }
     .btn-modal-save { background: var(--accent-color); color: #ffffff; border-color: var(--accent-color); }
     .btn-modal-copy { background: rgba(139, 92, 246, 0.18); color: #c4b5fd; border-color: rgba(139, 92, 246, 0.4); }
@@ -926,7 +916,6 @@
           <input type="date" id="editSoldDate">
         </div>
 
-        <!-- NUOVO LAYOUT PULSANTI NEL MODALE MODIFICA -->
         <div class="edit-modal-actions">
           <button type="button" class="btn-modal-action btn-modal-sell" id="btnQuickSell">🛒 Segna come Venduto</button>
           <button type="button" class="btn-modal-action btn-modal-save" onclick="saveEditChanges()">💾 Salva Modifiche</button>
@@ -1030,72 +1019,8 @@
     const USER_NICK_KEY = "reselling_pro_user_nick";
     const SNAPSHOTS_KEY = "reselling_auto_snapshots_v1";
 
-    const userRealDataset = [
-      {"id":"1793884343763","t":"Felpa Napapijri","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.15,"sp":0,"fee":0,"s":"stock","d":"05/11/2026","soldPlatform":"","soldDate":"","n":""},
-      {"id":"1793884334722","t":"Felpa Guinness","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.15,"sp":0,"fee":0,"s":"stock","d":"05/11/2026","soldPlatform":"","soldDate":"","n":""},
-      {"id":"1793884319850","t":"Felpa DHL taglia M","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.15,"sp":0,"fee":0,"s":"stock","d":"05/11/2026","soldPlatform":"","soldDate":"","n":""},
-      {"id":"1793884304211","t":"Felpa DHL taglia L","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.15,"sp":0,"fee":0,"s":"stock","d":"05/11/2026","soldPlatform":"","soldDate":"","n":""},
-      {"id":"1793709293839","t":"Felpa Ascoli Nike","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3,"sp":0,"fee":0,"s":"stock","d":"03/11/2026","soldPlatform":"","soldDate":"","n":""},
-      {"id":"1793261983990","t":"Miti del nord","c":"Libri","src":"Mercatino / Di Persona","bp":0,"sp":0,"fee":0,"s":"stock","d":"29/10/2026","soldPlatform":"","soldDate":"","n":""},
-      {"id":"1793261971110","t":"Enciclopedia del fantastico","c":"Libri","src":"Mercatino / Di Persona","bp":0,"sp":0,"fee":0,"s":"stock","d":"29/10/2026","soldPlatform":"","soldDate":"","n":""},
-      {"id":"1793261957954","t":"Edda","c":"Libri","src":"Mercatino / Di Persona","bp":0,"sp":10,"fee":0,"s":"sold","d":"29/10/2026","soldPlatform":"Vinted","soldDate":"01/11/2026","n":""},
-      {"id":"1793109700688","t":"Bushido","c":"Libri","src":"Mercatino / Di Persona","bp":0,"sp":0,"fee":0,"s":"stock","d":"27/10/2026","soldPlatform":"","soldDate":"","n":""},
-      {"id":"1793109690566","t":"Cuore oscuro","c":"Libri","src":"Mercatino / Di Persona","bp":0,"sp":0,"fee":0,"s":"stock","d":"27/10/2026","soldPlatform":"","soldDate":"","n":""},
-      {"id":"1793109674532","t":"Maglia DHL","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":2,"sp":17,"fee":0,"s":"sold","d":"27/10/2026","soldPlatform":"Vinted","soldDate":"28/10/2026","n":""},
-      {"id":"1793109660940","t":"Maglia Lipsia","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":5,"sp":0,"fee":0,"s":"stock","d":"27/10/2026","soldPlatform":"","soldDate":"","n":""},
-      {"id":"1792655015266","t":"Don Chisciotte DVD","c":"Altro","src":"Mercatino / Di Persona","bp":0,"sp":0,"fee":0,"s":"stock","d":"22/10/2026","soldPlatform":"","soldDate":"","n":""},
-      {"id":"1792655005063","t":"Il miracolo di berna DVD","c":"Altro","src":"Mercatino / Di Persona","bp":0,"sp":0,"fee":0,"s":"stock","d":"22/10/2026","soldPlatform":"","soldDate":"","n":""},
-      {"id":"1792654995011","t":"Nella terra dei cannibali dvd","c":"Altro","src":"Mercatino / Di Persona","bp":0,"sp":0,"fee":0,"s":"stock","d":"22/10/2026","soldPlatform":"","soldDate":"","n":""},
-      {"id":"1792654978314","t":"The getaway Ps2","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":0,"sp":0,"fee":0,"s":"stock","d":"22/10/2026","soldPlatform":"","soldDate":"","n":""},
-      {"id":"1792499154342","t":"Felpa Borussia Dortmund","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.3,"sp":30,"fee":0,"s":"sold","d":"20/10/2026","soldPlatform":"Wallapop","soldDate":"29/10/2026","n":""},
-      {"id":"1792499138053","t":"Maglia Chicago bulls","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.3,"sp":0,"fee":0,"s":"stock","d":"20/10/2026","soldPlatform":"","soldDate":"","n":""},
-      {"id":"1792499116883","t":"Maglia Jordan PSG","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.3,"sp":0,"fee":0,"s":"stock","d":"20/10/2026","soldPlatform":"","soldDate":"","n":""},
-      {"id":"1791914659856","t":"PS4 slim","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":25,"sp":0,"fee":0,"s":"stock","d":"13/10/2026","soldPlatform":"","soldDate":"","n":""},
-      {"id":"1791651300704","t":"Inazuma Eleven striker wii","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":5,"sp":0,"fee":0,"s":"stock","d":"10/10/2026","soldPlatform":"","soldDate":"","n":""},
-      {"id":"1791651288584","t":"Mario kart wii","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":5,"sp":0,"fee":0,"s":"stock","d":"10/10/2026","soldPlatform":"","soldDate":"","n":""},
-      {"id":"1791596827414","t":"Camicia uomo Tommy Hilfiger","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.75,"sp":0,"fee":0,"s":"stock","d":"06/10/2026","soldPlatform":"","soldDate":"","n":""},
-      {"id":"1791596810008","t":"Felpa Adidas donna con zip","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.75,"sp":0,"fee":0,"s":"stock","d":"06/10/2026","soldPlatform":"","soldDate":"","n":""},
-      {"id":"1791596787282","t":"Felpa Adidas oliva","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":3.75,"sp":0,"fee":0,"s":"stock","d":"06/10/2026","soldPlatform":"","soldDate":"","n":""},
-      {"id":"1791596760197","t":"Maglietta Rosario central","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":5.14,"sp":35,"fee":0,"s":"sold","d":"06/10/2026","soldPlatform":"Wallapop","soldDate":"29/10/2026","n":""},
-      {"id":"1791157418467","t":"God of war ps3","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":6,"sp":0,"fee":0,"s":"stock","d":"05/10/2026","soldPlatform":"","soldDate":"","n":""},
-      {"id":"1791157403004","t":"Maglietta Marcelo burlon","c":"Abbigliamento","src":"Mercatino / Di Persona","bp":16.65,"sp":0,"fee":0,"s":"stock","d":"05/10/2026","soldPlatform":"","soldDate":"","n":""},
-      {"id":"1791157390221","t":"Crash twinsanity","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":6.84,"sp":0,"fee":0,"s":"stock","d":"05/10/2026","soldPlatform":"","soldDate":"","n":""},
-      {"id":"1791157369967","t":"Spyro the eternal night","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":6.84,"sp":0,"fee":0,"s":"stock","d":"05/10/2026","soldPlatform":"","soldDate":"","n":""},
-      {"id":"1791157184294","t":"Crash 4","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":5,"sp":0,"fee":0,"s":"stock","d":"05/10/2026","soldPlatform":"","soldDate":"","n":""},
-      {"id":"1791157170580","t":"Rayman Legend","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":5,"sp":0,"fee":0,"s":"stock","d":"05/10/2026","soldPlatform":"","soldDate":"","n":""},
-      {"id":"1791157157611","t":"Crash Trilogy ps4","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":5,"sp":15,"fee":0,"s":"sold","d":"05/10/2026","soldPlatform":"Vinted","soldDate":"05/10/2026","n":""},
-      {"id":"1791157144737","t":"Spyro Trilogy ps4","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":5,"sp":15,"fee":0,"s":"sold","d":"05/10/2026","soldPlatform":"Vinted","soldDate":"05/10/2026","n":""},
-      {"id":"1791157109063","t":"PS4 fat","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","bp":40,"sp":0,"fee":0,"s":"stock","d":"05/10/2026","soldPlatform":"","soldDate":"","n":""},
-      {"id":"1","t":"Onimusha: Dawn of Dreams (PS2)","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":20,"sp":0,"fee":0,"d":"05/09/2026","soldPlatform":"","soldDate":"","n":""},
-      {"id":"2","t":"Zerocalcare (Libro)","c":"Libri","src":"Vinted","s":"sold","bp":0,"sp":9,"fee":0,"d":"05/09/2026","soldPlatform":"Vinted","soldDate":"05/09/2026","n":""},
-      {"id":"3","t":"Crash l'ira di Cortex","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":0,"sp":0,"fee":0,"d":"05/09/2026","soldPlatform":"","soldDate":"","n":""},
-      {"id":"4","t":"Gta V","c":"Gaming / Videogiochi","src":"Wallapop","s":"sold","bp":0,"sp":8,"fee":0,"d":"05/09/2026","soldPlatform":"Wallapop","soldDate":"05/09/2026","n":""},
-      {"id":"5","t":"Jak e dexter","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":0,"sp":0,"fee":0,"d":"05/09/2026","soldPlatform":"","soldDate":"","n":""},
-      {"id":"6","t":"SmackDown shut your mouth","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":0,"sp":0,"fee":0,"d":"05/09/2026","soldPlatform":"","soldDate":"","n":""},
-      {"id":"7","t":"Smackdown here comes the pain","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":0,"sp":0,"fee":0,"d":"05/09/2026","soldPlatform":"","soldDate":"","n":""},
-      {"id":"8","t":"TMNT Wii","c":"Gaming / Videogiochi","src":"eBay","s":"sold","bp":0,"sp":6.94,"fee":0,"d":"05/09/2026","soldPlatform":"eBay","soldDate":"05/09/2026","n":""},
-      {"id":"9","t":"Cardigan Abercrombie","c":"Abbigliamento","src":"Vinted","s":"sold","bp":0,"sp":7,"fee":0,"d":"05/09/2026","soldPlatform":"Vinted","soldDate":"05/09/2026","n":""},
-      {"id":"10","t":"The last of us part 2","c":"Gaming / Videogiochi","src":"Vinted","s":"sold","bp":5,"sp":14,"fee":0,"d":"05/09/2026","soldPlatform":"Vinted","soldDate":"05/09/2026","n":""},
-      {"id":"11","t":"Dying light","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"sold","bp":5,"sp":11.5,"fee":0,"d":"05/09/2026","soldPlatform":"Vinted","soldDate":"05/11/2026","n":""},
-      {"id":"12","t":"Ring fit Adventure","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":20,"sp":0,"fee":0,"d":"06/09/2026","soldPlatform":"","soldDate":"","n":""},
-      {"id":"13","t":"Distruggi documenti","c":"Elettronica","src":"Mercatino / Di Persona","s":"stock","bp":0,"sp":0,"fee":0,"d":"09/09/2026","soldPlatform":"","soldDate":"","n":""},
-      {"id":"14","t":"Resistance 2","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":3,"sp":0,"fee":0,"d":"16/09/2026","soldPlatform":"","soldDate":"","n":""},
-      {"id":"15","t":"Resistance fall of man","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":3,"sp":0,"fee":0,"d":"16/09/2026","soldPlatform":"","soldDate":"","n":""},
-      {"id":"16","t":"Gran Turismo 6","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"sold","bp":3,"sp":6,"fee":0,"d":"16/09/2026","soldPlatform":"Vinted","soldDate":"01/11/2026","n":""},
-      {"id":"17","t":"Street fighter IV","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":3,"sp":0,"fee":0,"d":"16/09/2026","soldPlatform":"","soldDate":"","n":""},
-      {"id":"18","t":"Metal Gear Solid guns of the patriots","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":3,"sp":0,"fee":0,"d":"16/09/2026","soldPlatform":"","soldDate":"","n":""},
-      {"id":"19","t":"Binary domain","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":3,"sp":0,"fee":0,"d":"16/09/2026","soldPlatform":"","soldDate":"","n":""},
-      {"id":"20","t":"Time crisis razing storm","c":"Gaming / Videogiochi","src":"Vinted","s":"sold","bp":3,"sp":13,"fee":0,"d":"16/09/2026","soldPlatform":"Vinted","soldDate":"16/09/2026","n":""},
-      {"id":"21","t":"The Legend of Spyro","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"sold","bp":3,"sp":24,"fee":0,"d":"16/09/2026","soldPlatform":"Vinted","soldDate":"05/10/2026","n":""},
-      {"id":"22","t":"The last of us","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":3,"sp":0,"fee":0,"d":"16/09/2026","soldPlatform":"","soldDate":"","n":""},
-      {"id":"23","t":"COD Advanced warfare","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":3,"sp":0,"fee":0,"d":"16/09/2026","soldPlatform":"","soldDate":"","n":""},
-      {"id":"24","t":"Costume adidas","c":"Abbigliamento","src":"Mercatino / Di Persona","s":"stock","bp":0,"sp":0,"fee":0,"d":"18/09/2026","soldPlatform":"","soldDate":"","n":""},
-      {"id":"25","t":"Castlevania","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"sold","bp":6,"sp":19,"fee":0,"d":"19/09/2026","soldPlatform":"Vinted","soldDate":"10/10/2026","n":""},
-      {"id":"26","t":"Dead space 2","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":6,"sp":0,"fee":0,"d":"19/09/2026","soldPlatform":"","soldDate":"","n":""},
-      {"id":"27","t":"Polo Lacoste","c":"Abbigliamento","src":"Vinted","s":"sold","bp":5,"sp":19,"fee":0,"d":"19/09/2026","soldPlatform":"Vinted","soldDate":"19/09/2026","n":""},
-      {"id":"28","t":"Life Is strange","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"stock","bp":11.39,"sp":0,"fee":0,"d":"24/09/2026","soldPlatform":"","soldDate":"","n":""},
-      {"id":"29","t":"GTA Trilogy ps4","c":"Gaming / Videogiochi","src":"Mercatino / Di Persona","s":"sold","bp":9.63,"sp":15,"fee":0,"d":"27/09/2026","soldPlatform":"Vinted","soldDate":"05/10/2026","n":""}
-    ];
+    /* DATASET INIZIALE VUOTO PER MANTENERE IL FILE LEGGERO */
+    const userRealDataset = [];
 
     let db = [];
     let expenses = [];
@@ -2728,7 +2653,7 @@
       document.getElementById("celebrateModal").style.display = "flex";
     }
 
-    if (navigator.storage && navigator.storage.persist) {
+    if (navigator.storage && navigator.storagepersist) {
       navigator.storage.persist().catch(() => {});
     }
 
@@ -2766,4 +2691,4 @@
     });
   </script>
 </body>
-</html> 
+</html>
