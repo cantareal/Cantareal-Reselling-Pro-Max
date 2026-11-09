@@ -72,9 +72,107 @@
     @keyframes goldGlow { 0% { box-shadow: 0 0 4px #f59e0b; } 100% { box-shadow: 0 0 12px #fbbf24; } }
     @keyframes goldShift { 0% { background-position: 0% 50%; } 100% { background-position: 100% 50%; } }
 
-    .status-tabs { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; margin-bottom: 10px; }
-    .tab-btn { padding: 9px 2px; font-size: 0.68rem; font-weight: 700; border-radius: 8px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-color); cursor: pointer; text-align: center; }
-    .tab-btn.active { background: var(--tab-active); color: var(--tab-active-text); border-color: var(--tab-active); }
+    .status-tabs {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+      margin-bottom: 12px;
+      padding: 6px;
+      background: linear-gradient(180deg, rgba(30,41,59,0.95), rgba(15,23,42,0.9));
+      border: 1px solid rgba(51,65,85,0.9);
+      border-radius: 16px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+    }
+    [data-theme="light"] .status-tabs {
+      background: linear-gradient(180deg, #ffffff, #f1f5f9);
+      border-color: var(--border-color);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.8);
+    }
+    .tab-btn {
+      position: relative;
+      border: 1px solid transparent;
+      background: rgba(15, 23, 42, 0.55);
+      color: #94a3b8;
+      border-radius: 12px;
+      padding: 10px 4px 8px;
+      font-size: 0.62rem;
+      font-weight: 800;
+      letter-spacing: 0.2px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      width: 100%;
+      transition: transform .12s ease, box-shadow .15s ease, background .15s ease, color .15s ease;
+      text-align: center;
+    }
+    [data-theme="light"] .tab-btn {
+      background: rgba(241, 245, 249, 0.9);
+      color: #64748b;
+    }
+    .tab-btn .tab-ico {
+      font-size: 1.15rem;
+      line-height: 1;
+      filter: grayscale(0.25);
+      opacity: 0.9;
+    }
+    .tab-btn .tab-count {
+      position: absolute;
+      top: 4px;
+      right: 5px;
+      min-width: 16px;
+      height: 16px;
+      padding: 0 4px;
+      border-radius: 99px;
+      background: #334155;
+      color: #e2e8f0;
+      font-size: 0.58rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+    }
+    [data-theme="light"] .tab-btn .tab-count {
+      background: #cbd5e1;
+      color: #0f172a;
+    }
+    .tab-btn.active {
+      color: #fff !important;
+      border-color: rgba(255,255,255,0.12);
+      transform: translateY(-1px);
+    }
+    .tab-btn.active .tab-ico {
+      filter: none;
+      opacity: 1;
+      transform: scale(1.08);
+    }
+    .tab-btn.active .tab-count {
+      background: rgba(0,0,0,0.35);
+      color: #fff;
+    }
+    .tab-btn.active[data-tab="ALL"] {
+      background: linear-gradient(145deg, #3b82f6, #1d4ed8);
+      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
+    }
+    .tab-btn.active[data-tab="stock"] {
+      background: linear-gradient(145deg, #2563eb, #1e40af);
+      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
+    }
+    .tab-btn.active[data-tab="sold"] {
+      background: linear-gradient(145deg, #22c55e, #15803d);
+      box-shadow: 0 6px 16px rgba(34, 197, 94, 0.4);
+    }
+    .tab-btn.active[data-tab="EXPENSES"] {
+      background: linear-gradient(145deg, #f43f5e, #be123c);
+      box-shadow: 0 6px 16px rgba(244, 63, 94, 0.35);
+    }
+    .tab-btn.active[data-tab="STATS"] {
+      background: linear-gradient(145deg, #a855f7, #6d28d9);
+      box-shadow: 0 6px 16px rgba(168, 85, 247, 0.4);
+    }
+    .tab-btn:active { transform: scale(0.96); }
 
     .controls-card { background: var(--card-bg); padding: 8px 10px; border-radius: 10px; border: 1px solid var(--border-color); margin-bottom: 10px; }
     
@@ -389,11 +487,30 @@
   </div>
 
   <div class="status-tabs">
-    <button class="tab-btn active" id="tabALL" onclick="setStatusFilter('ALL')">Tutti (0)</button>
-    <button class="tab-btn" id="tabstock" onclick="setStatusFilter('stock')">📦 Stock (0)</button>
-    <button class="tab-btn" id="tabsold" onclick="setStatusFilter('sold')">✅ Venduti (0)</button>
-    <button class="tab-btn" id="tabEXPENSES" onclick="setStatusFilter('EXPENSES')">💸 Spese (0)</button>
-    <button class="tab-btn" id="tabSTATS" onclick="setStatusFilter('STATS')">📊 Grafici</button>
+    <button class="tab-btn active" data-tab="ALL" id="tabALL" onclick="setStatusFilter('ALL')">
+      <span class="tab-count" id="countAll">0</span>
+      <span class="tab-ico">📋</span>
+      Tutti
+    </button>
+    <button class="tab-btn" data-tab="stock" id="tabstock" onclick="setStatusFilter('stock')">
+      <span class="tab-count" id="countStock">0</span>
+      <span class="tab-ico">📦</span>
+      Stock
+    </button>
+    <button class="tab-btn" data-tab="sold" id="tabsold" onclick="setStatusFilter('sold')">
+      <span class="tab-count" id="countSold">0</span>
+      <span class="tab-ico">✅</span>
+      Venduti
+    </button>
+    <button class="tab-btn" data-tab="EXPENSES" id="tabEXPENSES" onclick="setStatusFilter('EXPENSES')">
+      <span class="tab-count" id="countExp">0</span>
+      <span class="tab-ico">💸</span>
+      Spese
+    </button>
+    <button class="tab-btn" data-tab="STATS" id="tabSTATS" onclick="setStatusFilter('STATS')">
+      <span class="tab-ico">📊</span>
+      Grafici
+    </button>
   </div>
 
   <div id="mainView">
@@ -2298,10 +2415,11 @@
       const netTotalProfit = totalSalesProfit - totalExpensesSum;
       const netMonthProfit = monthSalesProfit - monthExpensesSum;
 
-      document.getElementById("tabALL").innerText = `Tutti (${db.length})`;
-      document.getElementById("tabstock").innerText = `📦 Stock (${stockCount})`;
-      document.getElementById("tabsold").innerText = `✅ Venduti (${soldCount})`;
-      document.getElementById("tabEXPENSES").innerText = `💸 Spese (${expenses.length})`;
+      const setCount = (id, n) => { const el = document.getElementById(id); if (el) el.textContent = n; };
+      setCount("countAll", db.length);
+      setCount("countStock", stockCount);
+      setCount("countSold", soldCount);
+      setCount("countExp", expenses.length);
       document.getElementById("statMonthCount").innerText = `${monthSoldCount} vendit${monthSoldCount === 1 ? 'a' : 'e'}`;
 
       if (currentStatusFilter === "STATS" || currentStatusFilter === "TROPHIES") return;
