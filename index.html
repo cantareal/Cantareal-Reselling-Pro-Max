@@ -54,7 +54,7 @@
 
     .goal-card {
       background: var(--card-bg);
-      padding: 6px 10px;
+      padding: 5px 10px 6px;
       border-radius: 8px;
       border: 1px solid var(--border-color);
       margin-bottom: 8px;
@@ -64,18 +64,34 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 4px;
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       font-weight: 700;
     }
-    .goal-input {
-      width: 58px;
-      padding: 1px 4px;
-      font-size: 0.72rem;
+    .goal-card input.goal-input[type="number"] {
+      width: 52px !important;
+      min-width: 52px;
+      max-width: 52px;
+      padding: 2px 4px !important;
+      height: 22px !important;
+      font-size: 0.72rem !important;
       text-align: right;
       background: var(--input-bg);
       color: var(--text-color);
       border: 1px solid var(--border-color);
       border-radius: 4px;
+      margin-left: 4px;
+      display: inline-block;
+      vertical-align: middle;
+      box-sizing: border-box;
+    }
+    .goal-card .goal-header {
+      gap: 8px;
+    }
+    .goal-card .goal-header > span:first-child {
+      display: inline-flex;
+      align-items: center;
+      flex-wrap: nowrap;
+      min-width: 0;
     }
     .progress-bar-bg {
       background: var(--border-color);
