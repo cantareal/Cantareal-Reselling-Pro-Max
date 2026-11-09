@@ -170,6 +170,29 @@
     .record-label { font-size: 0.68rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; }
     .record-val { font-size: 1.1rem; font-weight: 900; color: var(--success-color); margin-top: 2px; }
 
+    
+    .trophy-section { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; margin-bottom: 8px; overflow: hidden; }
+    .trophy-section-header { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 12px 14px; background: transparent; border: none; color: var(--text-color); cursor: pointer; font-weight: 800; font-size: 0.82rem; text-align: left; }
+    .trophy-section-header .sec-left { display: flex; align-items: center; gap: 8px; }
+    .trophy-section-header .sec-count { font-size: 0.72rem; color: var(--text-muted); font-weight: 700; }
+    .trophy-section-header .sec-chevron { color: var(--warn-color); transition: transform 0.2s; }
+    .trophy-section.open .sec-chevron { transform: rotate(90deg); }
+    .trophy-section-body { display: none; border-top: 1px solid var(--border-color); padding: 6px 8px 10px; }
+    .trophy-section.open .trophy-section-body { display: block; }
+    .ach-row { display: flex; align-items: center; gap: 10px; padding: 10px 8px; border-radius: 10px; margin-bottom: 4px; background: var(--input-bg); border: 1px solid transparent; }
+    .ach-row.done { border-color: rgba(34,197,94,0.35); }
+    .ach-row.locked { opacity: 0.75; }
+    .ach-icon { width: 28px; text-align: center; font-size: 1rem; flex-shrink: 0; }
+    .ach-info { flex: 1; min-width: 0; }
+    .ach-title { font-weight: 800; font-size: 0.82rem; }
+    .ach-desc { font-size: 0.68rem; color: var(--text-muted); margin-top: 1px; }
+    .ach-bar-bg { height: 5px; background: var(--border-color); border-radius: 4px; margin-top: 5px; overflow: hidden; }
+    .ach-bar-fill { height: 100%; background: var(--warn-color); width: 0%; }
+    .ach-right { text-align: right; flex-shrink: 0; }
+    .ach-xp { font-size: 0.65rem; font-weight: 800; color: var(--warn-color); }
+    .ach-prog { font-size: 0.65rem; color: var(--text-muted); font-weight: 700; }
+    .trophy-xp-line { font-size: 0.75rem; color: var(--text-muted); margin-top: 6px; font-weight: 700; }
+
     .trophy-placeholder-box {
       background: var(--card-bg);
       border: 2px dashed var(--border-color);
@@ -500,11 +523,7 @@
     </div>
 
     <div class="section-title-gold">🎖️ Bacheca Traguardi</div>
-    <div class="trophy-placeholder-box">
-      <div style="font-size: 2rem; margin-bottom: 8px;">🎯</div>
-      <div style="font-weight: 800; color: var(--text-color); margin-bottom: 4px;">Spazio Traguardi Sbloccabile</div>
-      <div style="font-size: 0.8rem;">La struttura è pronta. I 100 obiettivi evolutivi e i 10 livelli verranno inseriti qui nella prossima fase!</div>
-    </div>
+    <div id="achievementsAccordion"></div>
   </div>
 
   <div id="toastWrap"></div>
@@ -1451,7 +1470,13 @@
         mainView.style.display = "none";
         chartsView.style.display = "none";
         trophiesView.style.display = "block";
-        computeTrophies();
+        (async () => {
+          try {
+            const all = await getAllPhotosIDB();
+            Object.keys(all || {}).forEach(k => { photoCache[k] = all[k]; });
+          } catch (e) {}
+          computeTrophies();
+        })();
       } else {
         const el = document.getElementById("tab" + status);
         if (el) el.classList.add("active");
@@ -1554,7 +1579,369 @@
       }
     }
 
-    const TROPHY_STATE = { level: 1, levelName: "Avvio", unlocked: 0, total: 0 };
+
+    const TROPHY_XP_KEY = "cantareal_trophy_xp_v1";
+    const TROPHY_CLAIMED_KEY = "cantareal_trophy_claimed_v1";
+    const TROPHY_OPEN_SEC_KEY = "cantareal_trophy_open_sec";
+
+    const LEVEL_TITLES = [
+      [1, "Avvio"], [3, "Novizio"], [5, "Rivenditore"], [8, "Flipper"],
+      [12, "Pro"], [16, "Shark"], [20, "Leggenda"]
+    ];
+
+    function levelFromXp(xp) {
+      return Math.max(1, Math.floor(xp / 100) + 1);
+    }
+    function titleFromLevel(lv) {
+      let t = "Avvio";
+      LEVEL_TITLES.forEach(([min, name]) => { if (lv >= min) t = name; });
+      return t;
+    }
+    function loadTrophyXp() {
+      return parseInt(localStorage.getItem(TROPHY_XP_KEY) || "0", 10) || 0;
+    }
+    function loadClaimed() {
+      try { return JSON.parse(localStorage.getItem(TROPHY_CLAIMED_KEY) || "[]"); } catch (e) { return []; }
+    }
+    function saveClaimed(arr) {
+      localStorage.setItem(TROPHY_CLAIMED_KEY, JSON.stringify(arr));
+    }
+
+    const ACHIEVEMENT_CATS = [
+      { id: "inv", icon: "📦", title: "Inventario & volume" },
+      { id: "cat", icon: "🏷️", title: "Categorie" },
+      { id: "sales", icon: "✅", title: "Vendite" },
+      { id: "profit", icon: "💰", title: "Profitto netto" },
+      { id: "roi", icon: "📈", title: "ROI & colpi" },
+      { id: "speed", icon: "⚡", title: "Velocità & rotazione" },
+      { id: "plat", icon: "🌐", title: "Piattaforme" },
+      { id: "app", icon: "🛠️", title: "Gestione app" }
+    ];
+
+    // progress fn returns { current, target, done }
+    const ACHIEVEMENTS = [
+      // Inventario
+      { id: "inv_1", cat: "inv", title: "Primo passo", desc: "Registra il primo oggetto", xp: 10, target: 1, progress: ctx => ctx.total },
+      { id: "inv_10", cat: "inv", title: "Collezionista", desc: "10 oggetti totali gestiti", xp: 15, target: 10, progress: ctx => ctx.total },
+      { id: "inv_25", cat: "inv", title: "Magazzino", desc: "25 oggetti totali", xp: 20, target: 25, progress: ctx => ctx.total },
+      { id: "inv_50", cat: "inv", title: "Scaffali pieni", desc: "50 oggetti totali", xp: 25, target: 50, progress: ctx => ctx.total },
+      { id: "inv_100", cat: "inv", title: "Grosso calibro", desc: "100 oggetti totali", xp: 40, target: 100, progress: ctx => ctx.total },
+      { id: "inv_150", cat: "inv", title: "Archivista", desc: "150 oggetti totali", xp: 50, target: 150, progress: ctx => ctx.total },
+      { id: "stock_10", cat: "inv", title: "Stock vivo", desc: "Almeno 10 pezzi in stock ora", xp: 15, target: 10, progress: ctx => ctx.stockNow },
+      { id: "stock_25", cat: "inv", title: "Stock serio", desc: "25 pezzi in stock ora", xp: 25, target: 25, progress: ctx => ctx.stockNow },
+      { id: "bp_30", cat: "inv", title: "Pezzo importante", desc: "Un acquisto ≥ €30", xp: 15, target: 1, progress: ctx => ctx.hasBp30 ? 1 : 0 },
+      { id: "bp_50", cat: "inv", title: "Caccia grossa", desc: "Un acquisto ≥ €50", xp: 20, target: 1, progress: ctx => ctx.hasBp50 ? 1 : 0 },
+      { id: "free_1", cat: "inv", title: "Costo zero ×1", desc: "1 oggetto a bp 0", xp: 10, target: 1, progress: ctx => ctx.freeCount },
+      { id: "free_5", cat: "inv", title: "Costo zero ×5", desc: "5 oggetti a bp 0", xp: 20, target: 5, progress: ctx => ctx.freeCount },
+      { id: "free_10", cat: "inv", title: "Costo zero ×10", desc: "10 oggetti a bp 0", xp: 30, target: 10, progress: ctx => ctx.freeCount },
+      { id: "src_3", cat: "inv", title: "Tre fonti", desc: "3 fonti di acquisto diverse", xp: 15, target: 3, progress: ctx => ctx.sources },
+      { id: "day_buy_5", cat: "inv", title: "Giornata acquisti", desc: "5 oggetti acquistati lo stesso giorno", xp: 20, target: 1, progress: ctx => ctx.maxBuySameDay >= 5 ? 1 : 0 },
+      // Categorie
+      { id: "cat_game_10", cat: "cat", title: "Videogiocatore", desc: "10 pezzi Gaming totali", xp: 15, target: 10, progress: ctx => ctx.catTotal["Gaming / Videogiochi"] || 0 },
+      { id: "cat_cloth_10", cat: "cat", title: "Stilista", desc: "10 pezzi Abbigliamento totali", xp: 15, target: 10, progress: ctx => ctx.catTotal["Abbigliamento"] || 0 },
+      { id: "cat_book_5", cat: "cat", title: "Bibliotecario", desc: "5 Libri totali", xp: 15, target: 5, progress: ctx => ctx.catTotal["Libri"] || 0 },
+      { id: "cat_elec_5", cat: "cat", title: "Tech", desc: "5 Elettronica totali", xp: 15, target: 5, progress: ctx => ctx.catTotal["Elettronica"] || 0 },
+      { id: "cat_stock_3", cat: "cat", title: "Multicat. stock", desc: "3 categorie diverse in stock", xp: 15, target: 3, progress: ctx => ctx.catStockKinds },
+      { id: "sold_game_1", cat: "cat", title: "Prima vendita Gaming", desc: "1 vendita Gaming", xp: 10, target: 1, progress: ctx => ctx.catSold["Gaming / Videogiochi"] || 0 },
+      { id: "sold_cloth_1", cat: "cat", title: "Prima vendita Abbigliamento", desc: "1 vendita Abbigliamento", xp: 10, target: 1, progress: ctx => ctx.catSold["Abbigliamento"] || 0 },
+      { id: "sold_book_1", cat: "cat", title: "Prima vendita Libri", desc: "1 vendita Libri", xp: 10, target: 1, progress: ctx => ctx.catSold["Libri"] || 0 },
+      { id: "sold_cloth_5", cat: "cat", title: "5 abiti venduti", desc: "5 vendite Abbigliamento", xp: 20, target: 5, progress: ctx => ctx.catSold["Abbigliamento"] || 0 },
+      { id: "sold_game_5", cat: "cat", title: "5 gaming venduti", desc: "5 vendite Gaming", xp: 20, target: 5, progress: ctx => ctx.catSold["Gaming / Videogiochi"] || 0 },
+      // Vendite
+      { id: "s_1", cat: "sales", title: "Prima vendita", desc: "Chiudi la prima vendita", xp: 15, target: 1, progress: ctx => ctx.sold },
+      { id: "s_5", cat: "sales", title: "Prime 5", desc: "5 vendite", xp: 20, target: 5, progress: ctx => ctx.sold },
+      { id: "s_10", cat: "sales", title: "Prime 10", desc: "10 vendite", xp: 25, target: 10, progress: ctx => ctx.sold },
+      { id: "s_20", cat: "sales", title: "Venti a segno", desc: "20 vendite", xp: 30, target: 20, progress: ctx => ctx.sold },
+      { id: "s_30", cat: "sales", title: "Trenta", desc: "30 vendite", xp: 35, target: 30, progress: ctx => ctx.sold },
+      { id: "s_50", cat: "sales", title: "Cinquanta colpi", desc: "50 vendite", xp: 50, target: 50, progress: ctx => ctx.sold },
+      { id: "s_75", cat: "sales", title: "Settantacinque", desc: "75 vendite", xp: 60, target: 75, progress: ctx => ctx.sold },
+      { id: "s_100", cat: "sales", title: "Centenario", desc: "100 vendite", xp: 80, target: 100, progress: ctx => ctx.sold },
+      { id: "s_day2", cat: "sales", title: "Doppia in un giorno", desc: "2 vendite lo stesso giorno", xp: 20, target: 1, progress: ctx => ctx.maxSoldSameDay >= 2 ? 1 : 0 },
+      { id: "s_day3", cat: "sales", title: "Tris giornaliero", desc: "3 vendite lo stesso giorno", xp: 30, target: 1, progress: ctx => ctx.maxSoldSameDay >= 3 ? 1 : 0 },
+      { id: "s_m5", cat: "sales", title: "5 in un mese", desc: "5 vendite nello stesso mese", xp: 25, target: 1, progress: ctx => ctx.maxSoldMonth >= 5 ? 1 : 0 },
+      { id: "s_m10", cat: "sales", title: "10 in un mese", desc: "10 vendite nello stesso mese", xp: 40, target: 1, progress: ctx => ctx.maxSoldMonth >= 10 ? 1 : 0 },
+      { id: "s_rate50", cat: "sales", title: "Tasso chiusura 50%", desc: "Almeno metà del catalogo venduto (min 10)", xp: 30, target: 1, progress: ctx => (ctx.total >= 10 && ctx.sold / ctx.total >= 0.5) ? 1 : 0 },
+      // Profitto
+      { id: "p_1", cat: "profit", title: "Primo euro netto", desc: "Profitto netto totale > 0", xp: 15, target: 1, progress: ctx => ctx.netTotal > 0 ? 1 : 0 },
+      { id: "p_25", cat: "profit", title: "25 € netti", desc: "Netto totale ≥ €25", xp: 20, target: 25, progress: ctx => Math.floor(ctx.netTotal) },
+      { id: "p_50", cat: "profit", title: "50 € netti", desc: "Netto totale ≥ €50", xp: 25, target: 50, progress: ctx => Math.floor(ctx.netTotal) },
+      { id: "p_100", cat: "profit", title: "100 € netti", desc: "Netto totale ≥ €100", xp: 30, target: 100, progress: ctx => Math.floor(ctx.netTotal) },
+      { id: "p_200", cat: "profit", title: "200 € netti", desc: "Netto totale ≥ €200", xp: 40, target: 200, progress: ctx => Math.floor(ctx.netTotal) },
+      { id: "p_300", cat: "profit", title: "300 € netti", desc: "Netto totale ≥ €300", xp: 50, target: 300, progress: ctx => Math.floor(ctx.netTotal) },
+      { id: "p_500", cat: "profit", title: "500 € netti", desc: "Netto totale ≥ €500", xp: 60, target: 500, progress: ctx => Math.floor(ctx.netTotal) },
+      { id: "p_1000", cat: "profit", title: "1000 € netti", desc: "Netto totale ≥ €1000", xp: 80, target: 1000, progress: ctx => Math.floor(ctx.netTotal) },
+      { id: "p_single10", cat: "profit", title: "Mattoncino", desc: "Una vendita con netto ≥ €10", xp: 15, target: 1, progress: ctx => ctx.bestNet >= 10 ? 1 : 0 },
+      { id: "p_single20", cat: "profit", title: "Affare d'oro", desc: "Una vendita con netto ≥ €20", xp: 20, target: 1, progress: ctx => ctx.bestNet >= 20 ? 1 : 0 },
+      { id: "p_single50", cat: "profit", title: "Colpo grosso", desc: "Una vendita con netto ≥ €50", xp: 35, target: 1, progress: ctx => ctx.bestNet >= 50 ? 1 : 0 },
+      { id: "p_single100", cat: "profit", title: "La svolta", desc: "Una vendita con netto ≥ €100", xp: 50, target: 1, progress: ctx => ctx.bestNet >= 100 ? 1 : 0 },
+      { id: "p_month50", cat: "profit", title: "Mese +50 €", desc: "Un mese con netto ≥ €50", xp: 30, target: 1, progress: ctx => ctx.bestMonthNet >= 50 ? 1 : 0 },
+      { id: "p_month200", cat: "profit", title: "Mese +200 €", desc: "Un mese con netto ≥ €200", xp: 50, target: 1, progress: ctx => ctx.bestMonthNet >= 200 ? 1 : 0 },
+      // ROI
+      { id: "r_50", cat: "roi", title: "ROI 50%+", desc: "Una vendita con ROI ≥ 50%", xp: 15, target: 1, progress: ctx => ctx.bestRoi >= 50 ? 1 : 0 },
+      { id: "r_100", cat: "roi", title: "Raddoppio 100%", desc: "ROI ≥ 100%", xp: 25, target: 1, progress: ctx => ctx.bestRoi >= 100 ? 1 : 0 },
+      { id: "r_200", cat: "roi", title: "Super ROI 200%", desc: "ROI ≥ 200%", xp: 30, target: 1, progress: ctx => ctx.bestRoi >= 200 ? 1 : 0 },
+      { id: "r_500", cat: "roi", title: "ROI 500%", desc: "ROI ≥ 500%", xp: 40, target: 1, progress: ctx => ctx.bestRoi >= 500 ? 1 : 0 },
+      { id: "r_1000", cat: "roi", title: "ROI 1000%", desc: "ROI ≥ 1000%", xp: 50, target: 1, progress: ctx => ctx.bestRoi >= 1000 ? 1 : 0 },
+      { id: "r_x3", cat: "roi", title: "Tre raddoppi", desc: "3 vendite con ROI ≥ 100%", xp: 30, target: 3, progress: ctx => ctx.roi100Count },
+      { id: "r_x5", cat: "roi", title: "Cinque raddoppi", desc: "5 vendite con ROI ≥ 100%", xp: 40, target: 5, progress: ctx => ctx.roi100Count },
+      { id: "r_free10", cat: "roi", title: "Mani d'oro", desc: "bp 0 venduto a ≥ €10", xp: 20, target: 1, progress: ctx => ctx.bestZero >= 10 ? 1 : 0 },
+      { id: "r_free20", cat: "roi", title: "Regalo top", desc: "bp 0 venduto a ≥ €20", xp: 30, target: 1, progress: ctx => ctx.bestZero >= 20 ? 1 : 0 },
+      { id: "r_fee10", cat: "roi", title: "Fee consapevole", desc: "Commissioni totali ≥ €10", xp: 15, target: 10, progress: ctx => Math.floor(ctx.feeTotal) },
+      { id: "r_fee25", cat: "roi", title: "Fee 25 €", desc: "Commissioni totali ≥ €25", xp: 25, target: 25, progress: ctx => Math.floor(ctx.feeTotal) },
+      { id: "r_gt_stock", cat: "roi", title: "Netto > giacenza", desc: "Netto totale > valore stock attuale", xp: 40, target: 1, progress: ctx => ctx.netTotal > ctx.stockVal ? 1 : 0 },
+      // Speed
+      { id: "v_0", cat: "speed", title: "Vendita lampo", desc: "Venduto lo stesso giorno dell'acquisto", xp: 25, target: 1, progress: ctx => ctx.flip0 ? 1 : 0 },
+      { id: "v_3", cat: "speed", title: "Entro 3 giorni", desc: "Flip in ≤ 3 giorni", xp: 20, target: 1, progress: ctx => ctx.flip3 ? 1 : 0 },
+      { id: "v_7", cat: "speed", title: "Entro 7 giorni", desc: "Flip in ≤ 7 giorni", xp: 15, target: 1, progress: ctx => ctx.flip7 ? 1 : 0 },
+      { id: "v_14", cat: "speed", title: "Entro 14 giorni", desc: "Flip in ≤ 14 giorni", xp: 10, target: 1, progress: ctx => ctx.flip14 ? 1 : 0 },
+      { id: "v_fast3", cat: "speed", title: "Tre flip veloci", desc: "3 vendite in ≤ 7 giorni", xp: 25, target: 3, progress: ctx => ctx.flip7Count },
+      { id: "v_fast5", cat: "speed", title: "Cinque flip veloci", desc: "5 vendite in ≤ 7 giorni", xp: 35, target: 5, progress: ctx => ctx.flip7Count },
+      { id: "v_crit1", cat: "speed", title: "Critico risolto", desc: "Venduto dopo ≥ 30 giorni", xp: 20, target: 1, progress: ctx => ctx.critSold },
+      { id: "v_crit3", cat: "speed", title: "3 critici risolti", desc: "3 vendite dopo ≥ 30 giorni", xp: 30, target: 3, progress: ctx => ctx.critSold },
+      { id: "v_crit5", cat: "speed", title: "5 critici risolti", desc: "5 vendite dopo ≥ 30 giorni", xp: 40, target: 5, progress: ctx => ctx.critSold },
+      { id: "v_crit10", cat: "speed", title: "10 critici risolti", desc: "10 vendite dopo ≥ 30 giorni", xp: 50, target: 10, progress: ctx => ctx.critSold },
+      { id: "v_60", cat: "speed", title: "Resurrezione", desc: "Venduto dopo ≥ 60 giorni", xp: 25, target: 1, progress: ctx => ctx.crit60 ? 1 : 0 },
+      { id: "v_nocrit", cat: "speed", title: "Zero critici", desc: "≥5 in stock e nessuno ≥30 gg", xp: 30, target: 1, progress: ctx => ctx.zeroCrit ? 1 : 0 },
+      { id: "v_avg15", cat: "speed", title: "Media ≤15 gg", desc: "Media giorni su ≥10 vendite ≤ 15", xp: 30, target: 1, progress: ctx => ctx.avgDaysOk15 ? 1 : 0 },
+      { id: "v_avg7", cat: "speed", title: "Media ≤7 gg", desc: "Media giorni su ≥10 vendite ≤ 7", xp: 40, target: 1, progress: ctx => ctx.avgDaysOk7 ? 1 : 0 },
+      // Platforms
+      { id: "pl_v1", cat: "plat", title: "Primo Vinted", desc: "1 vendita Vinted", xp: 10, target: 1, progress: ctx => ctx.plat["Vinted"] || 0 },
+      { id: "pl_v10", cat: "plat", title: "Vinted ×10", desc: "10 vendite Vinted", xp: 25, target: 10, progress: ctx => ctx.plat["Vinted"] || 0 },
+      { id: "pl_v25", cat: "plat", title: "Vinted ×25", desc: "25 vendite Vinted", xp: 40, target: 25, progress: ctx => ctx.plat["Vinted"] || 0 },
+      { id: "pl_w1", cat: "plat", title: "Primo Wallapop", desc: "1 vendita Wallapop", xp: 10, target: 1, progress: ctx => ctx.plat["Wallapop"] || 0 },
+      { id: "pl_w10", cat: "plat", title: "Wallapop ×10", desc: "10 vendite Wallapop", xp: 25, target: 10, progress: ctx => ctx.plat["Wallapop"] || 0 },
+      { id: "pl_s1", cat: "plat", title: "Primo Subito", desc: "1 vendita Subito", xp: 10, target: 1, progress: ctx => ctx.plat["Subito"] || 0 },
+      { id: "pl_s5", cat: "plat", title: "Subito ×5", desc: "5 vendite Subito", xp: 20, target: 5, progress: ctx => ctx.plat["Subito"] || 0 },
+      { id: "pl_e1", cat: "plat", title: "Primo eBay", desc: "1 vendita eBay", xp: 10, target: 1, progress: ctx => ctx.plat["eBay"] || 0 },
+      { id: "pl_p1", cat: "plat", title: "Di persona ×1", desc: "1 vendita di persona", xp: 10, target: 1, progress: ctx => ctx.platPersona },
+      { id: "pl_p5", cat: "plat", title: "Di persona ×5", desc: "5 vendite di persona", xp: 20, target: 5, progress: ctx => ctx.platPersona },
+      { id: "pl_2", cat: "plat", title: "Due canali", desc: "2 piattaforme diverse", xp: 15, target: 2, progress: ctx => ctx.platKinds },
+      { id: "pl_4", cat: "plat", title: "Quattro cantoni", desc: "Vinted+Wallapop+Subito+eBay", xp: 40, target: 4, progress: ctx => ctx.platMain4 },
+      // App
+      { id: "a_nick", cat: "app", title: "Profilo curato", desc: "Nickname personalizzato", xp: 10, target: 1, progress: ctx => ctx.hasNick ? 1 : 0 },
+      { id: "a_photo10", cat: "app", title: "Galleria ×10", desc: "Foto su 10 oggetti", xp: 20, target: 10, progress: ctx => ctx.photoCount },
+      { id: "a_photo25", cat: "app", title: "Galleria ×25", desc: "Foto su 25 oggetti", xp: 35, target: 25, progress: ctx => ctx.photoCount },
+      { id: "a_exp1", cat: "app", title: "Prima spesa", desc: "Registra 1 spesa", xp: 10, target: 1, progress: ctx => ctx.expenses },
+      { id: "a_exp5", cat: "app", title: "5 spese", desc: "5 spese registrate", xp: 15, target: 5, progress: ctx => ctx.expenses },
+      { id: "a_adj", cat: "app", title: "Cassa allineata", desc: "1 aggiustamento cassa", xp: 10, target: 1, progress: ctx => ctx.adjustments },
+      { id: "a_notes5", cat: "app", title: "5 note", desc: "Note su 5 oggetti", xp: 15, target: 5, progress: ctx => ctx.notesCount },
+      { id: "a_goal", cat: "app", title: "Obiettivo mese", desc: "Raggiungi l'obiettivo mensile", xp: 40, target: 1, progress: ctx => ctx.goalReached ? 1 : 0 },
+      { id: "a_backup", cat: "app", title: "Backup completo", desc: "Esporta backup con foto", xp: 25, target: 1, progress: ctx => ctx.flagBackup ? 1 : 0 },
+      { id: "a_legend", cat: "app", title: "Leggenda Cantareal", desc: "Sblocca almeno 90 traguardi", xp: 100, target: 90, progress: ctx => ctx.unlockedOthers }
+    ];
+
+    function buildTrophyContext() {
+      const soldItems = db.filter(i => i.s === "sold");
+      const stockItems = db.filter(i => i.s === "stock");
+      const catTotal = {}, catSold = {};
+      const buyDay = {}, soldDay = {}, soldMonth = {};
+      const plat = {};
+      let freeCount = 0, hasBp30 = false, hasBp50 = false;
+      let netTotal = 0, bestNet = -Infinity, bestRoi = -Infinity, bestZero = -Infinity;
+      let roi100Count = 0, feeTotal = 0, stockVal = 0;
+      let flip0 = false, flip3 = false, flip7 = false, flip14 = false, flip7Count = 0;
+      let critSold = 0, crit60 = false;
+      let daysSum = 0, daysN = 0;
+      let notesCount = 0, photoCount = 0;
+      let platPersona = 0;
+      const sources = new Set();
+      const catStock = new Set();
+
+      db.forEach(i => {
+        const bp = parseFloat(i.bp) || 0;
+        catTotal[i.c] = (catTotal[i.c] || 0) + 1;
+        if (bp === 0) freeCount++;
+        if (bp >= 30) hasBp30 = true;
+        if (bp >= 50) hasBp50 = true;
+        if (i.src) sources.add(i.src);
+        if (i.d) buyDay[i.d] = (buyDay[i.d] || 0) + 1;
+        if (i.n && String(i.n).trim()) notesCount++;
+        if (photoCache[i.id]) photoCount++;
+        if (i.s === "stock") {
+          stockVal += bp;
+          if (i.c) catStock.add(i.c);
+        }
+      });
+
+      soldItems.forEach(i => {
+        const bp = parseFloat(i.bp) || 0;
+        const sp = parseFloat(i.sp) || 0;
+        const fee = parseFloat(i.fee) || 0;
+        const net = getItemNetProfit(i);
+        netTotal += net;
+        feeTotal += fee;
+        if (net > bestNet) bestNet = net;
+        catSold[i.c] = (catSold[i.c] || 0) + 1;
+        if (i.soldDate) {
+          soldDay[i.soldDate] = (soldDay[i.soldDate] || 0) + 1;
+          const mk = i.soldDate.length >= 7 ? i.soldDate.slice(3) : "";
+          if (mk) soldMonth[mk] = (soldMonth[mk] || 0) + 1;
+        }
+        let p = (i.soldPlatform || "").trim();
+        if (/persona/i.test(p) || /mercatino/i.test(p)) platPersona++;
+        else if (p) plat[p] = (plat[p] || 0) + 1;
+        if (bp > 0) {
+          const roi = (net / bp) * 100;
+          if (roi > bestRoi) bestRoi = roi;
+          if (roi >= 100) roi100Count++;
+        } else if (sp > bestZero) bestZero = sp;
+        const d = daysToSell(i);
+        if (d !== null && d >= 0) {
+          daysSum += d; daysN++;
+          if (d === 0) flip0 = true;
+          if (d <= 3) flip3 = true;
+          if (d <= 7) { flip7 = true; flip7Count++; }
+          if (d <= 14) flip14 = true;
+          if (d >= 30) critSold++;
+          if (d >= 60) crit60 = true;
+        }
+      });
+
+      let bestMonthNet = -Infinity;
+      Object.keys(soldMonth).forEach(mk => {
+        let m = 0;
+        soldItems.forEach(i => {
+          if (i.soldDate && i.soldDate.slice(3) === mk) m += getItemNetProfit(i);
+        });
+        if (m > bestMonthNet) bestMonthNet = m;
+      });
+
+      const maxBuySameDay = Math.max(0, ...Object.values(buyDay), 0);
+      const maxSoldSameDay = Math.max(0, ...Object.values(soldDay), 0);
+      const maxSoldMonth = Math.max(0, ...Object.values(soldMonth), 0);
+      const avgDays = daysN ? daysSum / daysN : 999;
+      const stockCriticalNow = stockItems.filter(i => daysInStock(i) >= 30).length;
+      const zeroCrit = stockItems.length >= 5 && stockCriticalNow === 0;
+      const platKinds = Object.keys(plat).length + (platPersona > 0 ? 1 : 0);
+      const main = ["Vinted", "Wallapop", "Subito", "eBay"];
+      const platMain4 = main.filter(x => (plat[x] || 0) > 0).length;
+
+      const goalTarget = parseFloat(String((document.getElementById("targetGoalInput") || {}).value || "200").replace(",", ".")) || 200;
+      // month profit from sold this calendar month
+      const now = new Date();
+      const curMK = String(now.getMonth() + 1).padStart(2, "0") + "/" + now.getFullYear();
+      let monthNet = 0;
+      soldItems.forEach(i => {
+        if (i.soldDate && i.soldDate.slice(3) === curMK) monthNet += getItemNetProfit(i);
+      });
+
+      const nick = localStorage.getItem(USER_NICK_KEY) || "";
+      const hasNick = !!(nick && nick !== "Cantareal" && nick !== "Miki Resell");
+
+      return {
+        total: db.length,
+        sold: soldItems.length,
+        stockNow: stockItems.length,
+        freeCount, hasBp30, hasBp50,
+        sources: sources.size,
+        maxBuySameDay, maxSoldSameDay, maxSoldMonth,
+        catTotal, catSold, catStockKinds: catStock.size,
+        netTotal, bestNet: bestNet === -Infinity ? 0 : bestNet,
+        bestRoi: bestRoi === -Infinity ? 0 : bestRoi,
+        bestZero: bestZero === -Infinity ? 0 : bestZero,
+        bestMonthNet: bestMonthNet === -Infinity ? 0 : bestMonthNet,
+        roi100Count, feeTotal, stockVal,
+        flip0, flip3, flip7, flip14, flip7Count,
+        critSold, crit60, zeroCrit,
+        avgDaysOk15: daysN >= 10 && avgDays <= 15,
+        avgDaysOk7: daysN >= 10 && avgDays <= 7,
+        plat, platPersona, platKinds, platMain4,
+        expenses: expenses.length,
+        adjustments: adjustments.length,
+        notesCount, photoCount,
+        hasNick,
+        goalReached: monthNet >= goalTarget,
+        flagBackup: localStorage.getItem("trophy_flag_backup_photos") === "1",
+        unlockedOthers: 0
+      };
+    }
+
+    function evaluateAchievements(ctx) {
+      // two-pass for legend depending on others
+      const results = ACHIEVEMENTS.map(a => {
+        if (a.id === "a_legend") return null;
+        let current = 0;
+        try { current = a.progress(ctx); } catch (e) { current = 0; }
+        current = Math.max(0, Number(current) || 0);
+        const target = a.target || 1;
+        const done = current >= target;
+        return { ...a, current: Math.min(current, target * 2), target, done };
+      }).filter(Boolean);
+
+      const unlocked = results.filter(r => r.done).length;
+      ctx.unlockedOthers = unlocked;
+      const legend = ACHIEVEMENTS.find(a => a.id === "a_legend");
+      if (legend) {
+        const current = unlocked;
+        const target = legend.target;
+        results.push({ ...legend, current, target, done: current >= target });
+      }
+      return results;
+    }
+
+    function toggleTrophySection(catId) {
+      const el = document.getElementById("tsec-" + catId);
+      if (!el) return;
+      const willOpen = !el.classList.contains("open");
+      document.querySelectorAll(".trophy-section").forEach(s => s.classList.remove("open"));
+      if (willOpen) {
+        el.classList.add("open");
+        sessionStorage.setItem(TROPHY_OPEN_SEC_KEY, catId);
+      } else {
+        sessionStorage.removeItem(TROPHY_OPEN_SEC_KEY);
+      }
+    }
+
+    function renderAchievementsAccordion(results) {
+      const root = document.getElementById("achievementsAccordion");
+      if (!root) return;
+      const byCat = {};
+      ACHIEVEMENT_CATS.forEach(c => { byCat[c.id] = []; });
+      results.forEach(r => {
+        if (!byCat[r.cat]) byCat[r.cat] = [];
+        byCat[r.cat].push(r);
+      });
+
+      let openId = sessionStorage.getItem(TROPHY_OPEN_SEC_KEY) || "";
+      if (!openId) {
+        const firstIncomplete = ACHIEVEMENT_CATS.find(c => (byCat[c.id] || []).some(x => !x.done));
+        openId = firstIncomplete ? firstIncomplete.id : (ACHIEVEMENT_CATS[0] && ACHIEVEMENT_CATS[0].id);
+      }
+
+      root.innerHTML = ACHIEVEMENT_CATS.map(c => {
+        const list = byCat[c.id] || [];
+        const doneN = list.filter(x => x.done).length;
+        const rows = list.map(a => {
+          const pct = Math.min(100, Math.round((a.current / a.target) * 100));
+          const icon = a.done ? "✅" : "🔒";
+          const cls = a.done ? "done" : "locked";
+          const prog = a.done ? "Completato" : (a.current + "/" + a.target);
+          const bar = a.done ? "" : `<div class="ach-bar-bg"><div class="ach-bar-fill" style="width:${pct}%"></div></div>`;
+          return `<div class="ach-row ${cls}">
+            <div class="ach-icon">${icon}</div>
+            <div class="ach-info">
+              <div class="ach-title">${esc(a.title)}</div>
+              <div class="ach-desc">${esc(a.desc)}</div>
+              ${bar}
+            </div>
+            <div class="ach-right">
+              <div class="ach-xp">+${a.xp} XP</div>
+              <div class="ach-prog">${prog}</div>
+            </div>
+          </div>`;
+        }).join("");
+        const isOpen = c.id === openId ? " open" : "";
+        return `<div class="trophy-section${isOpen}" id="tsec-${c.id}">
+          <button type="button" class="trophy-section-header" onclick="toggleTrophySection('${c.id}')">
+            <span class="sec-left"><span class="sec-chevron">▶</span> ${c.icon} ${c.title}</span>
+            <span class="sec-count">${doneN}/${list.length}</span>
+          </button>
+          <div class="trophy-section-body">${rows}</div>
+        </div>`;
+      }).join("");
+    }
+
+    const TROPHY_STATE = { level: 1, levelName: "Avvio", unlocked: 0, total: 0, xp: 0 };
 
     function renderLevelInfo() {
       const t = TROPHY_STATE;
@@ -1562,11 +1949,26 @@
       ["userLevelTitle", "sheetLevelChip"].forEach(id => { const el = document.getElementById(id); if (el) el.innerText = label; });
       const pct = t.total > 0 ? Math.round((t.unlocked / t.total) * 100) : 0;
       const bar = document.getElementById("trophyOverallProgress");
-      if (bar) bar.style.width = pct + "%";
+      if (bar) bar.style.width = Math.min(100, pct) + "%";
       const txt = document.getElementById("trophyProgressText");
       if (txt) txt.innerText = t.unlocked + " su " + t.total + " Trofei Sbloccati";
       const snap = document.getElementById("snapTrophies");
       if (snap) snap.innerText = t.unlocked + " / " + t.total;
+      // XP line under hero if present
+      let xpLine = document.getElementById("trophyXpLine");
+      if (!xpLine) {
+        const hero = document.querySelector(".trophy-hero");
+        if (hero) {
+          xpLine = document.createElement("div");
+          xpLine.id = "trophyXpLine";
+          xpLine.className = "trophy-xp-line";
+          hero.appendChild(xpLine);
+        }
+      }
+      if (xpLine) {
+        const nextNeed = 100 - (t.xp % 100);
+        xpLine.innerText = t.xp + " XP · prossimi " + nextNeed + " XP per livello " + (t.level + 1);
+      }
     }
 
     function computeTrophies() {
@@ -1583,9 +1985,7 @@
       db.filter(i => i.s === "sold").forEach(item => {
         const bp = parseFloat(item.bp) || 0;
         const profit = getItemNetProfit(item);
-
         if (profit > bestProfitVal) { bestProfitVal = profit; bestProfit = item; }
-
         if (bp > 0) {
           const roi = (profit / bp) * 100;
           if (roi > bestRoiVal) { bestRoiVal = roi; bestRoi = item; }
@@ -1594,7 +1994,6 @@
           zeroTotal += profit;
           if (profit > bestZeroVal) { bestZeroVal = profit; bestZero = item; }
         }
-
         const diff = daysToSell(item);
         if (diff !== null && diff >= 0 && diff < minDays) {
           minDays = diff; fastest = item;
@@ -1609,7 +2008,37 @@
         setTxt("recZeroVal", fmt(bestZeroVal));
         setTxt("recZeroSub", zeroCount + (zeroCount === 1 ? " oggetto a costo 0 venduto" : " oggetti a costo 0 venduti") + " · " + fmt(zeroTotal) + " in totale");
       }
+
+      const ctx = buildTrophyContext();
+      // async photo count refinement
+      const results = evaluateAchievements(ctx);
+      let claimed = loadClaimed();
+      let xp = loadTrophyXp();
+      let gained = 0;
+      results.forEach(r => {
+        if (r.done && claimed.indexOf(r.id) === -1) {
+          claimed.push(r.id);
+          xp += r.xp;
+          gained += r.xp;
+        }
+      });
+      // remove claimed that no longer exist
+      claimed = claimed.filter(id => ACHIEVEMENTS.some(a => a.id === id));
+      saveClaimed(claimed);
+      localStorage.setItem(TROPHY_XP_KEY, String(xp));
+
+      const unlocked = results.filter(r => r.done).length;
+      TROPHY_STATE.unlocked = unlocked;
+      TROPHY_STATE.total = results.length;
+      TROPHY_STATE.xp = xp;
+      TROPHY_STATE.level = levelFromXp(xp);
+      TROPHY_STATE.levelName = titleFromLevel(TROPHY_STATE.level);
+
+      renderAchievementsAccordion(results);
       renderLevelInfo();
+      if (gained > 0) {
+        try { notify("Traguardi: +" + gained + " XP"); } catch (e) {}
+      }
     }
 
     function handleFabClick() { openAddChoiceSheet(); }
@@ -2716,6 +3145,9 @@
     }
 
     async function downloadBackup(withPhotos) {
+      if (withPhotos) {
+        try { localStorage.setItem("trophy_flag_backup_photos", "1"); } catch (e) {}
+      }
       const profile = { nick: localStorage.getItem(USER_NICK_KEY) || "" };
       if (withPhotos) {
         const av = await getAvatarIDB();
