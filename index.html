@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="Cantareal">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="application-name" content="Cantareal">
-  <title>Cantareal — Reselling Pro</title>
+  <title>Cantareal — Reselling Pro MAX</title>
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -145,6 +145,7 @@
     .chart-container { background: var(--card-bg); padding: 14px; border-radius: 10px; border: 1px solid var(--border-color); margin-bottom: 12px; position: relative; height: 280px; width: 100%; }
     .chart-container h3 { font-size: 0.9rem; margin-bottom: 10px; text-align: center; }
 
+    /* TROFEI & ACCORDION STYLES */
     #trophiesView { display: none; }
     .trophy-hero {
       background: linear-gradient(135deg, rgba(251, 191, 36, 0.15) 0%, var(--card-bg) 100%);
@@ -157,7 +158,7 @@
     }
     .trophy-hero h2 { font-size: 1.1rem; color: var(--warn-color); font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
     .level-chip-badge { font-size: 0.8rem; font-weight: 800; color: #f8fafc; margin-top: 6px; display: inline-block; background: rgba(0,0,0,0.35); padding: 4px 12px; border-radius: 20px; border: 1px solid rgba(251,191,36,0.3); }
-    .section-title-gold { font-size: 0.75rem; font-weight: 800; color: var(--warn-color); text-transform: uppercase; margin: 16px 0 10px 2px; display: flex; align-items: center; gap: 6px; }
+    .section-title-gold { font-size: 0.75rem; font-weight: 800; color: var(--warn-color); text-transform: uppercase; margin: 16px 0 10px 2px; display: flex; align-items: center; justify-content: space-between; }
 
     .records-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
     .record-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; }
@@ -166,15 +167,32 @@
     .record-label { font-size: 0.68rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; }
     .record-val { font-size: 1.1rem; font-weight: 900; color: var(--success-color); margin-top: 2px; }
 
-    .trophy-placeholder-box {
-      background: var(--card-bg);
-      border: 2px dashed var(--border-color);
-      border-radius: 14px;
-      padding: 30px 20px;
-      text-align: center;
-      color: var(--text-muted);
-      margin-top: 10px;
-    }
+    .trophy-filter-bar { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
+    .trophy-filter-btn { flex: 1; padding: 6px 8px; font-size: 0.72rem; font-weight: 700; border-radius: 8px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-color); cursor: pointer; text-align: center; }
+    .trophy-filter-btn.active { background: var(--warn-color); color: #000; border-color: var(--warn-color); font-weight: 800; }
+    
+    .accordion-item { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; margin-bottom: 10px; overflow: hidden; }
+    .accordion-header { padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; user-select: none; font-weight: 800; font-size: 0.88rem; background: rgba(255,255,255,0.02); }
+    .accordion-header-left { display: flex; align-items: center; gap: 8px; }
+    .accordion-count-badge { font-size: 0.7rem; font-weight: 800; padding: 2px 8px; border-radius: 12px; background: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-muted); }
+    .accordion-count-badge.complete { background: rgba(34, 197, 94, 0.15); border-color: var(--success-color); color: var(--success-color); }
+    .accordion-icon { transition: transform 0.25s ease; font-size: 0.8rem; color: var(--text-muted); }
+    .accordion-item.open .accordion-icon { transform: rotate(180deg); }
+    .accordion-content { display: none; padding: 10px; border-top: 1px solid var(--border-color); background: var(--input-bg); }
+    .accordion-item.open .accordion-content { display: block; }
+
+    .trophy-grid { display: grid; grid-template-columns: 1fr; gap: 8px; }
+    .trophy-card { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--card-bg); position: relative; }
+    .trophy-card.unlocked { border-color: rgba(251, 191, 36, 0.5); background: linear-gradient(135deg, rgba(251, 191, 36, 0.08), var(--card-bg)); box-shadow: 0 2px 8px rgba(251, 191, 36, 0.08); }
+    .trophy-card.locked { opacity: 0.55; filter: grayscale(80%); }
+    .trophy-icon { font-size: 1.8rem; flex-shrink: 0; width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; border-radius: 10px; background: var(--input-bg); border: 1px solid var(--border-color); }
+    .trophy-card.unlocked .trophy-icon { background: rgba(251, 191, 36, 0.15); border-color: var(--warn-color); }
+    .trophy-info { flex-grow: 1; min-width: 0; }
+    .trophy-title { font-size: 0.85rem; font-weight: 800; margin-bottom: 2px; display: flex; align-items: center; gap: 6px; }
+    .trophy-desc { font-size: 0.72rem; color: var(--text-muted); line-height: 1.35; }
+    .trophy-mini-progress { margin-top: 4px; height: 4px; background: var(--border-color); border-radius: 2px; overflow: hidden; }
+    .trophy-mini-bar { height: 100%; background: var(--warn-color); width: 0%; transition: width 0.3s; }
+    .trophy-check-mark { color: var(--success-color); font-weight: 900; font-size: 1rem; flex-shrink: 0; }
 
     .fab-btn { position: fixed; bottom: 20px; right: 20px; width: 56px; height: 56px; border-radius: 28px; background: var(--accent-color); color: white; border: none; font-size: 1.8rem; font-weight: 700; display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 14px rgba(0,0,0,0.4); cursor: pointer; z-index: 99; }
     .scroll-top-btn { position: fixed; bottom: 20px; left: 20px; width: 44px; height: 44px; border-radius: 22px; background: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); font-size: 1.2rem; font-weight: 700; display: none; justify-content: center; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.3); cursor: pointer; z-index: 98; }
@@ -197,40 +215,11 @@
     .photo-preview-box img { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; border: 1px solid var(--border-color); cursor: zoom-in; }
     .btn-remove-photo { position: absolute; top: -6px; right: -6px; background: var(--danger-color); color: #fff; border: none; border-radius: 50%; width: 22px; height: 22px; font-size: 0.8rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
 
-    /* NUOVO LAYOUT PULSANTI MODALE MODIFICA */
-    .edit-modal-actions {
-      grid-column: span 2;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-top: 12px;
-      padding-top: 12px;
-      border-top: 1px solid var(--border-color);
-    }
-    .modal-btn-row {
-      display: flex;
-      gap: 8px;
-    }
-    .modal-btn-row .btn-modal-action {
-      flex: 1;
-    }
-    .btn-modal-action {
-      width: 100%;
-      padding: 11px 12px;
-      border-radius: 10px;
-      font-size: 0.85rem;
-      font-weight: 700;
-      cursor: pointer;
-      border: 1px solid transparent;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      transition: transform 0.1s ease, filter 0.15s ease;
-    }
-    .btn-modal-action:active {
-      transform: scale(0.98);
-    }
+    .edit-modal-actions { grid-column: span 2; display: flex; flex-direction: column; gap: 8px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-color); }
+    .modal-btn-row { display: flex; gap: 8px; }
+    .modal-btn-row .btn-modal-action { flex: 1; }
+    .btn-modal-action { width: 100%; padding: 11px 12px; border-radius: 10px; font-size: 0.85rem; font-weight: 700; cursor: pointer; border: 1px solid transparent; display: flex; align-items: center; justify-content: center; gap: 6px; transition: transform 0.1s ease, filter 0.15s ease; }
+    .btn-modal-action:active { transform: scale(0.98); }
     .btn-modal-sell { background: var(--success-color); color: #ffffff; border-color: var(--success-color); }
     .btn-modal-save { background: var(--accent-color); color: #ffffff; border-color: var(--accent-color); }
     .btn-modal-copy { background: rgba(139, 92, 246, 0.18); color: #c4b5fd; border-color: rgba(139, 92, 246, 0.4); }
@@ -464,6 +453,7 @@
     </div>
   </div>
 
+  <!-- VISTA TROFEI COMPLETA (80 OBIETTIVI CON ACCORDION UI) -->
   <div id="trophiesView">
     <div class="trophy-hero">
       <h2>🏆 Hall of Fame & Trofei</h2>
@@ -471,7 +461,7 @@
       <div class="progress-bar-bg" style="margin-top: 10px; height: 8px;">
         <div class="progress-bar-fill goal-complete" id="trophyOverallProgress" style="width: 0%;"></div>
       </div>
-      <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700; margin-top: 4px;" id="trophyProgressText">0 su 0 Trofei Sbloccati</div>
+      <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700; margin-top: 4px;" id="trophyProgressText">0 su 80 Trofei Sbloccati</div>
     </div>
 
     <div class="section-title-gold">👑 Record Personali Assoluti</div>
@@ -503,12 +493,18 @@
       </div>
     </div>
 
-    <div class="section-title-gold">🎖️ Bacheca Traguardi</div>
-    <div class="trophy-placeholder-box">
-      <div style="font-size: 2rem; margin-bottom: 8px;">🎯</div>
-      <div style="font-weight: 800; color: var(--text-color); margin-bottom: 4px;">Spazio Traguardi Sbloccabile</div>
-      <div style="font-size: 0.8rem;">La struttura è pronta. I 100 obiettivi evolutivi e i 10 livelli verranno inseriti qui nella prossima fase!</div>
+    <div class="section-title-gold">
+      <span>🎖️ Bacheca 80 Traguardi</span>
+      <button style="background:none; border:none; color:var(--warn-color); font-size:0.75rem; font-weight:700; cursor:pointer;" onclick="toggleAllAccordions()">Espandi / Riduci Tutti</button>
     </div>
+
+    <div class="trophy-filter-bar">
+      <button class="trophy-filter-btn active" id="tfALL" onclick="setTrophyFilter('ALL')">Tutti (80)</button>
+      <button class="trophy-filter-btn" id="tfUNLOCKED" onclick="setTrophyFilter('UNLOCKED')">🔓 Sbloccati</button>
+      <button class="trophy-filter-btn" id="tfLOCKED" onclick="setTrophyFilter('LOCKED')">🔒 Da Sbloccare</button>
+    </div>
+
+    <div id="trophiesAccordionContainer"></div>
   </div>
 
   <div id="toastWrap"></div>
@@ -543,7 +539,7 @@
           <div class="snap-lbl">Profitto Netto</div>
         </div>
         <div class="snap-card">
-          <div class="snap-val" id="snapTrophies">0 / 0</div>
+          <div class="snap-val" id="snapTrophies">0 / 80</div>
           <div class="snap-lbl">Trofei Sbloccati</div>
         </div>
         <div class="snap-card">
@@ -926,7 +922,6 @@
           <input type="date" id="editSoldDate">
         </div>
 
-        <!-- NUOVO LAYOUT PULSANTI NEL MODALE MODIFICA -->
         <div class="edit-modal-actions">
           <button type="button" class="btn-modal-action btn-modal-sell" id="btnQuickSell">🛒 Segna come Venduto</button>
           <button type="button" class="btn-modal-action btn-modal-save" onclick="saveEditChanges()">💾 Salva Modifiche</button>
@@ -1546,19 +1541,137 @@
       }
     }
 
-    const TROPHY_STATE = { level: 1, levelName: "Avvio", unlocked: 0, total: 0 };
+    /* DEFINIZIONE DEGLI 80 TROFEI ORGANIZZATI IN 8 CATEGORIE */
+    const TROPHY_CATEGORIES = [
+      { id: "vol", title: "📦 Volumi & Vendite", emoji: "📦" },
+      { id: "prof", title: "💶 Profitto Netto & Cassa", emoji: "💶" },
+      { id: "roi", title: "📈 ROI, Margini & Top Flip", emoji: "📈" },
+      { id: "speed", title: "⏱️ Velocità & Rotazione Stock", emoji: "⏱️" },
+      { id: "cat", title: "🎮 Categorie & Nicchie", emoji: "🎮" },
+      { id: "plat", title: "🌐 Canali, Piattaforme & Metodi", emoji: "🌐" },
+      { id: "mgmt", title: "💸 Gestione, Spese & Cassa", emoji: "💸" },
+      { id: "sec", title: "🕵️ Segreti & Speciali", emoji: "🕵️" }
+    ];
 
-    function renderLevelInfo() {
-      const t = TROPHY_STATE;
-      const label = "Livello " + t.level + " · " + t.levelName;
-      ["userLevelTitle", "sheetLevelChip"].forEach(id => { const el = document.getElementById(id); if (el) el.innerText = label; });
-      const pct = t.total > 0 ? Math.round((t.unlocked / t.total) * 100) : 0;
-      const bar = document.getElementById("trophyOverallProgress");
-      if (bar) bar.style.width = pct + "%";
-      const txt = document.getElementById("trophyProgressText");
-      if (txt) txt.innerText = t.unlocked + " su " + t.total + " Trofei Sbloccati";
-      const snap = document.getElementById("snapTrophies");
-      if (snap) snap.innerText = t.unlocked + " / " + t.total;
+    const TROPHIES_DEF = [
+      // 📦 Volumi & Vendite (1-10)
+      { id: 1, cat: "vol", icon: "🐣", title: "Prima Scintilla", desc: "Carica il 1° oggetto nell'inventario.", check: s => s.totalItems >= 1, curr: s => s.totalItems, target: 1 },
+      { id: 2, cat: "vol", icon: "🛒", title: "Battesimo del Fuoco", desc: "Metti a segno la tua 1ª vendita in assoluto.", check: s => s.soldItemsCount >= 1, curr: s => s.soldItemsCount, target: 1 },
+      { id: 3, cat: "vol", icon: "📦", title: "Magazzino Nascente", desc: "Mantieni 5 oggetti contemporaneamente in stock.", check: s => s.stockCount >= 5, curr: s => s.stockCount, target: 5 },
+      { id: 4, cat: "vol", icon: "🔟", title: "Doppia Cifra", desc: "Raggiungi 10 vendite totali completate.", check: s => s.soldItemsCount >= 10, curr: s => s.soldItemsCount, target: 10 },
+      { id: 5, cat: "vol", icon: "🚀", title: "Ritmo Costante", desc: "Raggiungi 25 vendite completate nel registro.", check: s => s.soldItemsCount >= 25, curr: s => s.soldItemsCount, target: 25 },
+      { id: 6, cat: "vol", icon: "🎯", title: "Mezzo Centinaio", desc: "Completa 50 vendite totali.", check: s => s.soldItemsCount >= 50, curr: s => s.soldItemsCount, target: 50 },
+      { id: 7, cat: "vol", icon: "💯", title: "Centenario", desc: "Taglia il traguardo delle 100 vendite completate.", check: s => s.soldItemsCount >= 100, curr: s => s.soldItemsCount, target: 100 },
+      { id: 8, cat: "vol", icon: "🏆", title: "Reseller Pro", desc: "Raggiungi 250 vendite nel registro.", check: s => s.soldItemsCount >= 250, curr: s => s.soldItemsCount, target: 250 },
+      { id: 9, cat: "vol", icon: "👑", title: "Magazziniere Supremo", desc: "Raggiungi 500 vendite totali.", check: s => s.soldItemsCount >= 500, curr: s => s.soldItemsCount, target: 500 },
+      { id: 10, cat: "vol", icon: "🧱", title: "Stoccaggio Massiccio", desc: "Accumula più di 50 oggetti contemporaneamente in giacenza.", check: s => s.stockCount >= 50, curr: s => s.stockCount, target: 50 },
+
+      // 💶 Profitto Netto & Cassa (11-20)
+      { id: 11, cat: "prof", icon: "💶", title: "Primo Scontrino", desc: "Accumula 50€ di profitto netto totale.", check: s => s.netProfit >= 50, curr: s => Math.max(0, s.netProfit), target: 50, fmt: "€" },
+      { id: 12, cat: "prof", icon: "🥉", title: "Soglia 100", desc: "Raggiungi 100€ di profitto netto cumulato.", check: s => s.netProfit >= 100, curr: s => Math.max(0, s.netProfit), target: 100, fmt: "€" },
+      { id: 13, cat: "prof", icon: "🥈", title: "Muro dei 250", desc: "Accumula 250€ di profitto netto totale.", check: s => s.netProfit >= 250, curr: s => Math.max(0, s.netProfit), target: 250, fmt: "€" },
+      { id: 14, cat: "prof", icon: "🥇", title: "Club dei 500€", desc: "Supera i 500€ di profitto netto cumulato.", check: s => s.netProfit >= 500, curr: s => Math.max(0, s.netProfit), target: 500, fmt: "€" },
+      { id: 15, cat: "prof", icon: "💰", title: "Traguardo 1.000€", desc: "Raggiungi 1.000€ di profitto netto totale.", check: s => s.netProfit >= 1000, curr: s => Math.max(0, s.netProfit), target: 1000, fmt: "€" },
+      { id: 16, cat: "prof", icon: "💎", title: "Cassa da 2.500€", desc: "Accumula 2.500€ di profitto netto cumulato.", check: s => s.netProfit >= 2500, curr: s => Math.max(0, s.netProfit), target: 2500, fmt: "€" },
+      { id: 17, cat: "prof", icon: "🏦", title: "Banchiere del Resell", desc: "Taglia la quota di 5.000€ di profitto netto.", check: s => s.netProfit >= 5000, curr: s => Math.max(0, s.netProfit), target: 5000, fmt: "€" },
+      { id: 18, cat: "prof", icon: "🏛️", title: "Impero Finanziario", desc: "Raggiungi 10.000€ di profitto netto totale.", check: s => s.netProfit >= 10000, curr: s => Math.max(0, s.netProfit), target: 10000, fmt: "€" },
+      { id: 19, cat: "prof", icon: "🎯", title: "Target Centrato", desc: "Raggiungi il 100% dell'obiettivo di profitto mensile impostato.", check: s => s.goalPct >= 100, curr: s => s.goalPct, target: 100, fmt: "%" },
+      { id: 20, cat: "prof", icon: "🔥", title: "Mese da Incorniciare", desc: "Genera oltre 300€ di profitto netto in un singolo mese solare.", check: s => s.maxMonthProfit >= 300, curr: s => s.maxMonthProfit, target: 300, fmt: "€" },
+
+      // 📈 ROI, Margini & Top Flip (21-30)
+      { id: 21, cat: "roi", icon: "📈", title: "Raddoppio Capitale", desc: "Vendi un oggetto ottenendo un ROI ≥ 100%.", check: s => s.maxRoi >= 100, curr: s => s.maxRoi, target: 100, fmt: "%" },
+      { id: 22, cat: "roi", icon: "🚀", title: "Triplo Salto", desc: "Vendi un oggetto con un ROI ≥ 200%.", check: s => s.maxRoi >= 200, curr: s => s.maxRoi, target: 200, fmt: "%" },
+      { id: 23, cat: "roi", icon: "💥", title: "Colpo Grosso", desc: "Vendi un pezzo ottenendo un ROI ≥ 500%.", check: s => s.maxRoi >= 500, curr: s => s.maxRoi, target: 500, fmt: "%" },
+      { id: 24, cat: "roi", icon: "👑", title: "ROI Leggendario", desc: "Vendi un pezzo con un ROI ≥ 1000%.", check: s => s.maxRoi >= 1000, curr: s => s.maxRoi, target: 1000, fmt: "%" },
+      { id: 25, cat: "roi", icon: "🎁", title: "Capitale Zero", desc: "Vendi un oggetto ottenuto a costo 0€.", check: s => s.zeroCostCount >= 1, curr: s => s.zeroCostCount, target: 1 },
+      { id: 26, cat: "roi", icon: "🪙", title: "Magia da Mercatino", desc: "Trasforma un acquisto ≤ 2€ in una vendita ≥ 20€.", check: s => s.hasFleaMagic, curr: s => s.hasFleaMagic ? 1 : 0, target: 1 },
+      { id: 27, cat: "roi", icon: "🏆", title: "Super Margine", desc: "Realizza oltre 30€ di profitto netto su un singolo oggetto.", check: s => s.maxSingleProfit >= 30, curr: s => s.maxSingleProfit, target: 30, fmt: "€" },
+      { id: 28, cat: "roi", icon: "💰", title: "Maxi Flip", desc: "Realizza oltre 70€ di profitto netto con una singola vendita.", check: s => s.maxSingleProfit >= 70, curr: s => s.maxSingleProfit, target: 70, fmt: "€" },
+      { id: 29, cat: "roi", icon: "🐋", title: "La Balena", desc: "Realizza oltre 150€ di profitto netto su una singola vendita.", check: s => s.maxSingleProfit >= 150, curr: s => s.maxSingleProfit, target: 150, fmt: "€" },
+      { id: 30, cat: "roi", icon: "🛡️", title: "Zero Perdite", desc: "Completa 20 vendite totali senza mai chiudere un oggetto in perdita.", check: s => s.soldItemsCount >= 20 && s.lossCount === 0, curr: s => s.lossCount === 0 ? s.soldItemsCount : 0, target: 20 },
+
+      // ⏱️ Velocità & Rotazione Stock (31-40)
+      { id: 31, cat: "speed", icon: "⚡", title: "Flash Sale", desc: "Vendi un oggetto nello stesso giorno d'acquisto (0 giorni in stock).", check: s => s.hasFlashSale, curr: s => s.hasFlashSale ? 1 : 0, target: 1 },
+      { id: 32, cat: "speed", icon: "🏎️", title: "Express Flip", desc: "Vendi un pezzo entro 48 ore (≤ 2 giorni) dal caricamento.", check: s => s.hasExpressFlip, curr: s => s.hasExpressFlip ? 1 : 0, target: 1 },
+      { id: 33, cat: "speed", icon: "⏱️", title: "Sprint Settimanale", desc: "Vendi un pezzo entro 7 giorni dall'acquisto.", check: s => s.hasSprintWeek, curr: s => s.hasSprintWeek ? 1 : 0, target: 1 },
+      { id: 34, cat: "speed", icon: "🌪️", title: "Doppietta Flash", desc: "Completa 2 vendite nello stesso giorno solare.", check: s => s.maxSameDaySales >= 2, curr: s => s.maxSameDaySales, target: 2 },
+      { id: 35, cat: "speed", icon: "💥", title: "Trippietta di Fuoco", desc: "Completa 3 vendite nello stesso giorno solare.", check: s => s.maxSameDaySales >= 3, curr: s => s.maxSameDaySales, target: 3 },
+      { id: 36, cat: "speed", icon: "🧹", title: "Magazzino Liquido", desc: "Mantieni zero oggetti con più di 60 giorni di giacenza in stock.", check: s => s.stockCount > 0 && s.oldStockCount60 === 0, curr: s => (s.stockCount > 0 && s.oldStockCount60 === 0) ? 1 : 0, target: 1 },
+      { id: 37, cat: "speed", icon: "⏳", title: "Resurrezione", desc: "Vendi un pezzo rimasto in stock per oltre 90 giorni.", check: s => s.hasOldResurrection, curr: s => s.hasOldResurrection ? 1 : 0, target: 1 },
+      { id: 38, cat: "speed", icon: "🧟", title: "Mummia Sbloccata", desc: "Vendi un pezzo rimasto in stock per oltre 180 giorni.", check: s => s.hasMummyResurrection, curr: s => s.hasMummyResurrection ? 1 : 0, target: 1 },
+      { id: 39, cat: "speed", icon: "⚡", title: "Settimana D'Oro", desc: "Completa 5 o più vendite nell'arco di una singola settimana.", check: s => s.maxWeeklySales >= 5, curr: s => s.maxWeeklySales, target: 5 },
+      { id: 40, cat: "speed", icon: "🔄", title: "Rotazione Perfetta", desc: "Metti a segno almeno 5 vendite in meno di 14 giorni.", check: s => s.fastSalesCount14 <= 14 && s.soldItemsCount >= 5, curr: s => s.soldItemsCount, target: 5 },
+
+      // 🎮 Categorie & Nicchie (41-52)
+      { id: 41, cat: "cat", icon: "🎮", title: "Gamer in Erba", desc: "Vendi 5 articoli della categoria Gaming.", check: s => s.gamingSold >= 5, curr: s => s.gamingSold, target: 5 },
+      { id: 42, cat: "cat", icon: "🕹️", title: "Pro Gamer Reseller", desc: "Vendi 25 articoli della categoria Gaming.", check: s => s.gamingSold >= 25, curr: s => s.gamingSold, target: 25 },
+      { id: 43, cat: "cat", icon: "🎮", title: "Collezionista Gaming", desc: "Vendi 15 articoli in Gaming con ROI ≥ 50%.", check: s => s.gamingRoi50Count >= 15, curr: s => s.gamingRoi50Count, target: 15 },
+      { id: 44, cat: "cat", icon: "🎮", title: "Master Console", desc: "Vendi un articolo Gaming registrando almeno 25€ di profitto netto.", check: s => s.hasMasterConsole, curr: s => s.hasMasterConsole ? 1 : 0, target: 1 },
+      { id: 45, cat: "cat", icon: "👔", title: "Fashion Finder", desc: "Vendi 5 articoli della categoria Abbigliamento.", check: s => s.clothingSold >= 5, curr: s => s.clothingSold, target: 5 },
+      { id: 46, cat: "cat", icon: "🧥", title: "Wardrobe Master", desc: "Vendi 25 articoli della categoria Abbigliamento.", check: s => s.clothingSold >= 25, curr: s => s.clothingSold, target: 25 },
+      { id: 47, cat: "cat", icon: "👔", title: "Capo di Punta", desc: "Vendi un articolo Abbigliamento generando almeno 20€ di profitto netto.", check: s => s.hasTopClothing, curr: s => s.hasTopClothing ? 1 : 0, target: 1 },
+      { id: 48, cat: "cat", icon: "📚", title: "Top dei Libri", desc: "Vendi 5 libri o fumetti con ROI positivo.", check: s => s.booksProfitCount >= 5, curr: s => s.booksProfitCount, target: 5 },
+      { id: 49, cat: "cat", icon: "📚", title: "Biblioteca Liquidata", desc: "Vendi 20 libri o fumetti.", check: s => s.booksSold >= 20, curr: s => s.booksSold, target: 20 },
+      { id: 50, cat: "cat", icon: "📱", title: "Tech Guru", desc: "Vendi 5 articoli della categoria Elettronica.", check: s => s.techSold >= 5, curr: s => s.techSold, target: 5 },
+      { id: 51, cat: "cat", icon: "📦", title: "Jolly dell'Usato", desc: "Vendi 5 articoli inseriti nella categoria Altro con ROI positivo.", check: s => s.otherProfitCount >= 5, curr: s => s.otherProfitCount, target: 5 },
+      { id: 52, cat: "cat", icon: "🎨", title: "Eclettico", desc: "Completa almeno una vendita in tutte e 5 le categorie dell'app.", check: s => s.uniqueCategoriesCount >= 5, curr: s => s.uniqueCategoriesCount, target: 5 },
+
+      // 🌐 Canali, Piattaforme & Metodi (53-62)
+      { id: 53, cat: "plat", icon: "🤝", title: "Stretta di Mano", desc: "Registra 5 vendite completate Di Persona / Mercatino.", check: s => s.personaSold >= 5, curr: s => s.personaSold, target: 5 },
+      { id: 54, cat: "plat", icon: "🤝", title: "Mercante Locale", desc: "Registra 20 vendite completate Di Persona / Mercatino.", check: s => s.personaSold >= 20, curr: s => s.personaSold, target: 20 },
+      { id: 55, cat: "plat", icon: "🟢", title: "Vinted Novizio", desc: "Completa 5 vendite su Vinted.", check: s => s.vintedSold >= 5, curr: s => s.vintedSold, target: 5 },
+      { id: 56, cat: "plat", icon: "🟢", title: "Vinted Master", desc: "Completa 25 vendite su Vinted.", check: s => s.vintedSold >= 25, curr: s => s.vintedSold, target: 25 },
+      { id: 57, cat: "plat", icon: "🟢", title: "Wallapop Warrior", desc: "Completa 10 vendite su Wallapop.", check: s => s.wallapopSold >= 10, curr: s => s.wallapopSold, target: 10 },
+      { id: 58, cat: "plat", icon: "🔴", title: "Subito Dealer", desc: "Completa 10 vendite su Subito.", check: s => s.subitoSold >= 10, curr: s => s.subitoSold, target: 10 },
+      { id: 59, cat: "plat", icon: "🔵", title: "eBay Seller", desc: "Completa 5 vendite su eBay.", check: s => s.ebaySold >= 5, curr: s => s.ebaySold, target: 5 },
+      { id: 60, cat: "plat", icon: "🌐", title: "Omnicanale", desc: "Completa almeno 1 vendita su Vinted, Wallapop, Subito, eBay e Di Persona.", check: s => s.uniquePlatformsCount >= 5, curr: s => s.uniquePlatformsCount, target: 5 },
+      { id: 61, cat: "plat", icon: "📦", title: "Master del Blocco", desc: "Registra ed evadi il tuo primo Acquisto in Lotto.", check: s => s.hasLotItems, curr: s => s.hasLotItems ? 1 : 0, target: 1 },
+      { id: 62, cat: "plat", icon: "📦📦", title: "Grossista", desc: "Registra ed evadi almeno 5 oggetti acquistati in lotto.", check: s => s.lotItemsCount >= 5, curr: s => s.lotItemsCount, target: 5 },
+
+      // 💸 Gestione, Spese & Cassa (63-70)
+      { id: 63, cat: "mgmt", icon: "⚖️", title: "Cassa Sotto Controllo", desc: "Effettua il tuo primo aggiustamento manuale della cassa.", check: s => s.adjustmentsCount >= 1, curr: s => s.adjustmentsCount, target: 1 },
+      { id: 64, cat: "mgmt", icon: "💸", title: "Trasparenza Spese", desc: "Registra la tua prima Spesa Extra (imballi, trasporti o boost).", check: s => s.expensesCount >= 1, curr: s => s.expensesCount, target: 1 },
+      { id: 65, cat: "mgmt", icon: "📦", title: "Fornitore Imballi", desc: "Registra 5 spese extra dedicate a materiale d'imballo o scatole.", check: s => s.packagingExpensesCount >= 5, curr: s => s.packagingExpensesCount, target: 5 },
+      { id: 66, cat: "mgmt", icon: "⛽", title: "Km Zero", desc: "Registra la tua prima spesa extra per Carburante & Trasporti.", check: s => s.fuelExpensesCount >= 1, curr: s => s.fuelExpensesCount, target: 1 },
+      { id: 67, cat: "mgmt", icon: "🛡️", title: "Gestione Virtuosa", desc: "Mantieni le spese extra sotto il 10% del profitto totale.", check: s => s.netProfit >= 100 && (s.totalExpenses / s.netProfit) <= 0.1, curr: s => (s.netProfit >= 100 && (s.totalExpenses / s.netProfit) <= 0.1) ? 1 : 0, target: 1 },
+      { id: 68, cat: "mgmt", icon: "🧮", title: "Strategia Pura", desc: "Esegui calcoli o inserisci valutazioni nel registro.", check: s => s.totalItems >= 10, curr: s => s.totalItems, target: 10 },
+      { id: 69, cat: "mgmt", icon: "💾", title: "Master del Backup", desc: "Possiedi almeno 20 oggetti registrati e salvati in cassa.", check: s => s.totalItems >= 20, curr: s => s.totalItems, target: 20 },
+      { id: 70, cat: "mgmt", icon: "📊", title: "Analista Dati", desc: "Registra almeno 30 elementi tra oggetti e spese contabili.", check: s => (s.totalItems + s.expensesCount) >= 30, curr: s => (s.totalItems + s.expensesCount), target: 30 },
+
+      // 🕵️ Segreti & Speciali (71-80)
+      { id: 71, cat: "sec", icon: "🕵️", title: "Affare al Buio", desc: "Vendi un oggetto per il quale non avevi inserito note iniziali.", check: s => s.hasNoNotesSale, curr: s => s.hasNoNotesSale ? 1 : 0, target: 1 },
+      { id: 72, cat: "sec", icon: "🎯", title: "Cifra Perfetta", desc: "Chiudi una vendita a cifra esattamente tonda (es. 10€, 15€, 20€).", check: s => s.hasRoundSale, curr: s => s.hasRoundSale ? 1 : 0, target: 1 },
+      { id: 73, cat: "sec", icon: "🏷️", title: "Costo da Centesimi", desc: "Vendi un oggetto pagato meno di 1.00€.", check: s => s.hasCentsBuySale, curr: s => s.hasCentsBuySale ? 1 : 0, target: 1 },
+      { id: 74, cat: "sec", icon: "👑", title: "Re del Flip Gratuito", desc: "Realizza oltre 50€ totali accumulati vendendo articoli a costo 0€.", check: s => s.zeroCostProfitTotal >= 50, curr: s => s.zeroCostProfitTotal, target: 50, fmt: "€" },
+      { id: 75, cat: "sec", icon: "🚀", title: "Tripletta di Piattaforme", desc: "Effettua vendite su almeno 3 piattaforme distinte.", check: s => s.uniquePlatformsCount >= 3, curr: s => s.uniquePlatformsCount, target: 3 },
+      { id: 76, cat: "sec", icon: "⌛", title: "Pazienza Ricompensata", desc: "Vendi un oggetto rimasto in stock per oltre 60 giorni generandoci un ROI ≥ 100%.", check: s => s.hasPatienceProfit, curr: s => s.hasPatienceProfit ? 1 : 0, target: 1 },
+      { id: 77, cat: "sec", icon: "🏆", title: "Costanza Ferrea", desc: "Registra vendite in almeno 2 mesi differenti.", check: s => s.monthsCount >= 2, curr: s => s.monthsCount, target: 2 },
+      { id: 78, cat: "sec", icon: "🌟", title: "Previsione Perfetta", desc: "Realizza un ROI del 100% o superiore su un acquisto in mercatino.", check: s => s.maxRoi >= 100, curr: s => s.maxRoi, target: 100, fmt: "%" },
+      { id: 79, cat: "sec", icon: "⚡", title: "All-In", desc: "Raggiungi uno stock totale dal valore d'acquisto superiore a 200€.", check: s => s.stockValue >= 200, curr: s => s.stockValue, target: 200, fmt: "€" },
+      { id: 80, cat: "sec", icon: "👑", title: "Leggenda del Reselling", desc: "Sblocca l'80% di tutti gli altri trofei della bacheca (63 trofei).", check: s => s.unlockedOthersCount >= 63, curr: s => s.unlockedOthersCount, target: 63 }
+    ];
+
+    let trophyFilter = "ALL";
+    let openAccordions = { "vol": true };
+
+    function setTrophyFilter(filter) {
+      trophyFilter = filter;
+      document.querySelectorAll(".trophy-filter-btn").forEach(b => b.classList.remove("active"));
+      const btn = document.getElementById("tf" + filter);
+      if (btn) btn.classList.add("active");
+      computeTrophies();
+    }
+
+    function toggleAccordion(catId) {
+      openAccordions[catId] = !openAccordions[catId];
+      const item = document.getElementById("acc-item-" + catId);
+      if (item) item.classList.toggle("open", !!openAccordions[catId]);
+    }
+
+    function toggleAllAccordions() {
+      const allOpen = Object.values(openAccordions).every(v => v);
+      TROPHY_CATEGORIES.forEach(c => openAccordions[c.id] = !allOpen);
+      computeTrophies();
     }
 
     function computeTrophies() {
@@ -1572,7 +1685,11 @@
       let fastest = null, minDays = Infinity;
       let bestZero = null, bestZeroVal = -Infinity, zeroCount = 0, zeroTotal = 0;
 
-      db.filter(i => i.s === "sold").forEach(item => {
+      const soldItems = db.filter(i => i.s === "sold");
+      const stockItems = db.filter(i => i.s === "stock");
+      const totalProfitSum = soldItems.reduce((acc, i) => acc + getItemNetProfit(i), 0) - getTotalExpensesSum();
+
+      soldItems.forEach(item => {
         const bp = parseFloat(item.bp) || 0;
         const profit = getItemNetProfit(item);
 
@@ -1601,7 +1718,254 @@
         setTxt("recZeroVal", fmt(bestZeroVal));
         setTxt("recZeroSub", zeroCount + (zeroCount === 1 ? " oggetto a costo 0 venduto" : " oggetti a costo 0 venduti") + " · " + fmt(zeroTotal) + " in totale");
       }
+
+      // STATISTICHE PER VERIFICA TROFEI RETROATTIVA
+      const stats = {
+        totalItems: db.length,
+        stockCount: stockItems.length,
+        stockValue: stockItems.reduce((acc, i) => acc + (parseFloat(i.bp)||0), 0),
+        soldItemsCount: soldItems.length,
+        netProfit: totalProfitSum,
+        totalExpenses: getTotalExpensesSum(),
+        expensesCount: expenses.length,
+        adjustmentsCount: adjustments.length,
+        goalPct: 0,
+        maxMonthProfit: 0,
+        maxRoi: 0,
+        maxSingleProfit: 0,
+        zeroCostCount: zeroCount,
+        zeroCostProfitTotal: zeroTotal,
+        hasFleaMagic: false,
+        lossCount: 0,
+        hasFlashSale: false,
+        hasExpressFlip: false,
+        hasSprintWeek: false,
+        maxSameDaySales: 0,
+        oldStockCount60: stockItems.filter(i => daysInStock(i) > 60).length,
+        hasOldResurrection: false,
+        hasMummyResurrection: false,
+        maxWeeklySales: 0,
+        fastSalesCount14: 0,
+        gamingSold: 0,
+        gamingRoi50Count: 0,
+        hasMasterConsole: false,
+        clothingSold: 0,
+        hasTopClothing: false,
+        booksSold: 0,
+        booksProfitCount: 0,
+        techSold: 0,
+        otherProfitCount: 0,
+        uniqueCategoriesCount: new Set(soldItems.map(i => i.c)).size,
+        personaSold: 0,
+        vintedSold: 0,
+        wallapopSold: 0,
+        subitoSold: 0,
+        ebaySold: 0,
+        uniquePlatformsCount: new Set(soldItems.map(i => i.soldPlatform).filter(Boolean)).size,
+        hasLotItems: db.some(i => String(i.n||"").includes("Lotto") || parseFloat(i.bp)%1 !== 0),
+        lotItemsCount: db.filter(i => String(i.n||"").includes("Lotto") || parseFloat(i.bp)%1 !== 0).length,
+        packagingExpensesCount: expenses.filter(e => (e.category||"").includes("Imballaggi")).length,
+        fuelExpensesCount: expenses.filter(e => (e.category||"").includes("Carburante")).length,
+        hasNoNotesSale: soldItems.some(i => !i.n || !i.n.trim()),
+        hasRoundSale: soldItems.some(i => parseFloat(i.sp) > 0 && parseFloat(i.sp) % 5 === 0),
+        hasCentsBuySale: soldItems.some(i => parseFloat(i.bp) > 0 && parseFloat(i.bp) < 1.0),
+        hasPatienceProfit: false,
+        monthsCount: new Set(soldItems.map(i => monthKeyOf(i.soldDate || i.d)).filter(Boolean)).size,
+        unlockedOthersCount: 0
+      };
+
+      const targetGoal = parseFloat(String(document.getElementById("targetGoalInput").value).replace(",", ".")) || 200;
+      stats.goalPct = Math.max(0, Math.round((lastMonthProfit / targetGoal) * 100));
+
+      const monthlyProfits = {};
+      soldItems.forEach(i => {
+        const k = monthKeyOf(i.soldDate || i.d);
+        if (k) monthlyProfits[k] = (monthlyProfits[k] || 0) + getItemNetProfit(i);
+      });
+      expenses.forEach(e => {
+        const k = monthKeyOf(e.date);
+        if (k) monthlyProfits[k] = (monthlyProfits[k] || 0) - (parseFloat(e.amount) || 0);
+      });
+      stats.maxMonthProfit = Math.max(0, ...Object.values(monthlyProfits), 0);
+
+      const sameDayMap = {};
+      const weeklyMap = {};
+
+      soldItems.forEach(item => {
+        const bp = parseFloat(item.bp) || 0;
+        const sp = parseFloat(item.sp) || 0;
+        const profit = getItemNetProfit(item);
+        const roi = bp > 0 ? (profit / bp) * 100 : (sp > 0 ? 100 : 0);
+        const days = daysToSell(item);
+
+        if (roi > stats.maxRoi) stats.maxRoi = roi;
+        if (profit > stats.maxSingleProfit) stats.maxSingleProfit = profit;
+        if (profit < 0) stats.lossCount++;
+
+        if (bp > 0 && bp <= 2 && sp >= 20) stats.hasFleaMagic = true;
+        if (days !== null) {
+          if (days === 0) stats.hasFlashSale = true;
+          if (days <= 2) stats.hasExpressFlip = true;
+          if (days <= 7) stats.hasSprintWeek = true;
+          if (days > 90) stats.hasOldResurrection = true;
+          if (days > 180) stats.hasMummyResurrection = true;
+          if (days > 60 && roi >= 100) stats.hasPatienceProfit = true;
+          if (days <= 14) stats.fastSalesCount14++;
+        }
+
+        const sDate = item.soldDate || item.d;
+        if (sDate) {
+          sameDayMap[sDate] = (sameDayMap[sDate] || 0) + 1;
+          const p = sDate.split("/");
+          if (p.length === 3) {
+            const wKey = p[2] + "-W" + Math.ceil(parseInt(p[1]) / 4);
+            weeklyMap[wKey] = (weeklyMap[wKey] || 0) + 1;
+          }
+        }
+
+        const c = item.c || "";
+        const plat = item.soldPlatform || "";
+
+        if (c === "Gaming / Videogiochi") {
+          stats.gamingSold++;
+          if (roi >= 50) stats.gamingRoi50Count++;
+          if (profit >= 25) stats.hasMasterConsole = true;
+        } else if (c === "Abbigliamento") {
+          stats.clothingSold++;
+          if (profit >= 20) stats.hasTopClothing = true;
+        } else if (c === "Libri") {
+          stats.booksSold++;
+          if (profit > 0) stats.booksProfitCount++;
+        } else if (c === "Elettronica") {
+          stats.techSold++;
+        } else if (c === "Altro") {
+          if (profit > 0) stats.otherProfitCount++;
+        }
+
+        if (plat.includes("Vinted")) stats.vintedSold++;
+        else if (plat.includes("Wallapop")) stats.wallapopSold++;
+        else if (plat.includes("Subito")) stats.subitoSold++;
+        else if (plat.includes("eBay")) stats.ebaySold++;
+        else if (plat.includes("Mercatino") || plat.includes("Persona")) stats.personaSold++;
+      });
+
+      stats.maxSameDaySales = Math.max(0, ...Object.values(sameDayMap), 0);
+      stats.maxWeeklySales = Math.max(0, ...Object.values(weeklyMap), 0);
+
+      let unlockedCount = 0;
+      TROPHIES_DEF.forEach(t => {
+        if (t.id !== 80 && t.check(stats)) unlockedCount++;
+      });
+      stats.unlockedOthersCount = unlockedCount;
+
+      let finalUnlocked = 0;
+      const computedTrophies = TROPHIES_DEF.map(t => {
+        const isUnlocked = t.check(stats);
+        if (isUnlocked) finalUnlocked++;
+        return { ...t, isUnlocked };
+      });
+
+      TROPHY_STATE.unlocked = finalUnlocked;
+      TROPHY_STATE.total = TROPHIES_DEF.length;
+
+      let userLevel = 1, levelName = "Avvio";
+      if (finalUnlocked >= 65) { userLevel = 10; levelName = "Leggenda"; }
+      else if (finalUnlocked >= 55) { userLevel = 9; levelName = "Impresario"; }
+      else if (finalUnlocked >= 45) { userLevel = 8; levelName = "Magnate"; }
+      else if (finalUnlocked >= 35) { userLevel = 7; levelName = "Master"; }
+      else if (finalUnlocked >= 25) { userLevel = 6; levelName = "Esperto"; }
+      else if (finalUnlocked >= 18) { userLevel = 5; levelName = "Dealer"; }
+      else if (finalUnlocked >= 12) { userLevel = 4; levelName = "Trader"; }
+      else if (finalUnlocked >= 7) { userLevel = 3; levelName = "Flipping Pro"; }
+      else if (finalUnlocked >= 3) { userLevel = 2; levelName = "Mercante"; }
+
+      TROPHY_STATE.level = userLevel;
+      TROPHY_STATE.levelName = levelName;
+
       renderLevelInfo();
+      renderAccordionTrophies(computedTrophies, stats);
+    }
+
+    function renderAccordionTrophies(computedTrophies, stats) {
+      const container = document.getElementById("trophiesAccordionContainer");
+      if (!container) return;
+      container.innerHTML = "";
+
+      TROPHY_CATEGORIES.forEach(cat => {
+        let catTrophies = computedTrophies.filter(t => t.cat === cat.id);
+        
+        if (trophyFilter === "UNLOCKED") catTrophies = catTrophies.filter(t => t.isUnlocked);
+        else if (trophyFilter === "LOCKED") catTrophies = catTrophies.filter(t => !t.isUnlocked);
+
+        if (!catTrophies.length && trophyFilter !== "ALL") return;
+
+        const allCatTrophies = computedTrophies.filter(t => t.cat === cat.id);
+        const unlockedInCat = allCatTrophies.filter(t => t.isUnlocked).length;
+        const totalInCat = allCatTrophies.length;
+
+        const isOpen = !!openAccordions[cat.id];
+        const isComplete = unlockedInCat === totalInCat;
+
+        const item = document.createElement("div");
+        item.className = "accordion-item" + (isOpen ? " open" : "");
+        item.id = "acc-item-" + cat.id;
+
+        const header = document.createElement("div");
+        header.className = "accordion-header";
+        header.onclick = () => toggleAccordion(cat.id);
+        header.innerHTML = `
+          <div class="accordion-header-left">
+            <span>${cat.title}</span>
+            <span class="accordion-count-badge ${isComplete ? 'complete' : ''}">${unlockedInCat}/${totalInCat}</span>
+          </div>
+          <span class="accordion-icon">▼</span>
+        `;
+
+        const content = document.createElement("div");
+        content.className = "accordion-content";
+
+        const grid = document.createElement("div");
+        grid.className = "trophy-grid";
+
+        catTrophies.forEach(t => {
+          const card = document.createElement("div");
+          card.className = "trophy-card " + (t.isUnlocked ? "unlocked" : "locked");
+
+          let progressHtml = "";
+          if (!t.isUnlocked && t.target && t.curr) {
+            const currentVal = typeof t.curr === "function" ? t.curr(stats) : 0;
+            const pct = Math.min(100, Math.max(0, Math.round((currentVal / t.target) * 100)));
+            const unit = t.fmt || "";
+            progressHtml = `
+              <div style="display:flex; justify-size:space-between; font-size:0.65rem; color:var(--text-muted); margin-top:4px;">
+                <span>Progresso</span>
+                <span>${typeof currentVal === "number" && unit === "€" ? "€" + currentVal.toFixed(0) : currentVal} / ${unit === "€" ? "€" + t.target : t.target + unit}</span>
+              </div>
+              <div class="trophy-mini-progress">
+                <div class="trophy-mini-bar" style="width:${pct}%;"></div>
+              </div>
+            `;
+          }
+
+          card.innerHTML = `
+            <div class="trophy-icon">${t.icon}</div>
+            <div class="trophy-info">
+              <div class="trophy-title">
+                <span>${esc(t.title)}</span>
+              </div>
+              <div class="trophy-desc">${esc(t.desc)}</div>
+              ${progressHtml}
+            </div>
+            ${t.isUnlocked ? `<div class="trophy-check-mark">✓</div>` : `<div style="font-size:0.8rem; opacity:0.5;">🔒</div>`}
+          `;
+          grid.appendChild(card);
+        });
+
+        content.appendChild(grid);
+        item.appendChild(header);
+        item.appendChild(content);
+        container.appendChild(item);
+      });
     }
 
     function handleFabClick() { openAddChoiceSheet(); }
@@ -1778,7 +2142,11 @@
       const cat = document.getElementById("editCategory").value;
       const notes = document.getElementById("editNotes").value.trim();
       
-      const text = `📦 ${title}\n\n• Categoria: ${cat}\n${notes ? "• Condizioni / Dettagli: " + notes + "\n" : ""}• Spedizione rapida e imballo accurato! ⚡`;
+      const text = `📦 ${title}
+
+• Categoria: ${cat}
+${notes ? "• Condizioni / Dettagli: " + notes + "
+" : ""}• Spedizione rapida e imballo accurato! ⚡`;
       
       navigator.clipboard.writeText(text).then(() => {
         notify("Bozza annuncio copiata negli appunti!");
@@ -2576,7 +2944,9 @@
       const nPhotos = photos ? Object.keys(photos).length : 0;
       const msg = "Sostituire i dati attuali (" + db.length + " oggetti, " + expenses.length + " spese) con quelli del backup (" +
         newDb.length + " oggetti, " + newExp.length + " spese" + (photos ? ", " + nPhotos + " foto" : "") +
-        ")?\n\nPrima viene scaricata una copia di sicurezza dei dati attuali.";
+        ")?
+
+Prima viene scaricata una copia di sicurezza dei dati attuali.";
       if (!confirm(msg)) return;
       await downloadBackup(true);
       db = newDb; expenses = newExp; adjustments = newAdj;
@@ -2627,7 +2997,8 @@
     function downloadCSV() {
       const q = v => {
         let t = String(v == null ? "" : v);
-        if (/^[=+\-@\t\r]/.test(t)) t = "'" + t;
+        if (/^[=+\-@	
+]/.test(t)) t = "'" + t;
         return '"' + t.replace(/"/g, '""') + '"';
       };
       const n = v => (typeof v === "number" && !isNaN(v)) ? v.toFixed(2).replace(".", ",") : "";
@@ -2648,7 +3019,8 @@
       expenses.forEach(e => {
         lines.push([q(e.id), q(e.note), q(e.category), n(parseFloat(e.amount) || 0), q(e.date)].join(";"));
       });
-      const blob = new Blob(["\uFEFF" + lines.join("\r\n")], { type: "text/csv;charset=utf-8" });
+      const blob = new Blob(["﻿" + lines.join("
+")], { type: "text/csv;charset=utf-8" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
@@ -2707,7 +3079,7 @@
       "Spazio in magazzino liberato: pronto per il prossimo lotto! 🧹",
       "Vendita lampo! L'oggetto non ha fatto in tempo a prendere polvere. ⏱️",
       "Pezzo piazzato, cliente accontentato e profitto intascato. 🚚",
-      "El ciclo del resell continua: acquista, piazza, incassa! 🔄",
+      "Il ciclo del resell continua: acquista, piazza, incassa! 🔄",
       "Niente male davvero! Avanti così verso il prossimo obiettivo. 🔥",
       "Colpo grosso! Questa vendita è una piccola opera d'arte. 🏆"
     ];
@@ -2728,7 +3100,7 @@
       document.getElementById("celebrateModal").style.display = "flex";
     }
 
-    if (navigator.storage && navigator.storage.persist) {
+    if (navigator.storage && navigator.storagepersist) {
       navigator.storage.persist().catch(() => {});
     }
 
