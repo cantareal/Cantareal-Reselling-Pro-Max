@@ -653,6 +653,7 @@
       <div style="display:flex;flex-direction:column;gap:10px;">
         <button class="btn-sync green" onclick="manualSave(); closeModal('dataModal');">💾 Salva Modifiche Locale</button>
         <button class="btn-sync" onclick="openTrashModal(); closeModal('dataModal');">🗑️ Cestino (elementi eliminati)</button>
+        <button class="btn-sync" onclick="openSnapshotsModal(); closeModal('dataModal');">⏪ Copie automatiche (ultimi giorni)</button>
         <button class="btn-sync purple" onclick="downloadBackup(true); closeModal('dataModal');">📂 Backup completo con foto (.JSON)</button>
         <button class="btn-sync purple" onclick="downloadBackup(false); closeModal('dataModal');">📄 Backup leggero senza foto</button>
         <button class="btn-sync orange" onclick="downloadCSV(); closeModal('dataModal');">📊 Esporta Registro (.CSV)</button>
@@ -661,6 +662,17 @@
         <button class="btn-sync" onclick="importData(); closeModal('dataModal');">📋 Importa incollando il testo</button>
         <input type="file" id="importFileInput" accept=".json,application/json" style="display:none" onchange="importFromFile(event)">
       </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="snapModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="modal-title">⏪ Copie automatiche</span>
+        <button class="close-modal" onclick="closeModal('snapModal')">✕</button>
+      </div>
+      <p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:10px;">Ogni giorno, prima della prima modifica, l'app conserva lo stato precedente (ultimi 5 giorni). Se fai un errore grave, puoi tornare indietro.</p>
+      <div id="snapList"></div>
     </div>
   </div>
 
@@ -717,7 +729,7 @@
         </div>
         
         <div class="full-width">
-          <label style="font-size:0.75rem;font-weight:700;">NOTE / CONDITON / TAGLIA (OPZIONALE)</label>
+          <label style="font-size:0.75rem;font-weight:700;">NOTE / CONDIZIONI / TAGLIA (OPZIONALE)</label>
           <textarea id="addNotes" placeholder="es. Taglia L, CIB completo di manuale, mai aperto..."></textarea>
         </div>
 
@@ -1009,7 +1021,7 @@
   </div>
 
   <script>
-    const BASELINE_CASH = 200.64;
+    const BASELINE_CASH = 224.44; // cassa prima di contare gli oggetti (dataset iniziale vuoto)
     const DB_KEY = "reselling_pro_max_db_v6";
     const EXP_KEY = "reselling_pro_max_expenses_v1";
     const ADJ_KEY = "reselling_pro_max_adjustments";
@@ -1278,13 +1290,72 @@
       renderApp();
     }
 
+    // Copie automatiche: una al giorno (stato PRIMA della prima modifica del giorno), le ultime 5
+    function getSnapshots() {
+      try {
+        const snaps = JSON.parse(localStorage.getItem(SNAPSHOTS_KEY) || "[]");
+        return Array.isArray(snaps) ? snaps.filter(x => x && x.day && Array.isArray(x.db)) : [];
+      } catch (e) { return []; }
+    }
+
     function createAutoSnapshot() {
       try {
-        let snapshots = JSON.parse(localStorage.getItem(SNAPSHOTS_KEY) || "[]");
-        snapshots.unshift({ timestamp: Date.now(), db: JSON.parse(JSON.stringify(db)), expenses: JSON.parse(JSON.stringify(expenses)) });
-        while (snapshots.length > 3) snapshots.pop();
-        localStorage.setItem(SNAPSHOTS_KEY, JSON.stringify(snapshots));
-      } catch(e){}
+        const prevDb = localStorage.getItem(DB_KEY);
+        if (!prevDb) return;
+        const today = new Date().toISOString().slice(0, 10);
+        const snaps = getSnapshots();
+        if (snaps.some(x => x.day === today)) return;
+        snaps.unshift({
+          day: today,
+          timestamp: Date.now(),
+          db: JSON.parse(prevDb),
+          expenses: JSON.parse(localStorage.getItem(EXP_KEY) || "[]"),
+          adjustments: JSON.parse(localStorage.getItem(ADJ_KEY) || "[]")
+        });
+        while (snaps.length > 6) snaps.pop();
+        localStorage.setItem(SNAPSHOTS_KEY, JSON.stringify(snaps));
+      } catch (e) {}
+    }
+
+    function openSnapshotsModal() {
+      renderSnapshotsList();
+      document.getElementById("snapModal").style.display = "flex";
+    }
+
+    function renderSnapshotsList() {
+      const box = document.getElementById("snapList");
+      const snaps = getSnapshots();
+      if (!snaps.length) {
+        box.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-muted);font-size:0.85rem;">Nessuna copia disponibile: la prima si crea alla prossima modifica.</div>';
+        return;
+      }
+      box.innerHTML = snaps.map((sn, i) => {
+        const d = new Date(sn.timestamp).toLocaleDateString("it-IT");
+        const label = sn.day === "pre-ripristino" ? "Prima dell'ultimo ripristino" : "Stato a inizio giornata del " + d;
+        const counts = sn.db.length + " oggetti · " + (Array.isArray(sn.expenses) ? sn.expenses.length : 0) + " spese";
+        return `<div class="trash-row">
+          <div class="tr-info"><div class="tr-title">${label}</div><div class="tr-meta">${counts}</div></div>
+          <button style="background:var(--accent-color);color:#fff;border:none;" onclick="restoreSnapshot(${i})">Ripristina</button>
+        </div>`;
+      }).join("");
+    }
+
+    function restoreSnapshot(i) {
+      const snaps = getSnapshots();
+      const sn = snaps[i];
+      if (!sn) return;
+      const label = sn.day === "pre-ripristino" ? "prima dell'ultimo ripristino" : "a inizio giornata del " + new Date(sn.timestamp).toLocaleDateString("it-IT");
+      if (!confirm("Ripristinare i dati com'erano " + label + "?\n\nOggetti: " + sn.db.length + " · Spese: " + (Array.isArray(sn.expenses) ? sn.expenses.length : 0) + "\n\nLo stato attuale viene conservato come copia \"prima dell'ultimo ripristino\".")) return;
+      const clone = x => JSON.parse(JSON.stringify(x));
+      snaps.unshift({ day: "pre-ripristino", timestamp: Date.now(), db: clone(db), expenses: clone(expenses), adjustments: clone(adjustments) });
+      while (snaps.length > 6) snaps.pop();
+      try { localStorage.setItem(SNAPSHOTS_KEY, JSON.stringify(snaps)); } catch (e) {}
+      db = sanitizeItems(sn.db);
+      expenses = sanitizeExpenses(Array.isArray(sn.expenses) ? sn.expenses : []);
+      if (Array.isArray(sn.adjustments)) adjustments = sanitizeAdjustments(sn.adjustments);
+      saveData();
+      closeModal("snapModal");
+      notify("Dati ripristinati");
     }
 
     function saveData() {
@@ -1728,7 +1799,7 @@
         } else if (item.s === "sold") {
           const profit = getItemNetProfit(item);
           totalSalesProfit += profit;
-          currentSalesRevenue += sp;
+          currentSalesRevenue += sp - (parseFloat(item.fee) || 0);
           soldCount++;
           const sd = item.soldDate || item.d;
           if (sd && sd.endsWith(currentMMYYYY)) {
