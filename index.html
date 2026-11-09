@@ -40,7 +40,7 @@
     .header-actions { display: flex; gap: 8px; align-items: center; }
     .trophy-header-btn { background: var(--card-bg); border: 1.5px solid var(--warn-color); color: var(--warn-color); padding: 7px 12px; border-radius: 20px; font-size: 0.82rem; cursor: pointer; width: auto; font-weight: 800; box-shadow: 0 2px 8px rgba(251, 191, 36, 0.2); }
 
-    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
     .stat-card { padding: 12px 10px; border-radius: 14px; text-align: left; position: relative; border: none; color: #fff; min-height: 72px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 12px rgba(0,0,0,0.25); }
     .stat-card .label { font-size: 0.7rem; opacity: 0.9; font-weight: 600; }
     .stat-card .val { font-size: 1.2rem; font-weight: 800; margin-top: 2px; color: #fff !important; }
@@ -52,75 +52,26 @@
     .stat-card.month { background: linear-gradient(135deg, #d97706, #b45309); }
     .cash-adjust-btn { position: absolute; top: 8px; right: 8px; background: rgba(255,255,255,0.2); border: none; color: #fff; font-size: 0.85rem; cursor: pointer; width: auto; padding: 3px 7px; border-radius: 6px; }
 
-    .goal-card {
-      background: var(--card-bg);
-      padding: 5px 10px 6px;
-      border-radius: 8px;
-      border: 1px solid var(--border-color);
-      margin-bottom: 8px;
-    }
-    .goal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 4px;
-      font-size: 0.7rem;
-      font-weight: 700;
-    }
-    .goal-card input.goal-input[type="number"] {
-      width: 52px !important;
-      min-width: 52px;
-      max-width: 52px;
-      padding: 2px 4px !important;
-      height: 22px !important;
-      font-size: 0.72rem !important;
-      text-align: right;
-      background: var(--input-bg);
-      color: var(--text-color);
-      border: 1px solid var(--border-color);
-      border-radius: 4px;
-      margin-left: 4px;
-      display: inline-block;
-      vertical-align: middle;
-      box-sizing: border-box;
-    }
-    .goal-card .goal-header {
-      gap: 8px;
-    }
-    .goal-card .goal-header > span:first-child {
-      display: inline-flex;
-      align-items: center;
-      flex-wrap: nowrap;
-      min-width: 0;
-    }
-    .progress-bar-bg {
-      background: var(--border-color);
-      border-radius: 4px;
-      height: 6px;
-      overflow: hidden;
-    }
-    .progress-bar-fill {
-      background: var(--success-color);
-      height: 100%;
-      width: 0%;
-      transition: width 0.3s;
-    }
+    /* OBIETTIVO COMPATTO */
+    .goal-card { background: var(--card-bg); padding: 8px 12px; border-radius: 10px; border: 1px solid var(--border-color); margin-bottom: 10px; }
+    .goal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; font-size: 0.78rem; font-weight: 700; }
+    .goal-header-left { display: flex; align-items: center; gap: 6px; }
+    .goal-input { width: 64px; padding: 2px 4px; font-size: 0.8rem; text-align: right; background: var(--input-bg); color: var(--text-color); border: 1px solid var(--border-color); border-radius: 4px; display: inline-block; }
+    .progress-bar-bg { background: var(--border-color); border-radius: 6px; height: 8px; overflow: hidden; }
+    .progress-bar-fill { background: var(--success-color); height: 100%; width: 0%; transition: width 0.3s; }
     .progress-bar-fill.goal-complete {
       background: linear-gradient(90deg, #f59e0b, #fbbf24, #f59e0b);
       background-size: 200% 200%;
       animation: goldGlow 1.8s infinite alternate, goldShift 3s infinite linear;
     }
-    @keyframes goldGlow {
-      0% { box-shadow: 0 0 4px #f59e0b; }
-      100% { box-shadow: 0 0 12px #fbbf24; }
-    }
+    @keyframes goldGlow { 0% { box-shadow: 0 0 4px #f59e0b; } 100% { box-shadow: 0 0 12px #fbbf24; } }
     @keyframes goldShift { 0% { background-position: 0% 50%; } 100% { background-position: 100% 50%; } }
 
     .status-tabs { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; margin-bottom: 10px; }
     .tab-btn { padding: 9px 2px; font-size: 0.68rem; font-weight: 700; border-radius: 8px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-color); cursor: pointer; text-align: center; }
     .tab-btn.active { background: var(--tab-active); color: var(--tab-active-text); border-color: var(--tab-active); }
 
-    /* BARRA DEI FILTRI ESTREMAMENTE COMPATTA */
+    /* BARRA DEI FILTRI COMPATTA */
     .controls-card { background: var(--card-bg); padding: 8px 10px; border-radius: 10px; border: 1px solid var(--border-color); margin-bottom: 10px; }
     
     .search-wrapper { position: relative; flex-grow: 1; display: flex; align-items: center; }
@@ -245,6 +196,45 @@
     .photo-preview-box { position: relative; width: 84px; height: 84px; flex-shrink: 0; }
     .photo-preview-box img { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; border: 1px solid var(--border-color); cursor: zoom-in; }
     .btn-remove-photo { position: absolute; top: -6px; right: -6px; background: var(--danger-color); color: #fff; border: none; border-radius: 50%; width: 22px; height: 22px; font-size: 0.8rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
+
+    /* NUOVO LAYOUT PULSANTI MODALE MODIFICA */
+    .edit-modal-actions {
+      grid-column: span 2;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border-color);
+    }
+    .modal-btn-row {
+      display: flex;
+      gap: 8px;
+    }
+    .modal-btn-row .btn-modal-action {
+      flex: 1;
+    }
+    .btn-modal-action {
+      width: 100%;
+      padding: 11px 12px;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1px solid transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: transform 0.1s ease, filter 0.15s ease;
+    }
+    .btn-modal-action:active {
+      transform: scale(0.98);
+    }
+    .btn-modal-sell { background: var(--success-color); color: #ffffff; border-color: var(--success-color); }
+    .btn-modal-save { background: var(--accent-color); color: #ffffff; border-color: var(--accent-color); }
+    .btn-modal-copy { background: rgba(139, 92, 246, 0.18); color: #c4b5fd; border-color: rgba(139, 92, 246, 0.4); }
+    .btn-modal-delete { background: rgba(239, 68, 68, 0.18); color: #fca5a5; border-color: rgba(239, 68, 68, 0.4); }
 
     .bottom-sheet-overlay { position: fixed; inset: 0; background: var(--modal-overlay); z-index: 200; display: flex; align-items: flex-end; justify-content: center; }
     .bottom-sheet-overlay.hidden { display: none; }
@@ -371,7 +361,9 @@
 
   <div class="goal-card">
     <div class="goal-header">
-      <span>🎯 Obiettivo: €<input type="number" id="targetGoalInput" class="goal-input" value="200" oninput="updateGoal()"></span>
+      <div class="goal-header-left">
+        <span>🎯 Obiettivo: €</span><input type="number" id="targetGoalInput" class="goal-input" value="200" oninput="updateGoal()">
+      </div>
       <span id="goalPercentText">0%</span>
     </div>
     <div class="progress-bar-bg"><div class="progress-bar-fill" id="goalProgressBar"></div></div>
@@ -444,7 +436,6 @@
       </div>
     </div>
 
-    <!-- MINI BANNER CATEGORIA E SOMMATORIA FILTRO -->
     <div id="catBanner" class="cat-banner" style="display:none;"></div>
     <div id="filterSummaryBar" class="filter-summary-bar">
       <span id="summaryCount">Mostrando: 0 oggetti</span>
@@ -473,7 +464,6 @@
     </div>
   </div>
 
-  <!-- VISTA TROFEI -->
   <div id="trophiesView">
     <div class="trophy-hero">
       <h2>🏆 Hall of Fame & Trofei</h2>
@@ -531,7 +521,6 @@
     <img id="lightboxImg" class="lightbox-img" src="" alt="Ingrandimento Foto">
   </div>
 
-  <!-- BOTTOM SHEET: AVATAR HUB -->
   <div id="avatarSheet" class="bottom-sheet-overlay hidden" onclick="closeAvatarSheet(event)">
     <div class="bottom-sheet-content" onclick="event.stopPropagation()">
       <div class="sheet-handle"></div>
@@ -599,7 +588,6 @@
     </div>
   </div>
 
-  <!-- BOTTOM SHEET: CALCOLATORE COMPRA / SALTA -->
   <div id="calculatorSheet" class="bottom-sheet-overlay hidden" onclick="closeCalculatorSheet(event)">
     <div class="bottom-sheet-content" onclick="event.stopPropagation()">
       <div class="sheet-handle"></div>
@@ -631,7 +619,6 @@
     </div>
   </div>
 
-  <!-- BOTTOM SHEET SCELTA AGGIUNTA TAB -->
   <div id="addChoiceSheet" class="bottom-sheet-overlay hidden" onclick="closeAddChoiceSheet(event)">
     <div class="bottom-sheet-content" onclick="event.stopPropagation()">
       <div class="sheet-handle"></div>
@@ -664,7 +651,6 @@
     </div>
   </div>
 
-  <!-- MODALE GESTIONE DATI -->
   <div class="modal-overlay" id="dataModal">
     <div class="modal-content">
       <div class="modal-header">
@@ -688,7 +674,6 @@
     </div>
   </div>
 
-  <!-- MODALE CESTINO -->
   <div class="modal-overlay" id="trashModal">
     <div class="modal-content">
       <div class="modal-header">
@@ -701,7 +686,6 @@
     </div>
   </div>
 
-  <!-- MODALE AGGIUNGI OGGETTO SINGOLO -->
   <div class="modal-overlay" id="addModal">
     <div class="modal-content">
       <div class="modal-header">
@@ -767,7 +751,6 @@
     </div>
   </div>
 
-  <!-- MODALE AGGIUNGI LOTTO / BLOCCO -->
   <div class="modal-overlay" id="lotModal">
     <div class="modal-content">
       <div class="modal-header">
@@ -821,7 +804,6 @@
     </div>
   </div>
 
-  <!-- MODALE AGGIUNGI SPESA EXTRA -->
   <div class="modal-overlay" id="addExpenseModal">
     <div class="modal-content">
       <div class="modal-header">
@@ -858,7 +840,6 @@
     </div>
   </div>
 
-  <!-- MODALE MODIFICA OGGETTO -->
   <div class="modal-overlay" id="editModal">
     <div class="modal-content">
       <div class="modal-header">
@@ -944,17 +925,21 @@
           <label style="font-size:0.75rem;font-weight:700;">DATA VENDITA</label>
           <input type="date" id="editSoldDate">
         </div>
-        <div class="full-width">
-          <button class="btn-copy" onclick="copyListingDraft()">📋 Copia Testo Annuncio</button>
-          <button class="btn-sell-modal" id="btnQuickSell">🛒 Segna come Venduto</button>
-          <button class="btn-main" onclick="saveEditChanges()">💾 Salva Modifiche</button>
-          <button class="btn-danger" onclick="deleteCurrentItem()">🗑 Elimina</button>
+
+        <!-- NUOVO LAYOUT PULSANTI NEL MODALE MODIFICA -->
+        <div class="edit-modal-actions">
+          <button type="button" class="btn-modal-action btn-modal-sell" id="btnQuickSell">🛒 Segna come Venduto</button>
+          <button type="button" class="btn-modal-action btn-modal-save" onclick="saveEditChanges()">💾 Salva Modifiche</button>
+          <div class="modal-btn-row">
+            <button type="button" class="btn-modal-action btn-modal-copy" onclick="copyListingDraft()">📋 Copia Annuncio</button>
+            <button type="button" class="btn-modal-action btn-modal-delete" onclick="deleteCurrentItem()">🗑️ Elimina</button>
+          </div>
         </div>
+
       </div>
     </div>
   </div>
 
-  <!-- MODALE AGGIUSTA CASSA -->
   <div class="modal-overlay" id="cashModal">
     <div class="modal-content">
       <div class="modal-header">
@@ -981,7 +966,6 @@
     </div>
   </div>
 
-  <!-- MODALE CELEBRATIVA VENDITA -->
   <div class="modal-overlay" id="celebrateModal" style="z-index: 300;">
     <div class="celebrate-modal-content">
       <div class="celebrate-icon-wrapper">💸💸💸</div>
@@ -1006,7 +990,6 @@
     </div>
   </div>
 
-  <!-- BOTTOM SHEET VENDITA RAPIDA CON COMMISSIONI -->
   <div id="sellSheet" class="bottom-sheet-overlay hidden" onclick="closeSellSheet(event)">
     <div class="bottom-sheet-content" onclick="event.stopPropagation()">
       <div class="sheet-handle"></div>
@@ -1123,9 +1106,7 @@
     let platformChartInst = null, monthChartInst = null, categoryChartInst = null, leadTimeChartInst = null;
     let viewMode = localStorage.getItem(VIEW_MODE_KEY) || "list";
 
-    // IN-MEMORY IMAGE CACHE FOR 60FPS SCROLLING
     const photoCache = {};
-
     let imageDB = null;
     const IDB_NAME = "CantarealImageDB";
     const IDB_STORE = "photos";
@@ -1171,9 +1152,7 @@
     }
 
     function getPhotoIDB(id) {
-      if (photoCache[id] !== undefined) {
-        return Promise.resolve(photoCache[id]);
-      }
+      if (photoCache[id] !== undefined) return Promise.resolve(photoCache[id]);
       if (!imageDB) return Promise.resolve(null);
       return new Promise((resolve) => {
         const tx = imageDB.transaction([IDB_STORE], "readonly");
@@ -1216,9 +1195,7 @@
       const tx = imageDB.transaction([IDB_AVATAR_STORE], "readonly");
       const store = tx.objectStore(IDB_AVATAR_STORE);
       const req = store.get("userAvatar");
-      req.onsuccess = () => {
-        if (req.result) applyAvatarImage(req.result);
-      };
+      req.onsuccess = () => { if (req.result) applyAvatarImage(req.result); };
     }
 
     function applyAvatarImage(src) {
@@ -1227,16 +1204,8 @@
       const mImg = document.getElementById("menuAvatarImg");
       const mPh = document.getElementById("menuAvatarPlaceholder");
 
-      if (hImg && hPh) {
-        hImg.src = src;
-        hImg.style.display = "block";
-        hPh.style.display = "none";
-      }
-      if (mImg && mPh) {
-        mImg.src = src;
-        mImg.style.display = "block";
-        mPh.style.display = "none";
-      }
+      if (hImg && hPh) { hImg.src = src; hImg.style.display = "block"; hPh.style.display = "none"; }
+      if (mImg && mPh) { mImg.src = src; mImg.style.display = "block"; mPh.style.display = "none"; }
     }
 
     function handleAvatarUpload(event) {
@@ -1360,9 +1329,7 @@
         btn.style.display = "none";
       }
     };
-    function scrollToTop() {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+    function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
 
     try {
       const saved = localStorage.getItem(DB_KEY);
@@ -1374,9 +1341,7 @@
     try { adjustments = JSON.parse(localStorage.getItem(ADJ_KEY) || "[]"); } catch(e) { adjustments = []; }
 
     const savedTheme = localStorage.getItem(THEME_KEY);
-    if (savedTheme) {
-      document.documentElement.setAttribute("data-theme", savedTheme);
-    }
+    if (savedTheme) { document.documentElement.setAttribute("data-theme", savedTheme); }
 
     const savedGoal = localStorage.getItem(GOAL_KEY);
     if (savedGoal) document.getElementById("targetGoalInput").value = savedGoal;
@@ -1388,7 +1353,6 @@
       renderApp();
     }
 
-    // AUTO SAVE WITH ROLLING SAFETY SNAPSHOTS
     function createAutoSnapshot() {
       try {
         let snapshots = JSON.parse(localStorage.getItem(SNAPSHOTS_KEY) || "[]");
@@ -2169,7 +2133,6 @@
         });
       }
 
-      // 1. TEMPO MEDIO DI VENDITA (LEAD TIME)
       const leadTimes = {};
       const leadCounts = {};
       db.forEach(i => {
@@ -2188,7 +2151,6 @@
       });
       leadTimeChartInst = hbar("leadTimeChart", avgLeadTimes, leadTimeChartInst, true);
 
-      // 2. PROFITTO PER PIATTAFORMA E CATEGORIA
       const plat = {};
       const cats = {};
       db.forEach(i => {
@@ -2201,7 +2163,6 @@
       platformChartInst = hbar("platformChart", plat, platformChartInst);
       categoryChartInst = hbar("categoryChart", cats, categoryChartInst);
 
-      // 3. PROFITTO MENSILE
       const monthKey = d => {
         const p = String(d || "").split("/");
         return p.length === 3 ? p[1].padStart(2, "0") + "/" + p[2] : "Sconosciuto";
@@ -2428,7 +2389,7 @@
 
       const btn = document.getElementById("btnQuickSell");
       if (item.s === "stock") {
-        btn.style.display = "block";
+        btn.style.display = "flex";
         btn.onclick = () => { closeModal("editModal"); openSellSheet(item.id); };
       } else btn.style.display = "none";
       document.getElementById("editModal").style.display = "flex";
@@ -2632,7 +2593,7 @@
         }
       }
       saveData();
-      notify("Dati importati. Oggetti: " + db.length + " | Spese: " + expenses.length + (photos ? " | Foto: " + nPhotos : ""));
+      notify("Dati importati. Oggetti: " + db.length + " | Spese: " + newExp.length + (photos ? " | Foto: " + nPhotos : ""));
     }
 
     function importData() {
@@ -2746,7 +2707,7 @@
       "Spazio in magazzino liberato: pronto per il prossimo lotto! 🧹",
       "Vendita lampo! L'oggetto non ha fatto in tempo a prendere polvere. ⏱️",
       "Pezzo piazzato, cliente accontentato e profitto intascato. 🚚",
-      "Il ciclo del resell continua: acquista, piazza, incassa! 🔄",
+      "El ciclo del resell continua: acquista, piazza, incassa! 🔄",
       "Niente male davvero! Avanti così verso il prossimo obiettivo. 🔥",
       "Colpo grosso! Questa vendita è una piccola opera d'arte. 🏆"
     ];
