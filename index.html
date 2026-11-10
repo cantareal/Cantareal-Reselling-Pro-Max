@@ -632,6 +632,95 @@
     .lightbox-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 600; display: none; justify-content: center; align-items: center; padding: 16px; }
     .lightbox-img { max-width: 95vw; max-height: 85vh; border-radius: 12px; object-fit: contain; box-shadow: 0 8px 30px rgba(0,0,0,0.5); }
     .lightbox-close { position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,0.2); color: #fff; border: none; font-size: 1.5rem; width: 40px; height: 40px; border-radius: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  
+    /* === Completeness pack === */
+    .controls-card {
+      background: linear-gradient(180deg, rgba(30,41,59,0.95), rgba(15,23,42,0.88)) !important;
+      padding: 10px !important;
+      border-radius: 14px !important;
+      border: 1px solid rgba(51,65,85,0.9) !important;
+      margin-bottom: 10px !important;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+    }
+    [data-theme="light"] .controls-card {
+      background: #fff !important;
+      border-color: var(--border-color) !important;
+      box-shadow: none !important;
+    }
+    .filter-row { gap: 6px !important; margin-top: 8px !important; }
+    .filter-row label { font-size: 0.58rem !important; margin-bottom: 3px !important; }
+    .filter-row select {
+      padding: 0 8px !important; height: 34px !important; font-size: 0.72rem !important;
+      border-radius: 10px !important; font-weight: 700 !important;
+      background: rgba(15,23,42,0.65) !important;
+      border: 1px solid rgba(51,65,85,0.95) !important;
+    }
+    [data-theme="light"] .filter-row select {
+      background: #f8fafc !important; border-color: var(--border-color) !important;
+    }
+    .quick-chips { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+    .chip-btn {
+      border: 1px solid rgba(51,65,85,0.95);
+      background: rgba(15,23,42,0.55);
+      color: var(--text-muted);
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 0.68rem;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .chip-btn.active {
+      color: #fff;
+      border-color: transparent;
+      background: linear-gradient(145deg, #f43f5e, #be123c);
+      box-shadow: 0 4px 12px rgba(244,63,94,0.35);
+    }
+    .suggest-card {
+      display: none;
+      background: linear-gradient(135deg, rgba(251,191,36,0.12), rgba(30,41,59,0.95));
+      border: 1px solid rgba(251,191,36,0.45);
+      border-radius: 14px;
+      padding: 12px;
+      margin-bottom: 12px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+    }
+    .suggest-card.show { display: block; }
+    .suggest-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+    .suggest-label { font-size: 0.68rem; font-weight: 800; color: #fbbf24; text-transform: uppercase; letter-spacing: 0.4px; }
+    .suggest-title { font-size: 0.95rem; font-weight: 800; margin-bottom: 4px; }
+    .suggest-meta { font-size: 0.72rem; color: var(--text-muted); margin-bottom: 10px; }
+    .suggest-actions { display: flex; gap: 8px; }
+    .suggest-actions button {
+      flex: 1; border: none; border-radius: 10px; padding: 10px; font-weight: 800; cursor: pointer; color: #fff;
+    }
+    .suggest-sell { background: linear-gradient(145deg, #4ade80, #16a34a); }
+    .suggest-open { background: linear-gradient(145deg, #60a5fa, #1d4ed8); }
+    .empty-state {
+      text-align: center; padding: 36px 18px; grid-column: span 2;
+      background: var(--card-bg); border: 1px dashed var(--border-color);
+      border-radius: 14px; color: var(--text-muted);
+    }
+    .empty-state .empty-ico { font-size: 2.2rem; margin-bottom: 8px; }
+    .empty-state .empty-title { font-weight: 800; color: var(--text-color); margin-bottom: 4px; }
+    .empty-state .empty-sub { font-size: 0.8rem; margin-bottom: 12px; }
+    .empty-state button {
+      border: none; border-radius: 10px; padding: 10px 14px; font-weight: 800;
+      background: linear-gradient(145deg, #60a5fa, #1d4ed8); color: #fff; cursor: pointer;
+    }
+    .sheet-platform-grid { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 8px !important; }
+    .btn-sheet-platform {
+      border: none !important; border-radius: 12px !important; padding: 14px 10px !important;
+      font-weight: 800 !important; color: #fff !important; cursor: pointer !important;
+      display: flex !important; align-items: center !important; justify-content: center !important; gap: 8px !important;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25) !important;
+    }
+    .btn-p-vinted { background: linear-gradient(145deg, #0d9488, #007782) !important; }
+    .btn-p-wallapop { background: linear-gradient(145deg, #2dd4bf, #0f766e) !important; }
+    .btn-p-subito { background: linear-gradient(145deg, #fb7185, #e11d48) !important; }
+    .btn-p-ebay { background: linear-gradient(145deg, #60a5fa, #1d4ed8) !important; }
+    .btn-p-persona { background: linear-gradient(145deg, #94a3b8, #475569) !important; grid-column: span 2; }
+    .sheet-price-input { font-size: 1.4rem !important; font-weight: 900 !important; border-radius: 12px !important; }
+
   </style>
 </head>
 <body>
@@ -683,6 +772,19 @@
       <span id="goalPercentText">0%</span>
     </div>
     <div class="progress-bar-bg"><div class="progress-bar-fill" id="goalProgressBar"></div></div>
+  </div>
+
+  <div class="suggest-card" id="suggestCard">
+    <div class="suggest-top">
+      <span class="suggest-label">🎯 Da vendere oggi</span>
+      <span id="suggestDays" style="font-size:0.68rem;font-weight:800;color:var(--warn-color);"></span>
+    </div>
+    <div class="suggest-title" id="suggestTitle">—</div>
+    <div class="suggest-meta" id="suggestMeta">—</div>
+    <div class="suggest-actions">
+      <button type="button" class="suggest-sell" id="suggestSellBtn">Vendi ora</button>
+      <button type="button" class="suggest-open" id="suggestOpenBtn">Apri</button>
+    </div>
   </div>
 
   <div class="status-tabs">
@@ -768,6 +870,10 @@
             <option value="alpha-asc">A → Z</option>
           </select>
         </div>
+      </div>
+      <div class="quick-chips">
+        <button type="button" class="chip-btn" id="chipCritical" onclick="toggleCriticalFilter()">🚨 Solo critici (30+ gg)</button>
+        <button type="button" class="chip-btn" id="chipFresh" onclick="toggleFreshFilter()">✨ Freschi (≤7 gg)</button>
       </div>
     </div>
 
@@ -1386,6 +1492,8 @@
     let lastMonthProfit = 0;
     let adjustments = [];
     let currentStatusFilter = "ALL";
+    let filterCriticalOnly = false;
+    let filterFreshOnly = false;
     let activeSheetItemId = null;
     let platformChartInst = null, monthChartInst = null, categoryChartInst = null, leadTimeChartInst = null;
     let viewMode = localStorage.getItem(VIEW_MODE_KEY) || "list";
@@ -1710,6 +1818,7 @@
       localStorage.setItem(DB_KEY, JSON.stringify(db));
       localStorage.setItem(EXP_KEY, JSON.stringify(expenses));
       localStorage.setItem(ADJ_KEY, JSON.stringify(adjustments));
+      try { computeTrophies({ silent: true, updateRecords: false, renderList: currentStatusFilter === "TROPHIES" }); } catch (e) {}
       if (currentStatusFilter === "STATS") renderCharts();
       else if (currentStatusFilter === "TROPHIES") computeTrophies();
       else renderApp();
@@ -1816,7 +1925,71 @@
       const plat = document.getElementById("filterPlatform");
       if (cat) cat.value = "ALL";
       if (plat) plat.value = "ALL";
+      filterCriticalOnly = false;
+      filterFreshOnly = false;
+      updateFilterChips();
       setStatusFilter("sold");
+    }
+
+    function updateFilterChips() {
+      const c = document.getElementById("chipCritical");
+      const f = document.getElementById("chipFresh");
+      if (c) c.classList.toggle("active", !!filterCriticalOnly);
+      if (f) f.classList.toggle("active", !!filterFreshOnly);
+    }
+
+    function toggleCriticalFilter() {
+      filterCriticalOnly = !filterCriticalOnly;
+      if (filterCriticalOnly) filterFreshOnly = false;
+      updateFilterChips();
+      if (currentStatusFilter !== "stock" && currentStatusFilter !== "ALL") setStatusFilter("stock");
+      else renderApp();
+    }
+
+    function toggleFreshFilter() {
+      filterFreshOnly = !filterFreshOnly;
+      if (filterFreshOnly) filterCriticalOnly = false;
+      updateFilterChips();
+      if (currentStatusFilter !== "stock" && currentStatusFilter !== "ALL") setStatusFilter("stock");
+      else renderApp();
+    }
+
+    function getSuggestItem() {
+      const stock = db.filter(i => i.s === "stock");
+      if (!stock.length) return null;
+      let best = null, bestScore = -1;
+      stock.forEach(i => {
+        const days = daysInStock(i);
+        const bp = parseFloat(i.bp) || 0;
+        const score = days * 2 + bp; // priorita: fermo a lungo + capitale
+        if (score > bestScore) { bestScore = score; best = i; }
+      });
+      return best;
+    }
+
+    function updateSuggestCard() {
+      const card = document.getElementById("suggestCard");
+      if (!card) return;
+      if (currentStatusFilter === "STATS" || currentStatusFilter === "TROPHIES" || currentStatusFilter === "EXPENSES") {
+        card.classList.remove("show");
+        return;
+      }
+      const item = getSuggestItem();
+      if (!item) { card.classList.remove("show"); return; }
+      const days = daysInStock(item);
+      const bp = parseFloat(item.bp) || 0;
+      document.getElementById("suggestTitle").innerText = item.t || "Oggetto";
+      document.getElementById("suggestDays").innerText = days + " gg in stock";
+      document.getElementById("suggestMeta").innerText =
+        (item.c || "Altro") + " · Acq. €" + bp.toFixed(2) + (days >= 30 ? " · 🚨 Critico" : "");
+      document.getElementById("suggestSellBtn").onclick = () => openSellSheet(item.id);
+      document.getElementById("suggestOpenBtn").onclick = () => openEditModal(item.id);
+      card.classList.add("show");
+    }
+
+    function emptyStateHtml(ico, title, sub, btnLabel, btnOnclick) {
+      const btn = btnLabel ? `<button type="button" onclick="${btnOnclick}">${btnLabel}</button>` : "";
+      return `<div class="empty-state"><div class="empty-ico">${ico}</div><div class="empty-title">${title}</div><div class="empty-sub">${sub}</div>${btn}</div>`;
     }
 
     function openAvatarMenu() {
@@ -2644,6 +2817,9 @@
       setCount("countStock", stockCount);
       setCount("countSold", soldCount);
       setCount("countExp", expenses.length);
+      const critN = db.filter(i => i.s === "stock" && daysInStock(i) >= 30).length;
+      const chip = document.getElementById("chipCritical");
+      if (chip) chip.textContent = critN > 0 ? ("🚨 Critici " + critN + " (30+ gg)") : "🚨 Solo critici (30+ gg)";
       document.getElementById("statMonthCount").innerText = `${monthSoldCount} vendit${monthSoldCount === 1 ? 'a' : 'e'}`;
 
       if (currentStatusFilter === "STATS" || currentStatusFilter === "TROPHIES") return;
@@ -2672,6 +2848,8 @@
       document.getElementById("statMonthProfit").innerText = `€${netMonthProfit.toFixed(2)}`;
       lastMonthProfit = netMonthProfit;
       updateGoalProgress(netMonthProfit);
+      updateFilterChips();
+      updateSuggestCard();
 
       listEl.innerHTML = "";
 
@@ -2688,7 +2866,7 @@
         document.getElementById("summaryValues").innerText = `Totale: −€${totalExpFiltered.toFixed(2)}`;
 
         if (!filteredExp.length) {
-          listEl.innerHTML = '<div style="text-align:center;padding:24px;color:var(--text-muted);grid-column:span 2;">Nessuna spesa extra registrata. Tocca + per aggiungerne una!</div>';
+          listEl.innerHTML = emptyStateHtml("💸", "Nessuna spesa", "Registra imballi, boost, benzina…", "Registra spesa", "openAddExpenseModalFromChoice()");
           return;
         }
 
@@ -2747,7 +2925,13 @@
           const d = item.s === "sold" ? (item.soldDate || item.d) : item.d;
           matchMonth = monthKeyOf(d) === targetMonth;
         }
-        return matchSearch && matchCat && matchPlat && matchStatus && matchMonth;
+        let matchStockAge = true;
+        if (item.s === "stock" && (filterCriticalOnly || filterFreshOnly)) {
+          const d = daysInStock(item);
+          if (filterCriticalOnly) matchStockAge = d >= 30;
+          if (filterFreshOnly) matchStockAge = d <= 7;
+        }
+        return matchSearch && matchCat && matchPlat && matchStatus && matchMonth && matchStockAge;
       });
 
       const getROI = i => i.bp > 0 ? (getItemNetProfit(i) / i.bp) : ((i.sp||0) > 0 ? 9999 : 0);
@@ -2788,7 +2972,18 @@
         : `Investito: €${sumBp.toFixed(2)}`;
 
       if (!filtered.length) {
-        listEl.innerHTML = '<div style="text-align:center;padding:24px;color:var(--text-muted);grid-column:span 2;">Nessun articolo trovato.</div>';
+        if (filterCriticalOnly) {
+          listEl.innerHTML = emptyStateHtml("✨", "Nessun critico", "Nessun oggetto fermo da 30+ giorni. Ottimo.", "Vedi tutto lo stock", "filterCriticalOnly=false;updateFilterChips();setStatusFilter('stock')");
+        } else if (filterFreshOnly) {
+          listEl.innerHTML = emptyStateHtml("📦", "Nessun pezzo fresco", "Nessun oggetto in stock da ≤7 giorni.", "Vedi tutto", "filterFreshOnly=false;updateFilterChips();renderApp()");
+        } else if (currentStatusFilter === "sold") {
+          listEl.innerHTML = emptyStateHtml("✅", "Nessuna vendita qui", "Prova a cambiare periodo o filtri.", "Vedi tutti i venduti", "filterAllSold()");
+        } else if (currentStatusFilter === "stock") {
+          listEl.innerHTML = emptyStateHtml("📦", "Stock vuoto", "Aggiungi il prossimo pezzo da rivendere.", "Aggiungi oggetto", "handleFabClick()");
+        } else {
+          listEl.innerHTML = emptyStateHtml("🔍", "Nessun risultato", "Prova a cambiare cerca o filtri.", "Reset cerca", "clearSearch()");
+        }
+        updateSuggestCard();
         return;
       }
 
