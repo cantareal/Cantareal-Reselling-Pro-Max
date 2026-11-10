@@ -2298,49 +2298,56 @@
       }
     }
 
-    function computeTrophies() {
-      const fmt = v => (v >= 0 ? "+€" : "−€") + Math.abs(v).toFixed(2);
-      const setTxt = (id, t) => { const el = document.getElementById(id); if (el) el.innerText = t; };
-      ["recBestProfitName","recBestProfitVal","recBestRoiName","recBestRoiVal","recFastestName","recFastestVal","recZeroName","recZeroVal"].forEach(id => setTxt(id, "—"));
-      setTxt("recZeroSub", "");
+    function computeTrophies(opts) {
+      opts = opts || {};
+      const silent = !!opts.silent;
+      const updateRecords = opts.updateRecords !== false;
+      const renderList = opts.renderList !== false;
 
-      let bestProfit = null, bestProfitVal = -Infinity;
-      let bestRoi = null, bestRoiVal = -Infinity;
-      let fastest = null, minDays = Infinity;
-      let bestZero = null, bestZeroVal = -Infinity, zeroCount = 0, zeroTotal = 0;
+      if (updateRecords) {
+        const fmt = v => (v >= 0 ? "+€" : "−€") + Math.abs(v).toFixed(2);
+        const setTxt = (id, t) => { const el = document.getElementById(id); if (el) el.innerText = t; };
+        ["recBestProfitName","recBestProfitVal","recBestRoiName","recBestRoiVal","recFastestName","recFastestVal","recZeroName","recZeroVal"].forEach(id => setTxt(id, "—"));
+        setTxt("recZeroSub", "");
 
-      db.filter(i => i.s === "sold").forEach(item => {
-        const bp = parseFloat(item.bp) || 0;
-        const profit = getItemNetProfit(item);
-        if (profit > bestProfitVal) { bestProfitVal = profit; bestProfit = item; }
-        if (bp > 0) {
-          const roi = (profit / bp) * 100;
-          if (roi > bestRoiVal) { bestRoiVal = roi; bestRoi = item; }
-        } else if (profit > 0) {
-          zeroCount++;
-          zeroTotal += profit;
-          if (profit > bestZeroVal) { bestZeroVal = profit; bestZero = item; }
+        let bestProfit = null, bestProfitVal = -Infinity;
+        let bestRoi = null, bestRoiVal = -Infinity;
+        let fastest = null, minDays = Infinity;
+        let bestZero = null, bestZeroVal = -Infinity, zeroCount = 0, zeroTotal = 0;
+
+        db.filter(i => i.s === "sold").forEach(item => {
+          const bp = parseFloat(item.bp) || 0;
+          const profit = getItemNetProfit(item);
+          if (profit > bestProfitVal) { bestProfitVal = profit; bestProfit = item; }
+          if (bp > 0) {
+            const roi = (profit / bp) * 100;
+            if (roi > bestRoiVal) { bestRoiVal = roi; bestRoi = item; }
+          } else if (profit > 0) {
+            zeroCount++;
+            zeroTotal += profit;
+            if (profit > bestZeroVal) { bestZeroVal = profit; bestZero = item; }
+          }
+          const diff = daysToSell(item);
+          if (diff !== null && diff >= 0 && diff < minDays) {
+            minDays = diff; fastest = item;
+          }
+        });
+
+        if (bestProfit) { setTxt("recBestProfitName", bestProfit.t); setTxt("recBestProfitVal", fmt(bestProfitVal)); }
+        if (bestRoi) { setTxt("recBestRoiName", bestRoi.t); setTxt("recBestRoiVal", (bestRoiVal >= 0 ? "+" : "−") + Math.abs(bestRoiVal).toFixed(0) + "%"); }
+        if (fastest) { setTxt("recFastestName", fastest.t); setTxt("recFastestVal", minDays === 0 ? "Stesso Giorno ⚡" : (minDays === 1 ? "1 Giorno" : minDays + " Giorni")); }
+        if (bestZero) {
+          setTxt("recZeroName", bestZero.t);
+          setTxt("recZeroVal", fmt(bestZeroVal));
+          setTxt("recZeroSub", zeroCount + (zeroCount === 1 ? " oggetto a costo 0 venduto" : " oggetti a costo 0 venduti") + " · " + fmt(zeroTotal) + " in totale");
         }
-        const diff = daysToSell(item);
-        if (diff !== null && diff >= 0 && diff < minDays) {
-          minDays = diff; fastest = item;
-        }
-      });
-
-      if (bestProfit) { setTxt("recBestProfitName", bestProfit.t); setTxt("recBestProfitVal", fmt(bestProfitVal)); }
-      if (bestRoi) { setTxt("recBestRoiName", bestRoi.t); setTxt("recBestRoiVal", (bestRoiVal >= 0 ? "+" : "−") + Math.abs(bestRoiVal).toFixed(0) + "%"); }
-      if (fastest) { setTxt("recFastestName", fastest.t); setTxt("recFastestVal", minDays === 0 ? "Stesso Giorno ⚡" : (minDays === 1 ? "1 Giorno" : minDays + " Giorni")); }
-      if (bestZero) {
-        setTxt("recZeroName", bestZero.t);
-        setTxt("recZeroVal", fmt(bestZeroVal));
-        setTxt("recZeroSub", zeroCount + (zeroCount === 1 ? " oggetto a costo 0 venduto" : " oggetti a costo 0 venduti") + " · " + fmt(zeroTotal) + " in totale");
       }
 
       const ctx = buildTrophyContext();
-      // async photo count refinement
       const results = evaluateAchievements(ctx);
       let claimed = loadClaimed();
       let xp = loadTrophyXp();
+      const wasEmptyClaimed = claimed.length === 0;
       let gained = 0;
       results.forEach(r => {
         if (r.done && claimed.indexOf(r.id) === -1) {
@@ -2349,7 +2356,6 @@
           gained += r.xp;
         }
       });
-      // remove claimed that no longer exist
       claimed = claimed.filter(id => ACHIEVEMENTS.some(a => a.id === id));
       saveClaimed(claimed);
       localStorage.setItem(TROPHY_XP_KEY, String(xp));
@@ -2361,10 +2367,18 @@
       TROPHY_STATE.level = levelFromXp(xp);
       TROPHY_STATE.levelName = titleFromLevel(TROPHY_STATE.level);
 
-      renderAchievementsAccordion(results);
+      if (renderList) renderAchievementsAccordion(results);
       renderLevelInfo();
-      if (gained > 0) {
+
+      const bootstrapSilent = wasEmptyClaimed && gained > 0;
+      if (gained > 0 && !silent && !bootstrapSilent) {
         try { notify("Traguardi: +" + gained + " XP"); } catch (e) {}
+        const tb = document.getElementById("trophyHeaderBtn");
+        if (tb) tb.classList.add("has-new");
+      }
+      if (currentStatusFilter === "TROPHIES") {
+        const tb = document.getElementById("trophyHeaderBtn");
+        if (tb) tb.classList.remove("has-new");
       }
     }
 
@@ -3363,7 +3377,7 @@
     }
 
     async function applyImport(parsed) {
-      let newDb, newExp = expenses, newAdj = adjustments, photos = null, prof = null;
+      let newDb, newExp = expenses, newAdj = adjustments, photos = null, prof = null, troph = null;
       if (Array.isArray(parsed)) {
         newDb = sanitizeItems(parsed);
       } else if (parsed && Array.isArray(parsed.db)) {
@@ -3372,6 +3386,7 @@
         if (Array.isArray(parsed.adjustments)) newAdj = sanitizeAdjustments(parsed.adjustments);
         if (parsed.photos && typeof parsed.photos === "object") photos = parsed.photos;
         if (parsed.profile && typeof parsed.profile === "object") prof = parsed.profile;
+        if (parsed.trophies && typeof parsed.trophies === "object") troph = parsed.trophies;
       } else {
         return notify("Formato non valido. Serve un backup creato da questa app.");
       }
@@ -3394,8 +3409,25 @@
           applyAvatarImage(prof.avatar);
         }
       }
+      if (troph) {
+        if (typeof troph.xp === "number" && troph.xp >= 0) {
+          localStorage.setItem(TROPHY_XP_KEY, String(Math.floor(troph.xp)));
+        }
+        if (Array.isArray(troph.claimed)) {
+          const ids = troph.claimed.map(String).filter(id => ACHIEVEMENTS.some(a => a.id === id));
+          saveClaimed(ids);
+        }
+        if (troph.flags && troph.flags.backupPhotos) {
+          localStorage.setItem("trophy_flag_backup_photos", "1");
+        }
+      }
       saveData();
-      notify("Dati importati. Oggetti: " + db.length + " | Spese: " + newExp.length + (photos ? " | Foto: " + nPhotos : ""));
+      try {
+        const all = await getAllPhotosIDB();
+        Object.keys(all || {}).forEach(k => { photoCache[k] = all[k]; });
+      } catch (e) {}
+      computeTrophies({ silent: true, renderList: false });
+      notify("Dati importati. Oggetti: " + db.length + " | Spese: " + expenses.length + (photos ? " | Foto: " + nPhotos : ""));
     }
 
     function importData() {
@@ -3481,7 +3513,12 @@
         const av = await getAvatarIDB();
         if (av) profile.avatar = av;
       }
-      const payload = { version: 3, db, expenses, adjustments, profile };
+      const trophies = {
+        xp: loadTrophyXp(),
+        claimed: loadClaimed(),
+        flags: { backupPhotos: localStorage.getItem("trophy_flag_backup_photos") === "1" }
+      };
+      const payload = { version: 4, db, expenses, adjustments, profile, trophies };
       if (withPhotos) payload.photos = await getAllPhotosIDB();
       const blob = new Blob([JSON.stringify(payload)], { type: "application/json" });
       const url = URL.createObjectURL(blob);
@@ -3492,6 +3529,9 @@
       a.click();
       a.remove();
       setTimeout(() => URL.revokeObjectURL(url), 10000);
+      if (withPhotos) {
+        try { computeTrophies({ silent: true, updateRecords: false, renderList: currentStatusFilter === "TROPHIES" }); } catch (e) {}
+      }
     }
 
     const CELEBRATION_PHRASES = [
@@ -3564,9 +3604,14 @@
       deferredPrompt = null;
     }
 
-    initIndexedDB().then(() => {
+    initIndexedDB().then(async () => {
       loadTrash();
       loadUserProfile();
+      try {
+        const all = await getAllPhotosIDB();
+        Object.keys(all || {}).forEach(k => { photoCache[k] = all[k]; });
+      } catch (e) {}
+      try { computeTrophies({ silent: true, updateRecords: false, renderList: false }); } catch (e) {}
       renderApp();
     });
   </script>
