@@ -284,10 +284,18 @@
     .filter-summary-bar { font-size: 0.73rem; font-weight: 700; color: var(--text-muted); background: var(--card-bg); padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
     .cat-banner { background: rgba(59, 130, 246, 0.12); border: 1px solid var(--accent-color); border-radius: 8px; padding: 8px 12px; margin-bottom: 8px; font-size: 0.78rem; font-weight: 700; color: var(--accent-color); }
 
-    .btn-sync { background: #475569; color: white; border: none; font-weight: 700; font-size: 0.85rem; padding: 12px; cursor: pointer; border-radius: 8px; text-align: center; }
-    .btn-sync.green { background: var(--success-color); }
-    .btn-sync.purple { background: #8b5cf6; }
-    .btn-sync.orange { background: #d97706; }
+    .btn-sync {
+      background: linear-gradient(145deg, #64748b, #475569);
+      color: white; border: 1px solid rgba(255,255,255,0.1);
+      font-weight: 800; font-size: 0.85rem; padding: 12px;
+      cursor: pointer; border-radius: 12px; text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      transition: transform .12s ease;
+    }
+    .btn-sync:active { transform: scale(0.98); }
+    .btn-sync.green { background: linear-gradient(145deg, #4ade80, #16a34a); }
+    .btn-sync.purple { background: linear-gradient(145deg, #a78bfa, #7c3aed); }
+    .btn-sync.orange { background: linear-gradient(145deg, #fbbf24, #d97706); }
 
     .swipe-container { position: relative; margin-bottom: 8px; border-radius: 10px; overflow: hidden; }
     .swipe-background { position: absolute; inset: 0; display: flex; justify-content: space-between; align-items: center; font-weight: 700; color: white; font-size: 0.85rem; z-index: 0; }
@@ -467,10 +475,37 @@
     .close-modal { background: none; border: none; font-size: 1.4rem; color: var(--text-muted); cursor: pointer; width: auto; padding: 0; }
     .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     .full-width { grid-column: span 2; }
-    .btn-main { background: var(--accent-color); color: white; border: none; font-weight: 700; cursor: pointer; margin-top: 8px; }
-    .btn-copy { background: #8b5cf6; color: white; border: none; font-weight: 700; cursor: pointer; margin-top: 6px; }
-    .btn-sell-modal { background: var(--success-color); color: white; border: none; font-weight: 700; cursor: pointer; margin-top: 8px; }
-    .btn-danger { background: var(--danger-color); color: white; border: none; font-weight: 700; cursor: pointer; margin-top: 8px; }
+    .btn-main, .btn-copy, .btn-sell-modal, .btn-danger {
+      width: 100%;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 12px;
+      padding: 13px 14px;
+      font-size: 0.92rem;
+      font-weight: 800;
+      cursor: pointer;
+      margin-top: 8px;
+      color: #fff;
+      letter-spacing: 0.2px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.18);
+      transition: transform .12s ease, box-shadow .12s ease;
+    }
+    .btn-main:active, .btn-copy:active, .btn-sell-modal:active, .btn-danger:active {
+      transform: scale(0.98);
+      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+    }
+    .btn-main {
+      background: linear-gradient(145deg, #60a5fa, #2563eb 55%, #1d4ed8);
+    }
+    .btn-copy {
+      background: linear-gradient(145deg, #a78bfa, #7c3aed 55%, #6d28d9);
+      margin-top: 6px;
+    }
+    .btn-sell-modal {
+      background: linear-gradient(145deg, #4ade80, #22c55e 55%, #16a34a);
+    }
+    .btn-danger {
+      background: linear-gradient(145deg, #f87171, #ef4444 55%, #dc2626);
+    }
 
     .photo-upload-box { display: flex; align-items: center; gap: 12px; margin-top: 4px; }
     .btn-upload-photo { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 10px 14px; background: var(--input-bg); border: 1px dashed var(--accent-color); color: var(--accent-color); border-radius: 8px; font-size: 0.8rem; font-weight: 700; cursor: pointer; flex-grow: 1; }
@@ -504,8 +539,16 @@
       transition: transform 0.1s ease, filter 0.15s ease;
     }
     .btn-modal-action:active { transform: scale(0.98); }
-    .btn-modal-sell { background: var(--success-color); color: #ffffff; border-color: var(--success-color); }
-    .btn-modal-save { background: var(--accent-color); color: #ffffff; border-color: var(--accent-color); }
+    .btn-modal-sell {
+      background: linear-gradient(145deg, #4ade80, #16a34a);
+      color: #ffffff; border-color: transparent;
+      box-shadow: 0 6px 16px rgba(34,197,94,0.35);
+    }
+    .btn-modal-save {
+      background: linear-gradient(145deg, #60a5fa, #1d4ed8);
+      color: #ffffff; border-color: transparent;
+      box-shadow: 0 6px 16px rgba(37,99,235,0.35);
+    }
     .btn-modal-copy { background: rgba(139, 92, 246, 0.18); color: #c4b5fd; border-color: rgba(139, 92, 246, 0.4); }
     .btn-modal-delete { background: rgba(239, 68, 68, 0.18); color: #fca5a5; border-color: rgba(239, 68, 68, 0.4); }
 
@@ -617,7 +660,7 @@
       <div class="label">Cassa Disponibile</div>
       <div class="val" id="statCash">€0.00</div>
     </div>
-    <div class="stat-card profit" onclick="setStatusFilter('sold')" style="cursor:pointer;" title="Vai a Venduti">
+    <div class="stat-card profit" onclick="filterAllSold()" style="cursor:pointer;" title="Tutti i venduti">
       <span class="stat-icon">📈</span>
       <div class="label">Profitto Netto Totale</div>
       <div class="val" id="statProfit">€0.00</div>
@@ -1264,7 +1307,7 @@
           <label style="font-size:0.75rem;font-weight:700;">OPPURE IMPOSTA CASSA A (€)</label>
           <input type="text" inputmode="decimal" id="cashSetTo" placeholder="es. 180.50 = contante reale in cassa">
           <p style="font-size:0.7rem;color:var(--text-muted);margin:6px 0 8px;">Calcola da solo la differenza rispetto alla cassa attuale.</p>
-          <button class="btn-main" style="background:var(--success-color);" onclick="confirmSetCash()">Imposta cassa a questo importo</button>
+          <button class="btn-sell-modal" onclick="confirmSetCash()">💰 Imposta cassa a questo importo</button>
         </div>
       </div>
       <div class="adjust-list" id="adjustList"></div>
@@ -1761,7 +1804,18 @@
     }
 
     function filterThisMonth() {
-      document.getElementById("filterMonth").value = "CURR_MONTH";
+      const sel = document.getElementById("filterMonth");
+      if (sel) sel.value = "CURR_MONTH";
+      setStatusFilter("sold");
+    }
+
+    function filterAllSold() {
+      const sel = document.getElementById("filterMonth");
+      if (sel) sel.value = "ALL";
+      const cat = document.getElementById("filterCategory");
+      const plat = document.getElementById("filterPlatform");
+      if (cat) cat.value = "ALL";
+      if (plat) plat.value = "ALL";
       setStatusFilter("sold");
     }
 
