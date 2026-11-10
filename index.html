@@ -634,6 +634,24 @@
     .lightbox-close { position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,0.2); color: #fff; border: none; font-size: 1.5rem; width: 40px; height: 40px; border-radius: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
   
     /* === Completeness pack === */
+    .filters-toggle {
+      width: 100%;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 8px; margin-top: 6px;
+      border: 1px solid rgba(51,65,85,0.9);
+      background: rgba(15,23,42,0.45);
+      color: var(--text-muted);
+      border-radius: 10px;
+      padding: 8px 10px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .filters-toggle .ft-chevron { transition: transform .15s ease; }
+    .filters-toggle.open .ft-chevron { transform: rotate(90deg); }
+    .filters-panel { display: none; margin-top: 8px; }
+    .filters-panel.open { display: block; }
+
     .controls-card {
       background: linear-gradient(180deg, rgba(30,41,59,0.95), rgba(15,23,42,0.88)) !important;
       padding: 10px !important;
@@ -677,24 +695,27 @@
     }
     .suggest-card {
       display: none;
-      background: linear-gradient(135deg, rgba(251,191,36,0.12), rgba(30,41,59,0.95));
-      border: 1px solid rgba(251,191,36,0.45);
-      border-radius: 14px;
-      padding: 12px;
-      margin-bottom: 12px;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+      background: rgba(30,41,59,0.9);
+      border: 1px solid rgba(251,191,36,0.28);
+      border-radius: 12px;
+      padding: 8px 10px;
+      margin-bottom: 8px;
     }
     .suggest-card.show { display: block; }
-    .suggest-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
-    .suggest-label { font-size: 0.68rem; font-weight: 800; color: #fbbf24; text-transform: uppercase; letter-spacing: 0.4px; }
-    .suggest-title { font-size: 0.95rem; font-weight: 800; margin-bottom: 4px; }
-    .suggest-meta { font-size: 0.72rem; color: var(--text-muted); margin-bottom: 10px; }
-    .suggest-actions { display: flex; gap: 8px; }
-    .suggest-actions button {
-      flex: 1; border: none; border-radius: 10px; padding: 10px; font-weight: 800; cursor: pointer; color: #fff;
+    .suggest-row { display: flex; align-items: center; gap: 8px; }
+    .suggest-row .suggest-text { flex: 1; min-width: 0; }
+    .suggest-label { font-size: 0.62rem; font-weight: 800; color: #fbbf24; text-transform: uppercase; letter-spacing: 0.3px; }
+    .suggest-title { font-size: 0.82rem; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .suggest-meta { font-size: 0.68rem; color: var(--text-muted); }
+    .suggest-mini-btn {
+      border: none; border-radius: 8px; padding: 7px 10px; font-size: 0.72rem; font-weight: 800;
+      cursor: pointer; color: #fff; flex-shrink: 0;
+      background: linear-gradient(145deg, #4ade80, #16a34a);
     }
-    .suggest-sell { background: linear-gradient(145deg, #4ade80, #16a34a); }
-    .suggest-open { background: linear-gradient(145deg, #60a5fa, #1d4ed8); }
+    .suggest-x {
+      border: none; background: transparent; color: var(--text-muted);
+      font-size: 1rem; cursor: pointer; padding: 4px 6px; flex-shrink: 0;
+    }
     .empty-state {
       text-align: center; padding: 36px 18px; grid-column: span 2;
       background: var(--card-bg); border: 1px dashed var(--border-color);
@@ -775,15 +796,14 @@
   </div>
 
   <div class="suggest-card" id="suggestCard">
-    <div class="suggest-top">
-      <span class="suggest-label">🎯 Da vendere oggi</span>
-      <span id="suggestDays" style="font-size:0.68rem;font-weight:800;color:var(--warn-color);"></span>
-    </div>
-    <div class="suggest-title" id="suggestTitle">—</div>
-    <div class="suggest-meta" id="suggestMeta">—</div>
-    <div class="suggest-actions">
-      <button type="button" class="suggest-sell" id="suggestSellBtn">Vendi ora</button>
-      <button type="button" class="suggest-open" id="suggestOpenBtn">Apri</button>
+    <div class="suggest-row">
+      <div class="suggest-text">
+        <div class="suggest-label">Da vendere · <span id="suggestDays">—</span></div>
+        <div class="suggest-title" id="suggestTitle">—</div>
+        <div class="suggest-meta" id="suggestMeta">—</div>
+      </div>
+      <button type="button" class="suggest-mini-btn" id="suggestSellBtn">Vendi</button>
+      <button type="button" class="suggest-x" id="suggestDismissBtn" title="Nascondi oggi">✕</button>
     </div>
   </div>
 
@@ -826,6 +846,11 @@
           <button class="view-btn" id="btnGridView" onclick="setViewMode('grid')" title="Vista Griglia">⊞</button>
         </div>
       </div>
+      <button type="button" class="filters-toggle" id="filtersToggleBtn" onclick="toggleFiltersPanel()">
+        <span class="ft-left">⚙️ Filtri <span id="filtersActiveHint" style="opacity:.8;font-weight:700;"></span></span>
+        <span class="ft-chevron" id="filtersChevron">▶</span>
+      </button>
+      <div class="filters-panel" id="filtersPanel">
       <div class="filter-row">
         <div>
           <label>CATEGORIA</label>
@@ -874,6 +899,7 @@
       <div class="quick-chips">
         <button type="button" class="chip-btn" id="chipCritical" onclick="toggleCriticalFilter()">🚨 Solo critici (30+ gg)</button>
         <button type="button" class="chip-btn" id="chipFresh" onclick="toggleFreshFilter()">✨ Freschi (≤7 gg)</button>
+      </div>
       </div>
     </div>
 
@@ -1931,18 +1957,45 @@
       setStatusFilter("sold");
     }
 
+    function toggleFiltersPanel() {
+      const panel = document.getElementById("filtersPanel");
+      const btn = document.getElementById("filtersToggleBtn");
+      if (!panel) return;
+      const open = !panel.classList.contains("open");
+      panel.classList.toggle("open", open);
+      if (btn) btn.classList.toggle("open", open);
+      try { sessionStorage.setItem("cantareal_filters_open", open ? "1" : "0"); } catch (e) {}
+      updateFiltersHint();
+    }
+
+    function updateFiltersHint() {
+      const hint = document.getElementById("filtersActiveHint");
+      if (!hint) return;
+      const parts = [];
+      if (filterCriticalOnly) parts.push("critici");
+      if (filterFreshOnly) parts.push("freschi");
+      const cat = document.getElementById("filterCategory");
+      const plat = document.getElementById("filterPlatform");
+      const month = document.getElementById("filterMonth");
+      if (cat && cat.value !== "ALL") parts.push("cat");
+      if (plat && plat.value !== "ALL") parts.push("plat");
+      if (month && month.value !== "ALL") parts.push("periodo");
+      hint.textContent = parts.length ? ("· " + parts.join(", ")) : "";
+    }
+
     function updateFilterChips() {
       const c = document.getElementById("chipCritical");
       const f = document.getElementById("chipFresh");
       if (c) c.classList.toggle("active", !!filterCriticalOnly);
       if (f) f.classList.toggle("active", !!filterFreshOnly);
+      updateFiltersHint();
     }
 
     function toggleCriticalFilter() {
       filterCriticalOnly = !filterCriticalOnly;
       if (filterCriticalOnly) filterFreshOnly = false;
       updateFilterChips();
-      if (currentStatusFilter !== "stock" && currentStatusFilter !== "ALL") setStatusFilter("stock");
+      if (filterCriticalOnly) setStatusFilter("stock");
       else renderApp();
     }
 
@@ -1950,7 +2003,7 @@
       filterFreshOnly = !filterFreshOnly;
       if (filterFreshOnly) filterCriticalOnly = false;
       updateFilterChips();
-      if (currentStatusFilter !== "stock" && currentStatusFilter !== "ALL") setStatusFilter("stock");
+      if (filterFreshOnly) setStatusFilter("stock");
       else renderApp();
     }
 
@@ -1967,23 +2020,39 @@
       return best;
     }
 
+    function suggestDismissKey() {
+      const t = new Date();
+      return "cantareal_suggest_hide_" + t.getFullYear() + "-" + (t.getMonth()+1) + "-" + t.getDate();
+    }
+
     function updateSuggestCard() {
       const card = document.getElementById("suggestCard");
       if (!card) return;
-      if (currentStatusFilter === "STATS" || currentStatusFilter === "TROPHIES" || currentStatusFilter === "EXPENSES") {
+      if (currentStatusFilter === "STATS" || currentStatusFilter === "TROPHIES" || currentStatusFilter === "EXPENSES" || currentStatusFilter === "sold") {
         card.classList.remove("show");
         return;
       }
+      try {
+        if (localStorage.getItem(suggestDismissKey()) === "1") {
+          card.classList.remove("show");
+          return;
+        }
+      } catch (e) {}
       const item = getSuggestItem();
       if (!item) { card.classList.remove("show"); return; }
       const days = daysInStock(item);
       const bp = parseFloat(item.bp) || 0;
+      if (days < 14 && bp < 15) { card.classList.remove("show"); return; }
       document.getElementById("suggestTitle").innerText = item.t || "Oggetto";
-      document.getElementById("suggestDays").innerText = days + " gg in stock";
+      document.getElementById("suggestDays").innerText = days + " gg";
       document.getElementById("suggestMeta").innerText =
-        (item.c || "Altro") + " · Acq. €" + bp.toFixed(2) + (days >= 30 ? " · 🚨 Critico" : "");
+        (item.c || "Altro") + " · €" + bp.toFixed(2) + (days >= 30 ? " · critico" : "");
       document.getElementById("suggestSellBtn").onclick = () => openSellSheet(item.id);
-      document.getElementById("suggestOpenBtn").onclick = () => openEditModal(item.id);
+      const dismissBtn = document.getElementById("suggestDismissBtn");
+      if (dismissBtn) dismissBtn.onclick = () => {
+        try { localStorage.setItem(suggestDismissKey(), "1"); } catch (e) {}
+        card.classList.remove("show");
+      };
       card.classList.add("show");
     }
 
@@ -3807,6 +3876,14 @@
         Object.keys(all || {}).forEach(k => { photoCache[k] = all[k]; });
       } catch (e) {}
       try { computeTrophies({ silent: true, updateRecords: false, renderList: false }); } catch (e) {}
+      try {
+        if (sessionStorage.getItem("cantareal_filters_open") === "1") {
+          const panel = document.getElementById("filtersPanel");
+          const btn = document.getElementById("filtersToggleBtn");
+          if (panel) panel.classList.add("open");
+          if (btn) btn.classList.add("open");
+        }
+      } catch (e) {}
       renderApp();
     });
   </script>
