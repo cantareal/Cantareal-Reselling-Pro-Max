@@ -28,6 +28,67 @@
       --badge-sold-bg: #14532d; --badge-sold-text: #86efac; --tab-active: #3b82f6; --tab-active-text: #fff;
       --modal-overlay: rgba(0,0,0,0.7); --warn-color: #fbbf24;
     }
+    [data-theme="gold"] {
+      --bg-color: #0c0a09; --card-bg: #1c1917; --text-color: #faf7f2; --text-muted: #a8a29e;
+      --accent-color: #d4a017; --success-color: #22c55e; --danger-color: #ef4444;
+      --border-color: #44403c; --input-bg: #0c0a09; --badge-stock-bg: #78350f; --badge-stock-text: #fde68a;
+      --badge-sold-bg: #14532d; --badge-sold-text: #86efac; --tab-active: #d4a017; --tab-active-text: #1c1917;
+      --modal-overlay: rgba(0,0,0,0.75); --warn-color: #fbbf24;
+    }
+    [data-theme="gold"] h1 {
+      background: linear-gradient(90deg, #fde68a, #fbbf24 45%, #fff7ed) !important;
+      -webkit-background-clip: text !important;
+      background-clip: text !important;
+      color: transparent !important;
+      -webkit-text-fill-color: transparent !important;
+    }
+    [data-theme="gold"] .stat-card.stock { background: linear-gradient(145deg, #b45309, #92400e) !important; }
+    [data-theme="gold"] .stat-card.cash { background: linear-gradient(145deg, #a16207, #854d0e) !important; }
+    [data-theme="gold"] .stat-card.profit { background: linear-gradient(145deg, #7c3aed, #5b21b6) !important; }
+    [data-theme="gold"] .stat-card.month { background: linear-gradient(145deg, #f59e0b, #b45309) !important; }
+    [data-theme="gold"] .fab-btn {
+      background: linear-gradient(145deg, #fbbf24, #d97706 55%, #b45309) !important;
+      box-shadow: 0 8px 24px rgba(217, 119, 6, 0.5), 0 2px 0 rgba(255,255,255,0.2) inset !important;
+    }
+    [data-theme="gold"] .trophy-header-btn {
+      background: linear-gradient(135deg, rgba(251,191,36,0.25), rgba(180,83,9,0.15)) !important;
+      color: #fde68a !important;
+      border-color: #fbbf24 !important;
+    }
+    [data-theme="gold"] .tab-btn.active[data-tab="ALL"],
+    [data-theme="gold"] .tab-btn.active[data-tab="stock"] {
+      background: linear-gradient(145deg, #fbbf24, #b45309) !important;
+      color: #1c1917 !important;
+      box-shadow: 0 6px 16px rgba(217,119,6,0.4) !important;
+    }
+    [data-theme="gold"] .btn-main {
+      background: linear-gradient(145deg, #fbbf24, #d97706 55%, #b45309) !important;
+      color: #1c1917 !important;
+    }
+    [data-theme="gold"] .avatar-btn {
+      border-color: #fbbf24 !important;
+      box-shadow: 0 0 0 3px rgba(251,191,36,0.2), 0 0 20px rgba(251,191,36,0.45) !important;
+    }
+    .theme-picker {
+      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin: 8px 0 4px;
+    }
+    .theme-chip {
+      border: 1px solid var(--border-color);
+      background: var(--input-bg);
+      color: var(--text-color);
+      border-radius: 12px;
+      padding: 12px 8px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      cursor: pointer;
+      text-align: center;
+    }
+    .theme-chip.active {
+      border-color: var(--warn-color);
+      box-shadow: 0 0 0 1px var(--warn-color), 0 4px 12px rgba(251,191,36,0.2);
+      color: var(--warn-color);
+    }
+    .theme-chip .tc-ico { display: block; font-size: 1.2rem; margin-bottom: 4px; }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     body {
       background: var(--bg-color);
@@ -1033,9 +1094,19 @@
           <span>🗑️ Cestino</span>
           <span>➔</span>
         </div>
-        <div class="menu-list-item" onclick="toggleTheme()">
-          <span>🌙 / ☀️ Switch Tema</span>
-          <span>🎨</span>
+        <div style="padding: 4px 2px 2px;">
+          <div style="font-size:0.72rem;font-weight:800;color:var(--text-muted);margin:4px 0 6px;">🎨 TEMA APP</div>
+          <div class="theme-picker">
+            <button type="button" class="theme-chip" data-theme-val="dark" onclick="setTheme('dark')">
+              <span class="tc-ico">🌙</span>Scuro
+            </button>
+            <button type="button" class="theme-chip" data-theme-val="light" onclick="setTheme('light')">
+              <span class="tc-ico">☀️</span>Chiaro
+            </button>
+            <button type="button" class="theme-chip" data-theme-val="gold" onclick="setTheme('gold')">
+              <span class="tc-ico">✨</span>Gold
+            </button>
+          </div>
         </div>
       </div>
 
@@ -1759,7 +1830,11 @@
     try { adjustments = JSON.parse(localStorage.getItem(ADJ_KEY) || "[]"); } catch(e) { adjustments = []; }
 
     const savedTheme = localStorage.getItem(THEME_KEY);
-    if (savedTheme) { document.documentElement.setAttribute("data-theme", savedTheme); }
+    if (savedTheme === "dark" || savedTheme === "light" || savedTheme === "gold") {
+      document.documentElement.setAttribute("data-theme", savedTheme);
+      const meta = document.querySelector('meta[name="theme-color"]');
+      if (meta) meta.setAttribute("content", savedTheme === "light" ? "#f4f6f9" : (savedTheme === "gold" ? "#0c0a09" : "#0f172a"));
+    }
 
     const savedGoal = localStorage.getItem(GOAL_KEY);
     if (savedGoal) document.getElementById("targetGoalInput").value = savedGoal;
@@ -1895,12 +1970,31 @@
     function getTotalAdjustments() { return adjustments.reduce((s, a) => s + (parseFloat(a.amount) || 0), 0); }
     function getTotalExpensesSum() { return expenses.reduce((s, e) => s + (parseFloat(e.amount) || 0), 0); }
 
-    function toggleTheme() {
-      const html = document.documentElement;
-      const next = html.getAttribute("data-theme") === "dark" ? "light" : "dark";
-      html.setAttribute("data-theme", next);
+    function setTheme(name) {
+      const allowed = { dark: 1, light: 1, gold: 1 };
+      const next = allowed[name] ? name : "dark";
+      document.documentElement.setAttribute("data-theme", next);
       localStorage.setItem(THEME_KEY, next);
+      const meta = document.querySelector('meta[name="theme-color"]');
+      if (meta) {
+        meta.setAttribute("content", next === "light" ? "#f4f6f9" : (next === "gold" ? "#0c0a09" : "#0f172a"));
+      }
+      updateThemeChips();
       if (currentStatusFilter === "STATS") renderCharts();
+    }
+
+    function updateThemeChips() {
+      const cur = document.documentElement.getAttribute("data-theme") || "dark";
+      document.querySelectorAll(".theme-chip").forEach(btn => {
+        btn.classList.toggle("active", btn.getAttribute("data-theme-val") === cur);
+      });
+    }
+
+    function toggleTheme() {
+      const cur = document.documentElement.getAttribute("data-theme") || "dark";
+      const order = ["dark", "light", "gold"];
+      const i = order.indexOf(cur);
+      setTheme(order[(i + 1) % order.length]);
     }
 
     function setStatusFilter(status) {
@@ -2065,6 +2159,7 @@
       updateAvatarSnapshot();
       loadUserProfile();
       renderLevelInfo();
+      updateThemeChips();
       document.getElementById("avatarSheet").classList.remove("hidden");
     }
 
