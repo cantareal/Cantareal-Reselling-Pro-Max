@@ -918,6 +918,45 @@
       color: #0f172a !important;
     }
 
+
+    .welcome-overlay {
+      position: fixed; inset: 0; z-index: 9999;
+      background: rgba(0,0,0,0.72);
+      display: flex; align-items: flex-end; justify-content: center;
+      padding: 16px; padding-bottom: max(16px, env(safe-area-inset-bottom));
+    }
+    .welcome-overlay.hidden { display: none !important; }
+    .welcome-card {
+      width: 100%; max-width: 420px;
+      background: var(--card-bg);
+      color: var(--text-color);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 22px 18px 16px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.45);
+    }
+    .welcome-card h2 { font-size: 1.15rem; font-weight: 900; margin-bottom: 8px; }
+    .welcome-card p { font-size: 0.88rem; color: var(--text-muted); line-height: 1.45; margin-bottom: 12px; }
+    .welcome-steps { list-style: none; margin: 0 0 16px; padding: 0; }
+    .welcome-steps li {
+      font-size: 0.86rem; font-weight: 700; padding: 8px 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .welcome-steps li:last-child { border-bottom: none; }
+    .welcome-actions { display: flex; flex-direction: column; gap: 8px; }
+    .welcome-actions button {
+      width: 100%; border: none; border-radius: 12px; padding: 12px;
+      font-weight: 800; font-size: 0.9rem; cursor: pointer;
+    }
+    .welcome-actions .w-primary {
+      background: linear-gradient(145deg, #fbbf24, #d97706);
+      color: #1c1917;
+    }
+    .welcome-actions .w-secondary {
+      background: transparent; color: var(--text-muted);
+      border: 1px solid var(--border-color) !important;
+    }
+
   </style>
 </head>
 <body>
@@ -1171,7 +1210,7 @@
           <span id="menuAvatarPlaceholder" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 2.8rem;">👤</span>
         </div>
         <input type="file" id="avatarFileInput" accept="image/*" style="display:none;" onchange="handleAvatarUpload(event)">
-        <input type="text" id="userNickname" class="nick-input" value="" oninput="saveUserProfile()" placeholder="Il tuo nome / nickname">
+        <input type="text" id="userNickname" class="nick-input" value="" oninput="saveUserProfile()" placeholder="Es. Reseller, negozio, nome">
         <div class="level-chip-badge" id="sheetLevelChip" onclick="closeAvatarSheet(); setStatusFilter('TROPHIES');">Livello 1 · Avvio</div>
       </div>
 
@@ -1694,6 +1733,7 @@
     const THEME_KEY = "reselling_pro_max_theme";
     const VIEW_MODE_KEY = "reselling_pro_max_view_mode";
     const USER_NICK_KEY = "reselling_pro_user_nick";
+    const ONBOARDING_KEY = "resell_king_onboarding_v1";
     const SNAPSHOTS_KEY = "reselling_auto_snapshots_v1";
 
     /* DATASET INIZIALE VUOTO PER MANTENERE IL FILE LEGGERO */
@@ -1823,13 +1863,13 @@
     }
 
     function saveUserProfile() {
-      const nick = document.getElementById("userNickname").value.trim() || "Cantareal";
+      const nick = document.getElementById("userNickname").value.trim() || "Resell King";
       localStorage.setItem(USER_NICK_KEY, nick);
       document.getElementById("headerAppTitle").innerText = nick;
     }
 
     function loadUserProfile() {
-      const nick = localStorage.getItem(USER_NICK_KEY) || "Cantareal";
+      const nick = localStorage.getItem(USER_NICK_KEY) || "Resell King";
       const el = document.getElementById("userNickname");
       if (el) el.value = nick;
       const titleEl = document.getElementById("headerAppTitle");
@@ -2265,6 +2305,29 @@
       card.classList.add("show");
     }
 
+    
+    function shouldShowWelcome() {
+      try {
+        if (localStorage.getItem(ONBOARDING_KEY) === "1") return false;
+      } catch (e) {}
+      return db.length === 0 && expenses.length === 0 && adjustments.length === 0;
+    }
+
+    function showWelcomeIfNeeded() {
+      if (!shouldShowWelcome()) return;
+      const el = document.getElementById("welcomeOverlay");
+      if (el) el.classList.remove("hidden");
+    }
+
+    function dismissWelcome(startAdd) {
+      try { localStorage.setItem(ONBOARDING_KEY, "1"); } catch (e) {}
+      const el = document.getElementById("welcomeOverlay");
+      if (el) el.classList.add("hidden");
+      if (startAdd) {
+        try { handleFabClick(); } catch (e) {}
+      }
+    }
+
     function emptyStateHtml(ico, title, sub, btnLabel, btnOnclick) {
       const btn = btnLabel ? `<button type="button" onclick="${btnOnclick}">${btnLabel}</button>` : "";
       return `<div class="empty-state"><div class="empty-ico">${ico}</div><div class="empty-title">${title}</div><div class="empty-sub">${sub}</div>${btn}</div>`;
@@ -2506,7 +2569,7 @@
       { id: "a_notes5", cat: "app", title: "5 note", desc: "Note su 5 oggetti", xp: 15, target: 5, progress: ctx => ctx.notesCount },
       { id: "a_goal", cat: "app", title: "Obiettivo mese", desc: "Raggiungi l'obiettivo mensile", xp: 40, target: 1, progress: ctx => ctx.goalReached ? 1 : 0 },
       { id: "a_backup", cat: "app", title: "Backup completo", desc: "Esporta backup con foto", xp: 25, target: 1, progress: ctx => ctx.flagBackup ? 1 : 0 },
-      { id: "a_legend", cat: "app", title: "Leggenda Cantareal", desc: "Sblocca almeno 90 traguardi", xp: 100, target: 90, progress: ctx => ctx.unlockedOthers }
+      { id: "a_legend", cat: "app", title: "Leggenda Resell King", desc: "Sblocca almeno 90 traguardi", xp: 100, target: 90, progress: ctx => ctx.unlockedOthers }
     ];
 
     function buildTrophyContext() {
@@ -2605,7 +2668,7 @@
       });
 
       const nick = localStorage.getItem(USER_NICK_KEY) || "";
-      const hasNick = !!(nick && nick !== "Cantareal" && nick !== "Miki Resell");
+      const hasNick = !!(nick && nick !== "Resell King" && nick !== "Cantareal" && nick !== "Miki Resell" && nick !== "Reseller");
 
       return {
         total: db.length,
@@ -3125,6 +3188,21 @@
 
       document.getElementById("statStockVal").innerText = `€${stockVal.toFixed(2)}`;
       document.getElementById("statCash").innerText = `€${cashVal.toFixed(2)}`;
+      const cashCard = document.getElementById("statCash")?.closest(".stat-card");
+      if (cashCard) {
+        let hint = cashCard.querySelector(".cash-empty-hint");
+        if (Math.abs(cashVal) < 0.005 && db.length === 0 && expenses.length === 0 && adjustments.length === 0) {
+          if (!hint) {
+            hint = document.createElement("div");
+            hint.className = "cash-empty-hint";
+            hint.style.cssText = "font-size:0.65rem;opacity:0.9;margin-top:2px;font-weight:600;position:relative;z-index:1;";
+            cashCard.appendChild(hint);
+          }
+          hint.textContent = "Tocca la matita per impostare la cassa";
+        } else if (hint) {
+          hint.remove();
+        }
+      }
       document.getElementById("statProfit").innerText = `€${netTotalProfit.toFixed(2)}`;
       document.getElementById("statMonthProfit").innerText = `€${netMonthProfit.toFixed(2)}`;
       lastMonthProfit = netMonthProfit;
@@ -3257,12 +3335,16 @@
           listEl.innerHTML = emptyStateHtml("✨", "Nessun critico", "Nessun oggetto fermo da 30+ giorni. Ottimo.", "Vedi tutto lo stock", "filterCriticalOnly=false;updateFilterChips();setStatusFilter('stock')");
         } else if (filterFreshOnly) {
           listEl.innerHTML = emptyStateHtml("📦", "Nessun pezzo fresco", "Nessun oggetto in stock da ≤7 giorni.", "Vedi tutto", "filterFreshOnly=false;updateFilterChips();renderApp()");
+        } else if (db.length === 0 && (currentStatusFilter === "ALL" || currentStatusFilter === "stock")) {
+          listEl.innerHTML = emptyStateHtml("👑", "Nessun oggetto ancora", "Inizia da zero: aggiungi il primo pezzo in stock e imposta la cassa se vuoi.", "Aggiungi oggetto", "handleFabClick()");
         } else if (currentStatusFilter === "sold") {
-          listEl.innerHTML = emptyStateHtml("✅", "Nessuna vendita qui", "Prova a cambiare periodo o filtri.", "Vedi tutti i venduti", "filterAllSold()");
+          listEl.innerHTML = emptyStateHtml("✅", soldCount === 0 ? "Nessuna vendita ancora" : "Nessuna vendita qui", soldCount === 0 ? "Quando vendi un pezzo, comparirà qui con netto e ROI." : "Prova a cambiare periodo o filtri.", soldCount === 0 ? "Vai allo stock" : "Vedi tutti i venduti", soldCount === 0 ? "setStatusFilter('stock')" : "filterAllSold()");
         } else if (currentStatusFilter === "stock") {
           listEl.innerHTML = emptyStateHtml("📦", "Stock vuoto", "Aggiungi il prossimo pezzo da rivendere.", "Aggiungi oggetto", "handleFabClick()");
-        } else {
+        } else if (document.getElementById("searchInput").value.trim() || document.getElementById("filterCategory").value || document.getElementById("filterPlatform").value) {
           listEl.innerHTML = emptyStateHtml("🔍", "Nessun risultato", "Prova a cambiare cerca o filtri.", "Reset cerca", "clearSearch()");
+        } else {
+          listEl.innerHTML = emptyStateHtml("👑", "Nessun oggetto", "Aggiungi il primo pezzo per iniziare.", "Aggiungi oggetto", "handleFabClick()");
         }
         updateSuggestCard();
         return;
@@ -4097,7 +4179,25 @@
         }
       } catch (e) {}
       renderApp();
+      try { showWelcomeIfNeeded(); } catch (e) {}
     });
   </script>
+
+  <div id="welcomeOverlay" class="welcome-overlay hidden" onclick="if(event.target===this)dismissWelcome(false)">
+    <div class="welcome-card" onclick="event.stopPropagation()">
+      <h2>Benvenuto in Resell King</h2>
+      <p>Gestisci stock, cassa e profitto netto. Tutto resta sul tuo telefono.</p>
+      <ol class="welcome-steps">
+        <li>1 · Imposta la cassa (matita sulla card)</li>
+        <li>2 · Aggiungi il primo oggetto in stock</li>
+        <li>3 · Quando vendi, registra piattaforma e fee</li>
+      </ol>
+      <div class="welcome-actions">
+        <button type="button" class="w-primary" onclick="dismissWelcome(true)">Inizia · Aggiungi oggetto</button>
+        <button type="button" class="w-secondary" onclick="dismissWelcome(false)">Chiudi</button>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>
