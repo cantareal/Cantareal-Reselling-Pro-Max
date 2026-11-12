@@ -6,10 +6,10 @@
   <meta name="theme-color" content="#0f172a">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Cantareal">
+  <meta name="apple-mobile-web-app-title" content="Resell King">
   <meta name="mobile-web-app-capable" content="yes">
-  <meta name="application-name" content="Cantareal">
-  <title>Cantareal — Reselling Pro</title>
+  <meta name="application-name" content="Resell King">
+  <title>Resell King</title>
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -51,7 +51,7 @@
     }
     [data-theme="gold"] .stat-card.stock { background: linear-gradient(145deg, #b45309, #92400e) !important; }
     [data-theme="gold"] .stat-card.cash { background: linear-gradient(145deg, #a16207, #854d0e) !important; }
-    [data-theme="gold"] .stat-card.profit { background: linear-gradient(145deg, #7c3aed, #5b21b6) !important; }
+    [data-theme="gold"] .stat-card.profit { background: linear-gradient(145deg, #eab308, #a16207) !important; }
     [data-theme="gold"] .stat-card.month { background: linear-gradient(145deg, #f59e0b, #b45309) !important; }
     [data-theme="gold"] .fab-btn {
       background: linear-gradient(145deg, #fbbf24, #d97706 55%, #b45309) !important;
@@ -927,7 +927,7 @@
         <img id="headerAvatarImg" src="" style="display:none;">
         <span id="headerAvatarPlaceholder">👤</span>
       </div>
-      <h1 id="headerAppTitle">Cantareal</h1>
+      <h1 id="headerAppTitle">Resell King</h1>
     </div>
     <div class="header-actions">
       <button id="installBtn" onclick="installPWA()" style="display:none;background:#d97706;color:#fff;border:none;padding:6px 10px;border-radius:20px;font-size:0.8rem;font-weight:700;cursor:pointer;width:auto;">⬇ Installa</button>
@@ -2293,7 +2293,7 @@
 
     function updateAvatarSnapshot() {
       const soldItems = db.filter(i => i.s === "sold");
-      const totalProfit = soldItems.reduce((acc, i) => acc + getItemNetProfit(i), 0) - getTotalExpensesSum();
+      const totalProfit = soldItems.reduce((acc, i) => acc + getItemNetProfit(i), 0);
       
       let totalRoiSum = 0;
       let countWithBp = 0;
@@ -3088,7 +3088,9 @@
         }
       });
 
-      const netTotalProfit = totalSalesProfit - totalExpensesSum;
+      // Totale: solo margini delle vendite (fee incluse negli item).
+      // Le spese extra riducono cassa e netto del MESE, non riscrivono lo storico flip.
+      const netTotalProfit = totalSalesProfit;
       const netMonthProfit = monthSalesProfit - monthExpensesSum;
 
       const setCount = (id, n) => { const el = document.getElementById(id); if (el) el.textContent = n; };
