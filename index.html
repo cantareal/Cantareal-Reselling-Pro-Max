@@ -986,6 +986,43 @@
       border-color: #fbbf24;
       box-shadow: 0 0 10px rgba(251, 191, 36, 0.3);
     }
+
+    .info-tip-btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 16px; height: 16px; margin-left: 4px; border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.55); background: rgba(0,0,0,0.18);
+      color: #fff; font-size: 0.65rem; font-weight: 900; cursor: pointer;
+      vertical-align: middle; position: relative; z-index: 2; padding: 0; line-height: 1;
+    }
+    .stats-summary-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px;
+    }
+    .stats-mini-card {
+      background: var(--card-bg); border: 1px solid var(--border-color);
+      border-radius: 12px; padding: 12px; cursor: pointer;
+    }
+    .stats-mini-card .sm-label { font-size: 0.68rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; }
+    .stats-mini-card .sm-val { font-size: 1.05rem; font-weight: 900; margin-top: 4px; font-variant-numeric: tabular-nums; }
+    .stats-mini-card .sm-sub { font-size: 0.7rem; color: var(--text-muted); margin-top: 2px; font-weight: 600; }
+    .stats-mini-card.warn { border-color: rgba(251,191,36,0.45); background: linear-gradient(145deg, rgba(251,191,36,0.12), transparent); }
+    .backup-reminder {
+      display: none; margin-bottom: 10px; padding: 10px 12px; border-radius: 12px;
+      border: 1px solid rgba(251,191,36,0.45); background: rgba(251,191,36,0.12);
+      font-size: 0.78rem; font-weight: 700; color: var(--text-color);
+      align-items: center; justify-content: space-between; gap: 8px;
+    }
+    .backup-reminder.show { display: flex; }
+    .backup-reminder button {
+      flex-shrink: 0; border: none; border-radius: 8px; padding: 8px 10px;
+      font-size: 0.72rem; font-weight: 800; cursor: pointer;
+      background: linear-gradient(145deg, #fbbf24, #d97706); color: #1c1917;
+    }
+    .cat-add-row { display: flex; gap: 6px; margin-top: 6px; }
+    .cat-add-row button {
+      border: 1px dashed var(--border-color); background: var(--input-bg); color: var(--text-muted);
+      border-radius: 8px; padding: 8px 10px; font-size: 0.75rem; font-weight: 800; cursor: pointer; width: 100%;
+    }
+
   </style>
 </head>
 <body>
@@ -1011,12 +1048,12 @@
     </div>
     <div class="stat-card cash" onclick="openCashAdjust()" style="cursor:pointer;" title="Aggiusta Cassa">
       <button class="cash-adjust-btn" onclick="event.stopPropagation(); openCashAdjust()">✏️</button>
-      <div class="label">Cassa Disponibile</div>
+      <div class="label">Cassa Disponibile <button type="button" class="info-tip-btn" onclick="event.stopPropagation(); showInfoTip('cash')" title="Info">i</button></div>
       <div class="val" id="statCash">€0.00</div>
     </div>
     <div class="stat-card profit" onclick="filterAllSold()" style="cursor:pointer;" title="Tutti i venduti">
       <span class="stat-icon">📈</span>
-      <div class="label">Profitto Netto Totale</div>
+      <div class="label">Profitto Netto Totale <button type="button" class="info-tip-btn" onclick="event.stopPropagation(); showInfoTip('profit')" title="Info">i</button></div>
       <div class="val" id="statProfit">€0.00</div>
     </div>
     <div class="stat-card month" onclick="filterThisMonth()" style="cursor:pointer;" title="Mostra vendite questo mese">
@@ -1049,6 +1086,11 @@
       <button type="button" class="suggest-mini-btn" id="suggestSellBtn">Vendi</button>
       <button type="button" class="suggest-x" id="suggestDismissBtn" title="Nascondi oggi">✕</button>
     </div>
+  </div>
+
+  <div id="homeBackupReminder" class="backup-reminder" style="margin-bottom:10px;">
+    <span id="homeBackupReminderText">Fai un backup con foto</span>
+    <button type="button" onclick="downloadBackup(true)">Backup + foto</button>
   </div>
 
   <div class="status-tabs">
@@ -1100,12 +1142,8 @@
           <label>CATEGORIA</label>
           <select id="filterCategory" onchange="renderApp()">
             <option value="ALL">Tutte</option>
-            <option value="Gaming / Videogiochi">Gaming</option>
-            <option value="Abbigliamento">Abbigliamento</option>
-            <option value="Elettronica">Elettronica</option>
-            <option value="Libri">Libri</option>
-            <option value="Altro">Altro</option>
           </select>
+          <div class="cat-add-row"><button type="button" onclick="promptAddCategory('filterCategory')">+ Categoria</button></div>
         </div>
         <div>
           <label>PIATTAFORMA</label>
@@ -1157,6 +1195,34 @@
   </div>
 
   <div id="chartsView">
+    <div class="stats-summary-grid">
+      <div class="stats-mini-card warn" onclick="filterCriticalOnly=true;filterFreshOnly=false;updateFilterChips();setStatusFilter('stock')">
+        <div class="sm-label">Capitale bloccato</div>
+        <div class="sm-val" id="statsLockedVal">€0,00</div>
+        <div class="sm-sub" id="statsLockedSub">pezzi fermi da 30+ giorni</div>
+      </div>
+      <div class="stats-mini-card">
+        <div class="sm-label">Fee totali pagate</div>
+        <div class="sm-val" id="statsFeesVal">€0,00</div>
+        <div class="sm-sub">commissioni sulle vendite</div>
+      </div>
+      <div class="stats-mini-card">
+        <div class="sm-label">ROI medio</div>
+        <div class="sm-val" id="statsRoiVal">—</div>
+        <div class="sm-sub">solo pezzi venduti</div>
+      </div>
+      <div class="stats-mini-card">
+        <div class="sm-label">Giorni medi in stock</div>
+        <div class="sm-val" id="statsDaysVal">—</div>
+        <div class="sm-sub">tempo medio alla vendita</div>
+      </div>
+    </div>
+    <div class="chart-container" style="height:auto;min-height:0;padding:12px;">
+      <h3 style="margin:0 0 6px;">Come leggere i grafici</h3>
+      <p style="font-size:0.75rem;color:var(--text-muted);margin:0;line-height:1.4;font-weight:600;">
+        I profitti sono <strong>netti</strong> (vendita − acquisto − fee). Il capitale bloccato è il costo d'acquisto dei pezzi in stock da 30+ giorni — non è cassa.
+      </p>
+    </div>
     <div class="chart-container">
       <h3>Tempo Medio di Vendita (Giorni) per Categoria</h3>
       <canvas id="leadTimeChart"></canvas>
@@ -1377,6 +1443,10 @@
       <p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:14px;">
         Gestisci i tuoi dati contabili, effettua salvataggi manuali o esporta il registro.
       </p>
+      <div id="backupReminderBox" class="backup-reminder">
+        <span id="backupReminderText">Backup consigliato</span>
+        <button type="button" onclick="downloadBackup(true); closeModal('dataModal');">Backup + foto</button>
+      </div>
       <div style="display:flex;flex-direction:column;gap:10px;">
         <button class="btn-sync green" onclick="manualSave(); closeModal('dataModal');">💾 Salva Modifiche Locale</button>
         <button class="btn-sync" onclick="openTrashModal(); closeModal('dataModal');">🗑️ Cestino (elementi eliminati)</button>
@@ -1428,13 +1498,8 @@
         </div>
         <div>
           <label style="font-size:0.75rem;font-weight:700;">CATEGORIA</label>
-          <select id="addCategory">
-            <option value="Gaming / Videogiochi">Gaming / Videogiochi</option>
-            <option value="Abbigliamento">Abbigliamento</option>
-            <option value="Elettronica">Elettronica</option>
-            <option value="Libri">Libri</option>
-            <option value="Altro">Altro</option>
-          </select>
+          <select id="addCategory"></select>
+          <div class="cat-add-row"><button type="button" onclick="promptAddCategory('addCategory')">+ Nuova categoria</button></div>
         </div>
         <div>
           <label style="font-size:0.75rem;font-weight:700;">FONTE</label>
@@ -1500,13 +1565,8 @@
         </div>
         <div>
           <label style="font-size:0.75rem;font-weight:700;">CATEGORIA PREDEFINITA</label>
-          <select id="lotCategory">
-            <option value="Gaming / Videogiochi">Gaming / Videogiochi</option>
-            <option value="Abbigliamento">Abbigliamento</option>
-            <option value="Elettronica">Elettronica</option>
-            <option value="Libri">Libri</option>
-            <option value="Altro">Altro</option>
-          </select>
+          <select id="lotCategory"></select>
+          <div class="cat-add-row"><button type="button" onclick="promptAddCategory('lotCategory')">+ Nuova categoria</button></div>
         </div>
         <div>
           <label style="font-size:0.75rem;font-weight:700;">FONTE</label>
@@ -1536,9 +1596,10 @@
   <div class="modal-overlay" id="addExpenseModal">
     <div class="modal-content">
       <div class="modal-header">
-        <span class="modal-title">💸 Nuova Spesa Extra</span>
+        <span class="modal-title" id="expModalTitle">💸 Nuova Spesa Extra</span>
         <button class="close-modal" onclick="closeModal('addExpenseModal')">✕</button>
       </div>
+      <input type="hidden" id="expEditId" value="">
       <div class="form-grid">
         <div class="full-width">
           <label style="font-size:0.75rem;font-weight:700;">IMPORTO SPESO (€)</label>
@@ -1563,7 +1624,7 @@
           <input type="date" id="expDate">
         </div>
         <div class="full-width">
-          <button class="btn-main" onclick="addExpense()">Registra Spesa Extra</button>
+          <button class="btn-main" id="expSaveBtn" onclick="saveExpense()">Registra Spesa Extra</button>
         </div>
       </div>
     </div>
@@ -1583,13 +1644,8 @@
         </div>
         <div>
           <label style="font-size:0.75rem;font-weight:700;">CATEGORIA</label>
-          <select id="editCategory">
-            <option value="Gaming / Videogiochi">Gaming / Videogiochi</option>
-            <option value="Abbigliamento">Abbigliamento</option>
-            <option value="Elettronica">Elettronica</option>
-            <option value="Libri">Libri</option>
-            <option value="Altro">Altro</option>
-          </select>
+          <select id="editCategory"></select>
+          <div class="cat-add-row"><button type="button" onclick="promptAddCategory('editCategory')">+ Nuova categoria</button></div>
         </div>
         <div>
           <label style="font-size:0.75rem;font-weight:700;">FONTE</label>
@@ -1738,6 +1794,7 @@
         <div class="sheet-price-group">
           <label>COMMISSIONI (€)</label>
           <input type="number" id="sheetSellFee" step="0.10" class="sheet-fee-input" placeholder="0.00">
+          <p style="font-size:0.68rem;color:var(--text-muted);margin:4px 0 0;font-weight:600;">Default 0 · se hai una fee, inseriscila. L'ultima usata per piattaforma viene ricordata.</p>
         </div>
       </div>
 
@@ -1762,6 +1819,149 @@
     const THEME_KEY = "reselling_pro_max_theme";
     const VIEW_MODE_KEY = "reselling_pro_max_view_mode";
     const USER_NICK_KEY = "reselling_pro_user_nick";
+
+    const DEFAULT_CATEGORIES = [
+      "Gaming / Videogiochi", "Abbigliamento", "Scarpe", "Borse & Accessori",
+      "Elettronica", "Libri", "Casa & Cucina", "Bambini & Giocattoli",
+      "Sport & Outdoor", "Collezionismo", "Bellezza & Cura", "Altro"
+    ];
+    const CUSTOM_CATS_KEY = "resell_king_custom_cats_v1";
+    const LAST_FEE_KEY = "resell_king_last_fee_by_platform_v1";
+    const LAST_BACKUP_KEY = "resell_king_last_backup_ts_v1";
+    let lastSaleUndo = null;
+    let lastSaleUndoTimer = null;
+
+    function loadCustomCategories() {
+      try {
+        const arr = JSON.parse(localStorage.getItem(CUSTOM_CATS_KEY) || "[]");
+        return Array.isArray(arr) ? arr.map(String).filter(Boolean) : [];
+      } catch (e) { return []; }
+    }
+    function saveCustomCategories(arr) {
+      try { localStorage.setItem(CUSTOM_CATS_KEY, JSON.stringify(arr)); } catch (e) {}
+    }
+    function getAllCategories() {
+      const custom = loadCustomCategories();
+      const fromDb = [];
+      db.forEach(i => { if (i && i.c) fromDb.push(String(i.c)); });
+      const all = [...DEFAULT_CATEGORIES, ...custom, ...fromDb];
+      const seen = new Set();
+      const out = [];
+      all.forEach(c => {
+        const t = String(c || "").trim();
+        if (!t || seen.has(t)) return;
+        seen.add(t);
+        out.push(t);
+      });
+      return out;
+    }
+    function fillCategorySelect(sel, opts) {
+      if (!sel) return;
+      const keepAll = opts && opts.includeAll;
+      const current = sel.value;
+      const cats = getAllCategories();
+      sel.innerHTML = keepAll ? '<option value="ALL">Tutte</option>' : '';
+      cats.forEach(c => {
+        const o = document.createElement("option");
+        o.value = c;
+        o.textContent = c.replace("Gaming / Videogiochi", "Gaming");
+        sel.appendChild(o);
+      });
+      if (current && [...sel.options].some(o => o.value === current)) sel.value = current;
+      else if (!keepAll && sel.options.length) sel.selectedIndex = 0;
+    }
+    function refreshAllCategorySelects() {
+      fillCategorySelect(document.getElementById("filterCategory"), { includeAll: true });
+      fillCategorySelect(document.getElementById("addCategory"));
+      fillCategorySelect(document.getElementById("editCategory"));
+      fillCategorySelect(document.getElementById("lotCategory"));
+    }
+    function promptAddCategory(selectId) {
+      const name = prompt("Nome nuova categoria:");
+      if (!name || !name.trim()) return;
+      const t = name.trim().slice(0, 40);
+      const custom = loadCustomCategories();
+      if (![...DEFAULT_CATEGORIES, ...custom].includes(t)) {
+        custom.push(t);
+        saveCustomCategories(custom);
+      }
+      refreshAllCategorySelects();
+      const sel = document.getElementById(selectId);
+      if (sel) sel.value = t;
+      notify("Categoria aggiunta: " + t);
+    }
+
+    function loadLastFees() {
+      try { return JSON.parse(localStorage.getItem(LAST_FEE_KEY) || "{}") || {}; }
+      catch (e) { return {}; }
+    }
+    function rememberFee(platform, fee) {
+      const map = loadLastFees();
+      map[platform] = fee;
+      try { localStorage.setItem(LAST_FEE_KEY, JSON.stringify(map)); } catch (e) {}
+    }
+    function suggestedFeeFor(platform) {
+      const map = loadLastFees();
+      if (map[platform] != null && map[platform] !== "") return parseFloat(map[platform]) || 0;
+      return 0;
+    }
+
+    function showInfoTip(kind) {
+      const tips = {
+        cash: "Cassa disponibile\\n\\nStima del liquido: baseline + vendite − acquisti in stock − spese + aggiustamenti.\\nNon è il valore dello stock.",
+        profit: "Profitto netto totale\\n\\nSomma sulle vendite di: prezzo vendita − prezzo acquisto − commissioni.\\nLe spese extra (benzina, imballi) riducono il netto del mese e la cassa, non questo totale.",
+        locked: "Capitale bloccato\\n\\nSomma dei prezzi di acquisto dei pezzi ancora in stock da 30 giorni o più.\\nSoldi investiti fermi, diversi dalla cassa."
+      };
+      alert(tips[kind] || "");
+    }
+
+    function markBackupDone() {
+      try { localStorage.setItem(LAST_BACKUP_KEY, String(Date.now())); } catch (e) {}
+      updateBackupReminders();
+    }
+    function updateBackupReminders() {
+      let ts = 0;
+      try { ts = parseInt(localStorage.getItem(LAST_BACKUP_KEY) || "0", 10) || 0; } catch (e) {}
+      const days = ts ? Math.floor((Date.now() - ts) / 86400000) : null;
+      const need = !ts || days >= 7;
+      const text = !ts
+        ? "Nessun backup con foto recente. Consigliato per non perdere l'inventario."
+        : ("Ultimo backup: " + days + " giorni fa. Meglio rifarlo con foto.");
+      ["backupReminderBox", "homeBackupReminder"].forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.classList.toggle("show", need);
+      });
+      const t1 = document.getElementById("backupReminderText");
+      const t2 = document.getElementById("homeBackupReminderText");
+      if (t1) t1.textContent = text;
+      if (t2) t2.textContent = text;
+    }
+
+    function getLockedCapital() {
+      let sum = 0, n = 0;
+      db.forEach(i => {
+        if (i.s !== "stock") return;
+        const d = daysInStock(i);
+        if (d >= 30) { sum += parseFloat(i.bp) || 0; n++; }
+      });
+      return { sum, n };
+    }
+
+    function undoLastSale() {
+      if (!lastSaleUndo) return notify("Nessuna vendita da annullare.");
+      const { id, snapshot } = lastSaleUndo;
+      const item = db.find(x => x.id === id);
+      if (!item) { lastSaleUndo = null; return notify("Oggetto non trovato."); }
+      Object.assign(item, snapshot);
+      lastSaleUndo = null;
+      if (lastSaleUndoTimer) { clearTimeout(lastSaleUndoTimer); lastSaleUndoTimer = null; }
+      try { document.getElementById("celebrateModal").style.display = "none"; } catch (e) {}
+      saveData();
+      notify("Vendita annullata · pezzo di nuovo in stock");
+    }
+
+
     const ONBOARDING_KEY = "resell_king_onboarding_v1";
     const SNAPSHOTS_KEY = "reselling_auto_snapshots_v1";
 
@@ -2023,7 +2223,7 @@
     const savedGoal = localStorage.getItem(GOAL_KEY);
     if (savedGoal) document.getElementById("targetGoalInput").value = savedGoal;
 
-    function openDataModal() { document.getElementById("dataModal").style.display = "flex"; }
+    function openDataModal() { updateBackupReminders(); document.getElementById("dataModal").style.display = "flex"; }
     function setViewMode(mode) {
       viewMode = mode;
       localStorage.setItem(VIEW_MODE_KEY, mode);
@@ -3009,24 +3209,55 @@
     }
 
     function openAddExpenseModal() {
+      document.getElementById("expEditId").value = "";
+      document.getElementById("expModalTitle").innerText = "💸 Nuova Spesa Extra";
+      document.getElementById("expSaveBtn").innerText = "Registra Spesa Extra";
       document.getElementById("expDate").valueAsDate = new Date();
       document.getElementById("expAmount").value = "";
       document.getElementById("expNote").value = "";
       document.getElementById("addExpenseModal").style.display = "flex";
     }
 
-    function addExpense() {
+    function openEditExpense(id) {
+      const e = expenses.find(x => String(x.id) === String(id));
+      if (!e) return;
+      document.getElementById("expEditId").value = e.id;
+      document.getElementById("expModalTitle").innerText = "💸 Modifica Spesa";
+      document.getElementById("expSaveBtn").innerText = "Salva modifiche";
+      document.getElementById("expAmount").value = e.amount;
+      document.getElementById("expCategory").value = e.category;
+      document.getElementById("expNote").value = e.note || "";
+      try {
+        const p = String(e.date || "").split("/");
+        if (p.length === 3) document.getElementById("expDate").value = p[2] + "-" + p[1].padStart(2,"0") + "-" + p[0].padStart(2,"0");
+        else document.getElementById("expDate").valueAsDate = new Date();
+      } catch (err) { document.getElementById("expDate").valueAsDate = new Date(); }
+      document.getElementById("addExpenseModal").style.display = "flex";
+    }
+
+    function saveExpense() {
       const amount = parseFloat(document.getElementById("expAmount").value.replace(",", "."));
       if (isNaN(amount) || amount <= 0) return notify("Inserisci un importo valido.");
-      const dateInput = document.getElementById("expDate").value;
-      let d = todayFormatted();
-      if (dateInput) { const p = dateInput.split("-"); d = p[2] + "/" + p[1] + "/" + p[0]; }
       const category = document.getElementById("expCategory").value;
       const note = document.getElementById("expNote").value.trim() || "Spesa generica";
-
+      const d = document.getElementById("expDate").value
+        ? document.getElementById("expDate").value.split("-").reverse().join("/")
+        : todayFormatted();
+      const editId = document.getElementById("expEditId").value;
+      if (editId) {
+        const exp = expenses.find(x => String(x.id) === String(editId));
+        if (exp) {
+          exp.amount = amount; exp.category = category; exp.note = note; exp.date = d;
+          saveData();
+          closeModal("addExpenseModal");
+          notify("Spesa aggiornata");
+          return;
+        }
+      }
       expenses.unshift({ id: String(Date.now()), amount: amount, category: category, note: note, date: d });
       saveData();
       closeModal("addExpenseModal");
+      notify("Spesa registrata");
     }
 
     function deleteExpense(id) {
@@ -3266,6 +3497,7 @@
             </div>
             <div style="text-align:right;">
               <div class="expense-amount">−€${parseFloat(e.amount).toFixed(2)}</div>
+              <button onclick="openEditExpense('${e.id}')" style="background:none;border:none;color:var(--accent-color);font-size:0.75rem;cursor:pointer;padding:2px 0;margin-right:6px;">✏️ Modifica</button>
               <button onclick="deleteExpense('${e.id}')" style="background:none;border:none;color:var(--danger-color);font-size:0.75rem;cursor:pointer;padding:2px 0;">🗑 Elimina</button>
             </div>
           `;
@@ -3507,6 +3739,28 @@
     }
 
     function renderCharts() {
+      const locked = getLockedCapital();
+      const elL = document.getElementById("statsLockedVal");
+      const elLS = document.getElementById("statsLockedSub");
+      if (elL) elL.textContent = "€" + locked.sum.toFixed(2).replace(".", ",");
+      if (elLS) elLS.textContent = locked.n + " pezzi fermi da 30+ giorni · tap per aprirli";
+      let feeSum = 0, roiAcc = 0, roiN = 0, dayAcc = 0, dayN = 0;
+      db.forEach(i => {
+        if (i.s !== "sold") return;
+        feeSum += parseFloat(i.fee) || 0;
+        const bp = parseFloat(i.bp) || 0;
+        const profit = getItemNetProfit(i);
+        if (bp > 0) { roiAcc += (profit / bp) * 100; roiN++; }
+        const d1 = daysInStock(i);
+        if (d1 > 0) { dayAcc += d1; dayN++; }
+      });
+      const elF = document.getElementById("statsFeesVal");
+      const elR = document.getElementById("statsRoiVal");
+      const elD = document.getElementById("statsDaysVal");
+      if (elF) elF.textContent = "€" + feeSum.toFixed(2).replace(".", ",");
+      if (elR) elR.textContent = roiN ? ((roiAcc / roiN).toFixed(0) + "%") : "—";
+      if (elD) elD.textContent = dayN ? (Math.round(dayAcc / dayN) + " gg") : "—";
+
       const css = getComputedStyle(document.documentElement);
       const textColor = css.getPropertyValue("--text-color").trim();
       const gridColor = css.getPropertyValue("--border-color").trim();
@@ -3848,12 +4102,24 @@
       document.getElementById("sellSheet").classList.remove("hidden");
     }
 
+    function applyPlatformFeeHint(platform) {
+      const feeInput = document.getElementById("sheetSellFee");
+      if (!feeInput) return;
+      // Prefill only if empty / zero
+      const cur = parseFloat(String(feeInput.value).replace(",", ".")) || 0;
+      if (!feeInput.value || cur === 0) {
+        const sug = suggestedFeeFor(platform);
+        feeInput.value = sug ? String(sug) : "0";
+      }
+    }
+
     function closeSellSheet() {
       document.getElementById("sellSheet").classList.add("hidden");
       activeSheetItemId = null;
     }
 
     function confirmSheetSell(platform) {
+      applyPlatformFeeHint(platform);
       const priceVal = document.getElementById("sheetSellPrice").value.replace(",", ".");
       const feeVal = document.getElementById("sheetSellFee").value.replace(",", ".") || "0";
       const price = parseFloat(priceVal);
@@ -3862,10 +4128,19 @@
       if (isNaN(price) || price <= 0) return notify("Inserisci un prezzo valido.");
       const item = db.find(x => x.id === activeSheetItemId);
       if (item) {
+        const snapshot = {
+          s: item.s, sp: item.sp, fee: item.fee,
+          soldPlatform: item.soldPlatform || "", soldDate: item.soldDate || ""
+        };
         item.s = "sold"; item.sp = price; item.fee = fee; item.soldPlatform = platform; item.soldDate = todayFormatted();
+        rememberFee(platform, fee);
+        lastSaleUndo = { id: item.id, snapshot };
+        if (lastSaleUndoTimer) clearTimeout(lastSaleUndoTimer);
+        lastSaleUndoTimer = setTimeout(() => { lastSaleUndo = null; }, 15000);
         saveData();
         closeSellSheet();
         showCelebrationModal(item);
+        notify("Venduto: " + item.t, "Annulla", undoLastSale);
       }
     }
 
@@ -4085,6 +4360,7 @@
       if (withPhotos) {
         try { localStorage.setItem("trophy_flag_backup_photos", "1"); } catch (e) {}
       }
+      markBackupDone();
       const profile = { nick: localStorage.getItem(USER_NICK_KEY) || "" };
       if (withPhotos) {
         const av = await getAvatarIDB();
@@ -4197,6 +4473,8 @@
           if (btn) btn.classList.add("open");
         }
       } catch (e) {}
+      refreshAllCategorySelects();
+      updateBackupReminders();
       renderApp();
       try { showWelcomeIfNeeded(); } catch (e) {}
     });
